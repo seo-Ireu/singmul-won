@@ -2,8 +2,10 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Feed/insta_create.dart';
 import 'package:provider/provider.dart';
-import './plant_feed.dart';
+import 'Feed/insta_home.dart';
+import 'Feed/insta_list.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/manage_plant.dart';
 import './home.dart';
@@ -31,6 +33,9 @@ class MyApp extends StatelessWidget {
         routes: {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
+          CreatePage.routeName: (ctx) => CreatePage(),
+          InstaList.routeName: (ctx) => InstaList(),
+          InstaHome.routeName: (ctx) => InstaHome(),
         });
   }
 }
@@ -43,9 +48,7 @@ class Page extends StatefulWidget {
 class _PageState extends State<Page> {
   int selectedIndex = 2;
   final List<Widget> widgetOptions = <Widget>[
-    //수정: 임시로 feed()대신 Container()넣어놓음
-    //Feed(),
-    Container(),
+    InstaHome(),
     ManagePlant(),
     Home(),
     Community(),

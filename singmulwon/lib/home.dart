@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import 'Feed/insta_home.dart';
 import 'Plant/manage_plant.dart';
 import 'account.dart';
 import 'community.dart';
@@ -19,8 +20,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     int selectedIndex = 2;
     final List<Widget> widgetOptions = <Widget>[
-      //수정: 임시로 feed()대신 Container()넣어놓음
-      Container(),
+      InstaHome(),
       ManagePlant(),
       Home(),
       Community(),
