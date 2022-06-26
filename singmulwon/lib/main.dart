@@ -12,6 +12,7 @@ import './home.dart';
 import './community.dart';
 import './account.dart';
 import 'Provider/plants.dart';
+import 'Plant/plant_detail.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         routes: {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
+          PlantDetail.routeName: (ctx) => PlantDetail(),
           CreatePage.routeName: (ctx) => CreatePage(),
           InstaList.routeName: (ctx) => InstaList(),
           InstaHome.routeName: (ctx) => InstaHome(),

@@ -5,15 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '/Provider/plant.dart';
+import './edit_button.dart';
 import '/Provider/plants.dart';
-
-class WaterRate extends ChangeNotifier {
-  int _water = 0;
-
-  void get change {
-    notifyListeners();
-  }
-}
+import './plant_detail.dart';
 
 class EditPlant extends StatefulWidget {
   static const routeName = '/edit-plant';
@@ -78,7 +72,10 @@ class _EditPlantState extends State<EditPlant> {
 
   @override
   Widget build(BuildContext context) {
+    double waterValue = _currentWaterValue;
+    double lightValue = _currentLightValue;
     final plantData = Provider.of<Plants>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('식물 편집'),
@@ -93,61 +90,19 @@ class _EditPlantState extends State<EditPlant> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
+            SizedBox(
+              height: 40,
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  child: FlatButton(
-                    height: 100,
-                    onPressed: () {
-                      setState(() {
-                        // Text(
-                        //   'water\n' + _currentWaterValue.toString() + '%',
-                        // );
-                      });
-                    },
-                    child: Text(
-                      'water\n${_editedPlant.water.toInt().toString()}%',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: FlatButton(
-                    height: 100,
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    child: Text(
-                      'light\n${_editedPlant.light.toInt().toString()}',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: FlatButton(
-                    height: 100,
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    child: Column(
-                      children: [
-                        Icon(Icons.favorite),
-                        Text(
-                          _editedPlant.favorite.toInt().toString(),
-                          style: TextStyle(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                WaterValue(waterValue),
+                LightValue(lightValue),
+                FavoriteValue(_editedPlant.favorite),
               ],
             ),
             SizedBox(
-              height: 40,
+              height: 60,
             ),
             Row(
               children: [
@@ -157,26 +112,24 @@ class _EditPlantState extends State<EditPlant> {
                 ),
                 Expanded(
                   flex: 7,
-                  child: ChangeNotifierProvider(
-                    create: (_) => WaterRate(),
-                    child: Slider(
-                      value: _currentWaterValue,
-                      min: 0,
-                      max: 100,
-                      divisions: 100,
-                      label: _currentWaterValue.round().toString(),
-                      onChanged: (double value) {
-                        setState(() {
-                          _currentWaterValue = value;
-                        });
-                      },
-                    ),
+                  child: Slider(
+                    value: _currentWaterValue,
+                    min: 0,
+                    max: 100,
+                    divisions: 100,
+                    label: _currentWaterValue.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentWaterValue = value;
+                        waterValue = _currentWaterValue;
+                      });
+                    },
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 40,
             ),
             Row(
               children: [
@@ -194,10 +147,50 @@ class _EditPlantState extends State<EditPlant> {
                     onChanged: (double value) {
                       setState(() {
                         _currentLightValue = value;
+                        lightValue = _currentLightValue;
                       });
                     },
                   ),
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 100,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 110,
+                  height: 40,
+                  child: FlatButton(
+                    textColor: Colors.white,
+                    color: Colors.green,
+                    child: Text(
+                      "식물편집",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PlantDetail.routeName);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 60,
+                ),
+                SizedBox(
+                  width: 110,
+                  height: 40,
+                  child: FlatButton(
+                    textColor: Colors.white,
+                    color: Colors.green,
+                    child: Text(
+                      "자동설정",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {},
+                  ),
+                )
               ],
             ),
           ],
