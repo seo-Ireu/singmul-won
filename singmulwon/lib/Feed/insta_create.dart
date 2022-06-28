@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Feed/insta_home.dart';
+import '../account_sql_helper.dart';
 import '../feed_sql_helper.dart';
 import 'insta_list.dart';
 import 'dart:developer';
@@ -96,7 +97,8 @@ class _CreatePageState extends State<CreatePage> {
 
 // Insert a new journal to the database
   Future<void> _addItem() async {
-    await FeedSQLHelper.createFeed(_contentController.text);
+    //userId,content 매개변수 필요 수정해
+    await FeedSQLHelper.createFeed("00", _contentController.text);
     Navigator.of(context).pushNamed(InstaHome.routeName);
   }
 
