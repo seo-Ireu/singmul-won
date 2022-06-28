@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './insta_stories.dart';
-import '../sql_helper.dart';
+import '../feed_sql_helper.dart';
 import 'dart:developer';
 
 import 'insta_create.dart';
@@ -20,7 +20,7 @@ class _InstaListState extends State<InstaList> {
   List<Map<String, dynamic>> _feeds = [];
 
   void _refreshFeeds() async {
-    final data = await SQLHelper.getFeeds();
+    final data = await FeedSQLHelper.getFeeds();
 
     setState(() {
       _feeds = data;
@@ -29,7 +29,7 @@ class _InstaListState extends State<InstaList> {
   }
 
   void _deleteItem(int id) async {
-    await SQLHelper.deleteFeed(id);
+    await FeedSQLHelper.deleteFeed(id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Successfully deleted a journal!'),
     ));

@@ -1,13 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sql;
-import 'package:sqflite/sqflite.dart';
-import 'Provider/plant.dart';
+import './Provider/plant.dart';
 
-class SQLHelper {
+class PlantSQLHelper {
   static Future<void> createTables(sql.Database database) async {
-    await database.execute(
-        """CREATE TABLE feeds(
+    await database.execute("""CREATE TABLE plants(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         userId TEXT,
         content TEXT,
@@ -31,31 +28,32 @@ class SQLHelper {
   }
 
   // Create new item (journal)
-  static Future<int> createFeed(String content, [String text]) async {
-    final db = await SQLHelper.db();
+  static Future<int> createPlant(Plant plant) async {
+    final db = await PlantSQLHelper.db();
 
-    final data = {'content': content, 'createdAt': DateTime.now().toString()};
+    //final data = {'content': content, 'createdAt': DateTime.now().toString()};
+    final data = {'water': plant.water};
     final id = await db.insert('feeds', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
   }
 
   // Read all items (journals)
-  static Future<List<Map<String, dynamic>>> getFeeds() async {
-    final db = await SQLHelper.db();
+  static Future<List<Map<String, dynamic>>> getPlants() async {
+    final db = await PlantSQLHelper.db();
     return db.query('feeds', orderBy: "id");
   }
 
   // Read a single item by id
   // The app doesn't use this method but I put here in case you want to see it
-  static Future<List<Map<String, dynamic>>> getFeed(int id) async {
-    final db = await SQLHelper.db();
+  static Future<List<Map<String, dynamic>>> getPlant(int id) async {
+    final db = await PlantSQLHelper.db();
     return db.query('feeds', where: "id = ?", whereArgs: [id], limit: 1);
   }
 
   // Update an item by id
-  static Future<int> updateFeed(int id, String content, [String text]) async {
-    final db = await SQLHelper.db();
+  static Future<int> updatePlant(int id, String content, [String text]) async {
+    final db = await PlantSQLHelper.db();
 
     final data = {'content': content, 'createdAt': DateTime.now().toString()};
 
@@ -65,8 +63,8 @@ class SQLHelper {
   }
 
   // Delete
-  static Future<void> deleteFeed(int id) async {
-    final db = await SQLHelper.db();
+  static Future<void> deletePlant(int id) async {
+    final db = await PlantSQLHelper.db();
     try {
       await db.delete("feeds", where: "id = ?", whereArgs: [id]);
     } catch (err) {

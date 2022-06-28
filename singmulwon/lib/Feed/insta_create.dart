@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Feed/insta_home.dart';
-import '../sql_helper.dart';
+import '../feed_sql_helper.dart';
 import 'insta_list.dart';
 import 'dart:developer';
 
@@ -19,7 +19,7 @@ class _CreatePageState extends State<CreatePage> {
   bool _isLoading = true;
   // This function is used to fetch all data from the database
   void _refreshJournals() async {
-    final data = await SQLHelper.getFeeds();
+    final data = await FeedSQLHelper.getFeeds();
     setState(() {
       _journals = data;
       _isLoading = false;
@@ -96,19 +96,19 @@ class _CreatePageState extends State<CreatePage> {
 
 // Insert a new journal to the database
   Future<void> _addItem() async {
-    await SQLHelper.createFeed(_contentController.text);
+    await FeedSQLHelper.createFeed(_contentController.text);
     Navigator.of(context).pushNamed(InstaHome.routeName);
   }
 
   // Update an existing journal
   Future<void> _updateItem(int id) async {
-    await SQLHelper.updateFeed(id, _contentController.text);
+    await FeedSQLHelper.updateFeed(id, _contentController.text);
     Navigator.of(context).pushNamed(InstaHome.routeName);
   }
 
   // Delete an item
   void _deleteItem(int id) async {
-    await SQLHelper.deleteFeed(id);
+    await FeedSQLHelper.deleteFeed(id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Successfully deleted a journal!'),
     ));
