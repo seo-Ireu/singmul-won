@@ -19,8 +19,7 @@ class ManagePlant extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(EditPlant.routeName, arguments: ("00"));
+              Navigator.of(context).pushNamed(EditPlant.routeName);
               //수정: arguments(plantId) 추가
             },
             icon: const Icon(Icons.add),

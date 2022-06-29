@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '/Provider/plant.dart';
 import './edit_button.dart';
@@ -87,7 +86,7 @@ class _EditPlantState extends State<EditPlant> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             SizedBox(
@@ -170,8 +169,10 @@ class _EditPlantState extends State<EditPlant> {
                       "식물편집",
                       style: TextStyle(fontSize: 20),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(PlantDetail.routeName);
+                    //수정
+                    onPressed: () async {
+                      var plantTemp = await Navigator.of(context)
+                          .pushNamed(PlantDetail.routeName);
                     },
                   ),
                 ),
