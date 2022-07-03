@@ -1,10 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import 'Feed/insta_home.dart';
 import 'Plant/manage_plant.dart';
 import './home.dart';
-import './community.dart';
-import './account.dart';
+import 'Community/community.dart';
+import 'Account/account.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/homepage';

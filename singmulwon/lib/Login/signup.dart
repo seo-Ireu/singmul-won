@@ -195,9 +195,9 @@ class _SignUp extends State<SignUp> {
                       textColor: Colors.white,
                       color: Colors.green[700],
                       padding: EdgeInsets.all(10),
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.of(context).pushNamed(HomePage.routeName);
-                        AccountSQLHelper.createAccount(
+                        await AccountSQLHelper.createAccount(
                             _useridTextController.toString(),
                             _passwordTextController.toString(),
                             _nicknameTextController.toString(),

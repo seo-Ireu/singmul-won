@@ -6,8 +6,8 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import 'Feed/insta_home.dart';
 import 'Plant/manage_plant.dart';
-import 'account.dart';
-import 'community.dart';
+import 'Account/account.dart';
+import 'Community/community.dart';
 import 'plant_feed.dart';
 
 class Home extends StatefulWidget {
