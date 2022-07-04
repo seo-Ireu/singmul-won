@@ -1,8 +1,89 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: deprecated_member_use
 
-class Community extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/async.dart';
+
+import './write_page.dart';
+import './content_page.dart';
+
+class Community extends StatefulWidget {
+  @override
+  State<Community> createState() => _CommunityState();
+}
+
+class _CommunityState extends State<Community> {
+  void _incrementCounter() {
+    //쓰기로 이동
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WritePage()),
+      );
+    });
+  }
+
+  onMove(String title, String content) {
+    //해당 게시글로 이동
+    data d = new data();
+    d.setTitle(title, content);
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => contentPage()),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("커뮤니티"),
+      ),
+      body: Center(
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          children: <Widget>[
+            Card(
+                child: Column(
+              children: <Widget>[
+                // new Swiper(
+                //   autoplay: true,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return new Image.network(
+                //       ImagesList[index],
+                //       fit: BoxFit.fill,
+                //     );
+                //   },
+                //   itemCount: ImagesList.length,
+                //   itemWidth: 300.0,
+                //   itemHeight: 200.0,
+                //   layout: SwiperLayout.STACK,
+                // ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                        height: 800.0,
+                        child: sss(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: '글쓰기',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget sss(BuildContext context) {
     return Scaffold();
   }
 }
