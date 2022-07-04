@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/async.dart';
 
 import './write_page.dart';
-import './content_page.dart';
+import './category.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _CommunityState extends State<Community> {
     setState(() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => contentPage()),
+        MaterialPageRoute(builder: (context) => Category()),
       );
     });
   }
@@ -65,7 +65,7 @@ class _CommunityState extends State<Community> {
                     Expanded(
                       child: SizedBox(
                         height: 800.0,
-                        child: sss(context),
+                        child: Content(context),
                       ),
                     ),
                   ],
@@ -83,7 +83,7 @@ class _CommunityState extends State<Community> {
     );
   }
 
-  Widget sss(BuildContext context) {
+  Widget Content(BuildContext context) {
     return Scaffold();
   }
 }

@@ -54,7 +54,9 @@ class _WritePageState extends State<WritePage> {
                   padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                   child: FlatButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(
+                        context,
+                      );
                     },
                     child: Text(
                       '글쓰기',

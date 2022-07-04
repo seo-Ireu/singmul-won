@@ -12,12 +12,12 @@ class data {
   }
 }
 
-class contentPage extends StatefulWidget {
+class Category extends StatefulWidget {
   @override
-  _contentPageState createState() => _contentPageState();
+  _CategoryState createState() => _CategoryState();
 }
 
-class _contentPageState extends State<contentPage> {
+class _CategoryState extends State<Category> {
   data d = new data();
   @override
   Widget build(BuildContext context) {
