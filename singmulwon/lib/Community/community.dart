@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/async.dart';
 
 import './write_page.dart';
 import './category.dart';
+import '../http.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -44,34 +44,44 @@ class _CommunityState extends State<Community> {
         child: ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InfoPage(),
+                    ));
+              },
+            ),
             Card(
-                child: Column(
-              children: <Widget>[
-                // new Swiper(
-                //   autoplay: true,
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return new Image.network(
-                //       ImagesList[index],
-                //       fit: BoxFit.fill,
-                //     );
-                //   },
-                //   itemCount: ImagesList.length,
-                //   itemWidth: 300.0,
-                //   itemHeight: 200.0,
-                //   layout: SwiperLayout.STACK,
-                // ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                        height: 800.0,
-                        child: Content(context),
+              child: Column(
+                children: <Widget>[
+                  // new Swiper(
+                  //   autoplay: true,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return new Image.network(
+                  //       ImagesList[index],
+                  //       fit: BoxFit.fill,
+                  //     );
+                  //   },
+                  //   itemCount: ImagesList.length,
+                  //   itemWidth: 300.0,
+                  //   itemHeight: 200.0,
+                  //   layout: SwiperLayout.STACK,
+                  // ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 800.0,
+                          child: Content(context),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
