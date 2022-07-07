@@ -1,10 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:number_pagination/number_pagination.dart';
 
 import './write_page.dart';
-import './category.dart';
-import '../http.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -12,83 +11,102 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> {
-  void _incrementCounter() {
-    //쓰기로 이동
-    setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => WritePage()),
-      );
-    });
-  }
-
-  onMove(String title, String content) {
-    //해당 게시글로 이동
-    data d = new data();
-    d.setTitle(title, content);
-    setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Category()),
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    var selectedPageNumber = 1;
     return Scaffold(
       appBar: AppBar(
         title: Text("커뮤니티"),
       ),
-      body: Center(
-        child: ListView(
-          padding: const EdgeInsets.all(8),
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InfoPage(),
-                    ));
-              },
+      body: Column(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text('정보'),
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text('질문'),
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                TextButton(
+                  style: ButtonStyle(),
+                  onPressed: () {},
+                  child: Text('나눔'),
+                ),
+              ],
             ),
-            Card(
-              child: Column(
-                children: <Widget>[
-                  // new Swiper(
-                  //   autoplay: true,
-                  //   itemBuilder: (BuildContext context, int index) {
-                  //     return new Image.network(
-                  //       ImagesList[index],
-                  //       fit: BoxFit.fill,
-                  //     );
-                  //   },
-                  //   itemCount: ImagesList.length,
-                  //   itemWidth: 300.0,
-                  //   itemHeight: 200.0,
-                  //   layout: SwiperLayout.STACK,
-                  // ),
-                  Row(
+          ),
+          Flexible(
+            child: ListView(
+              padding: const EdgeInsets.all(8),
+              children: <Widget>[
+                Card(
+                  child: Column(
                     children: <Widget>[
-                      Expanded(
-                        child: SizedBox(
-                          height: 800.0,
-                          child: Content(context),
-                        ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: SizedBox(
+                              height: 800.0,
+                              child: Content(context),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 320,
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(240, 10, 30, 0),
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => WritePage()));
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [Icon(Icons.edit), Text(" 글쓰기")],
               ),
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: '글쓰기',
-        child: Icon(Icons.add),
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: NumberPagination(
+              onPageChanged: (int pageNumber) {
+                //do somthing for selected page
+                setState(
+                  () {
+                    selectedPageNumber = pageNumber;
+                  },
+                );
+              },
+              threshold: 4,
+              pageTotal: 100,
+              pageInit: selectedPageNumber, // picked number when init page
+              colorPrimary: Colors.white,
+              colorSub: Colors.green,
+            ),
+          ),
+        ],
       ),
     );
   }

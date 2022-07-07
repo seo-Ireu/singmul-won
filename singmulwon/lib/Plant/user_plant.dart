@@ -16,32 +16,44 @@ class UserPlant extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(name),
-      leading: CircleAvatar(
-        backgroundImage: AssetImage(image),
-      ),
-      trailing: Container(
-        width: 100,
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(EditPlant.routeName, arguments: id);
-              },
-              icon: Icon(Icons.edit),
-              color: Theme.of(context).primaryColor,
+    return Container(
+      width: 300,
+      height: 100,
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundImage: AssetImage(image),
+          ),
+          Column(
+            children: [
+              Text(name),
+              Text(sort),
+            ],
+          ),
+          Container(
+            width: 100,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(EditPlant.routeName, arguments: id);
+                  },
+                  icon: Icon(Icons.edit),
+                  color: Theme.of(context).primaryColor,
+                ),
+                IconButton(
+                  onPressed: () {
+                    Provider.of<Plants>(context, listen: false).deletePlant(id);
+                  },
+                  icon: Icon(Icons.delete),
+                  color: Theme.of(context).errorColor,
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () {
-                Provider.of<Plants>(context, listen: false).deletePlant(id);
-              },
-              icon: Icon(Icons.delete),
-              color: Theme.of(context).errorColor,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

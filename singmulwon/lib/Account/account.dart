@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../account_sql_helper.dart';
+import '../http.dart';
 
 class Account extends StatefulWidget {
   @override
@@ -155,6 +156,15 @@ class _AccountState extends State<Account> {
                     style: TextStyle(fontSize: 16, color: Colors.blue[400]),
                   ),
                 ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => InfoPage(),
+                      ));
+                },
               ),
             ]),
           )
