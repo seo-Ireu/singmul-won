@@ -17,6 +17,7 @@ class _CommunityState extends State<Community> {
     return Scaffold(
       appBar: AppBar(
         title: Text("커뮤니티"),
+        elevation: 0,
       ),
       body: Column(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
