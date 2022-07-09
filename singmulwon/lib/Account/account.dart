@@ -157,15 +157,15 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InfoPage(),
-                      ));
-                },
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => InfoPage(),
+              //         ));
+              //   },
+              // ),
             ]),
           )
         ],
