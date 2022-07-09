@@ -5,6 +5,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'Feed/insta_home.dart';
+import 'Feed/my_feed.dart';
 import 'Plant/manage_plant.dart';
 import 'Account/account.dart';
 import 'Community/community.dart';
@@ -20,9 +21,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     int selectedIndex = 2;
     final List<Widget> widgetOptions = <Widget>[
-      InstaHome(),
+      MyFeed(),
       ManagePlant(),
-      Home(),
+      InstaHome(),
       Community(),
       Account(),
     ];

@@ -8,8 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Feed/insta_home.dart';
 import 'Feed/insta_list.dart';
+import 'Feed/my_feed.dart';
+import 'Feed/my_feed_detail.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/manage_plant.dart';
+import 'Provider/feeds.dart';
 import 'Provider/plants.dart';
 import 'Plant/plant_detail.dart';
 import 'Login/signin.dart';
@@ -18,6 +21,7 @@ import 'home_page.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => Plants()),
+    ChangeNotifierProvider(create: (context) => Feeds()),
   ], child: MyApp()));
   //수정: EditPlant에서 Provider 가져올 수 없다고 해서 수정함
 }
@@ -40,6 +44,8 @@ class MyApp extends StatelessWidget {
           InstaList.routeName: (ctx) => InstaList(),
           InstaHome.routeName: (ctx) => InstaHome(),
           HomePage.routeName: (ctx) => HomePage(),
+          MyFeed.routeName: (ctx) => MyFeed(),
+          MyFeedDetail.routeName: (ctx) => MyFeedDetail(),
         });
   }
 }

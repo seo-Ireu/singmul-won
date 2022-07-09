@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
-import '../Provider/feed.dart';
+
 import '../Provider/feeds.dart';
 import '../feed_sql_helper.dart';
-import 'dart:developer';
-import 'insta_create.dart';
 
-class InstaList extends StatefulWidget {
-  static const routeName = '/inst_list';
+class MyFeedDetail extends StatefulWidget {
+  static const routeName = '/my_feed_detail.dart';
+
+  const MyFeedDetail({Key key}) : super(key: key);
 
   @override
-  _InstaListState createState() => _InstaListState();
+  State<MyFeedDetail> createState() => _MyFeedDetailState();
 }
 
-class _InstaListState extends State<InstaList> {
+class _MyFeedDetailState extends State<MyFeedDetail> {
   bool isPressed = false;
-
-  //SQL추가
   bool _isLoading = true;
   List<Map<String, dynamic>> _feeds = [];
 
@@ -29,14 +29,6 @@ class _InstaListState extends State<InstaList> {
     });
   }
 
-  void _deleteItem(int id) async {
-    await FeedSQLHelper.deleteFeed(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Successfully deleted a journal!'),
-    ));
-    _refreshFeeds();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -45,16 +37,29 @@ class _InstaListState extends State<InstaList> {
 
   @override
   Widget build(BuildContext context) {
+    final _index = ModalRoute.of(context).settings.arguments as int;
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      body: FeedDetail(_index),
+    );
+  }
+
+  Widget FeedDetail(_index) {
     final _temp = Provider.of<Feeds>(context);
 
-    var deviceSize = MediaQuery.of(context).size;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         // Expanded(flex: 1, child: new InstaStories()),
         Flexible(
             child: ListView.builder(
-          itemCount: 10,
+          itemCount: 1,
           itemBuilder: (context, index) => Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -68,30 +73,29 @@ class _InstaListState extends State<InstaList> {
                     Row(
                       children: <Widget>[
                         // 프로필 사진
-                        new Container(
+                        Container(
                           height: 40.0,
                           width: 40.0,
-                          decoration: new BoxDecoration(
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            image: new DecorationImage(
+                            image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: AssetImage(
-                                    _temp.feeds[index].profileImageurl)),
+                                image: AssetImage('assets/human_1.jpg')),
                           ),
                         ),
                         // //프로필 사진
-                        new SizedBox(
+                        SizedBox(
                           width: 10.0,
                         ),
                         //아이디
-                        new Text(
-                          _temp.feeds[index].userId,
+                        Text(
+                          "lshhh",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                         // //아이디
                       ],
                     ),
-                    new IconButton(
+                    IconButton(
                       icon: Icon(Icons.more_vert),
                       onPressed: null,
                     )
@@ -101,8 +105,8 @@ class _InstaListState extends State<InstaList> {
               // 피드 사진
               Flexible(
                 fit: FlexFit.loose,
-                child:
-                    Image.asset(_temp.feeds[index].imageUrl, fit: BoxFit.cover),
+                child: Image.asset(_temp.feeds[_index].imageUrl,
+                    fit: BoxFit.cover),
               ),
               // //피드 사진
 
@@ -112,11 +116,11 @@ class _InstaListState extends State<InstaList> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    new Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        new IconButton(
-                          icon: new Icon(
+                        IconButton(
+                          icon: Icon(
                               isPressed ? Icons.favorite : Icons.heart_broken),
                           color: isPressed ? Colors.red : Colors.black,
                           onPressed: () {
@@ -125,27 +129,27 @@ class _InstaListState extends State<InstaList> {
                             });
                           },
                         ),
-                        new SizedBox(
+                        SizedBox(
                           width: 16.0,
                         ),
-                        new Icon(
+                        Icon(
                           Icons.comment,
                         ),
-                        new SizedBox(
+                        SizedBox(
                           width: 16.0,
                         ),
-                        new IconButton(
-                          icon: new Icon(Icons.delete),
+                        IconButton(
+                          icon: Icon(Icons.delete),
                           onPressed: () {
-                            _deleteItem(_feeds[index]['id']);
+                            // _deleteItem(_feeds[index]['id']);
                           },
                         ),
                         IconButton(
                           icon: Icon(Icons.abc),
                           onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                CreatePage.routeName,
-                                arguments: (_feeds[index]['id']));
+                            // Navigator.of(context).pushNamed(
+                            //     CreatePage.routeName,
+                            //     arguments: (_feeds[index]['id']));
                           },
                         ),
                       ],
@@ -158,7 +162,7 @@ class _InstaListState extends State<InstaList> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
-                  _temp.feeds[index].content,
+                  _feeds[_index]['content'],
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -180,12 +184,12 @@ class _InstaListState extends State<InstaList> {
                     //             "https://pbs.twimg.com/profile_images/916384996092448768/PF1TSFOE_400x400.jpg")),
                     //   ),
                     // ),
-                    new SizedBox(
+                    SizedBox(
                       width: 10.0,
                     ),
                     Expanded(
-                      child: new TextField(
-                        decoration: new InputDecoration(
+                      child: TextField(
+                        decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "Add a comment...",
                         ),
@@ -196,7 +200,7 @@ class _InstaListState extends State<InstaList> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(_temp.feeds[index].date,
+                child: Text(_feeds[index]['createdAt'],
                     style: TextStyle(color: Colors.grey)),
               )
             ],
