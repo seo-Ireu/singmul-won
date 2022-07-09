@@ -1,10 +1,11 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, prefer_const_literals_to_create_immutables, prefer_const_constructors, non_constant_identifier_names
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:number_pagination/number_pagination.dart';
 
 import './write_page.dart';
+import './boast.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -13,73 +14,103 @@ class Community extends StatefulWidget {
 
 class _CommunityState extends State<Community> {
   var selectedPageNumber = 1;
-  Container category() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton(
-            onPressed: () {},
-            child: Text('꿀팁'),
-          ),
-          SizedBox(
-            width: 40,
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text('질문'),
-          ),
-          SizedBox(
-            width: 40,
-          ),
-          TextButton(
-            style: ButtonStyle(),
-            onPressed: () {},
-            child: Text('나눔'),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Container community_edit() {
+  Container boast_board() {
     return Container(
-      margin: EdgeInsets.fromLTRB(240, 10, 30, 0),
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => WritePage()));
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [Icon(Icons.edit), Text(" 글쓰기")],
+      margin: EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.green),
+          top: BorderSide(color: Colors.green),
+          left: BorderSide(color: Colors.green),
+          right: BorderSide(color: Colors.green),
+        ),
+      ),
+      child: SizedBox(
+        height: 60,
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Boast(),
+              ),
+            );
+          },
+          child: Text(
+            "<< 뽐내기 게시판 >>",
+            style: TextStyle(
+              fontSize: 24,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Flexible pagination() {
-    return Flexible(
-      fit: FlexFit.tight,
-      child: NumberPagination(
-        onPageChanged: (int pageNumber) {
-          //do somthing for selected page
-          setState(
-            () {
-              selectedPageNumber = pageNumber;
-            },
-          );
-        },
-        threshold: 4,
-        pageTotal: 100,
-        pageInit: selectedPageNumber, // picked number when init page
-        colorPrimary: Colors.white,
-        colorSub: Colors.green,
-      ),
-    );
-  }
+  Container category() => Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: Text('꿀팁'),
+            ),
+            SizedBox(
+              width: 40,
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {});
+              },
+              child: Text('질문'),
+            ),
+            SizedBox(
+              width: 40,
+            ),
+            TextButton(
+              style: ButtonStyle(),
+              onPressed: () {},
+              child: Text('나눔'),
+            ),
+          ],
+        ),
+      );
+
+  Container community_edit() => Container(
+        margin: EdgeInsets.fromLTRB(240, 10, 30, 0),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => WritePage()));
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [Icon(Icons.edit), Text(" 글쓰기")],
+          ),
+        ),
+      );
+
+  Expanded pagination() => Expanded(
+        child: NumberPagination(
+          onPageChanged: (int pageNumber) {
+            //do somthing for selected page
+            setState(
+              () {
+                selectedPageNumber = pageNumber;
+              },
+            );
+          },
+          threshold: 4,
+          pageTotal: 100,
+          pageInit: selectedPageNumber, // picked number when init page
+          colorPrimary: Colors.white,
+          colorSub: Colors.green,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +122,10 @@ class _CommunityState extends State<Community> {
       body: Column(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          category(),
-          Flexible(
+          boast_board(), //뽐내기 게시판
+          category(), //카테고리
+          Expanded(
+            flex: 6,
             child: ListView(
               padding: const EdgeInsets.all(8),
               children: <Widget>[
@@ -103,7 +136,7 @@ class _CommunityState extends State<Community> {
                         children: <Widget>[
                           Expanded(
                             child: SizedBox(
-                              height: 800.0,
+                              height: 450.0,
                               child: Content(context),
                             ),
                           ),

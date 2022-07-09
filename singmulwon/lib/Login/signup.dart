@@ -43,6 +43,7 @@ class _SignUp extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         margin: const EdgeInsets.all(4.0),
         padding: const EdgeInsets.only(top: 70, bottom: 24),

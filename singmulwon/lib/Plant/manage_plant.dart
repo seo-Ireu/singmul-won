@@ -16,7 +16,7 @@ class ManagePlant extends StatefulWidget {
 }
 
 var titleList = [
-  '수선',
+  '새싹이',
   '민들민들',
 ];
 

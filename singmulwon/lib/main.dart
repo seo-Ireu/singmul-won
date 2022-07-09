@@ -73,6 +73,7 @@ class _LoginState extends State<Login> {
 
   Widget _signInWidget() {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
