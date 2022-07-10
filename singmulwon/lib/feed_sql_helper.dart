@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
-import 'SQLHelper.dart';
+import '../SQLHelper.dart';
 
 // CREATE TABLE feeds(
 //         feedId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

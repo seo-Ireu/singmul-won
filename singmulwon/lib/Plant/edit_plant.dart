@@ -84,6 +84,7 @@ class _EditPlantState extends State<EditPlant> {
             icon: Icon(Icons.save),
           )
         ],
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

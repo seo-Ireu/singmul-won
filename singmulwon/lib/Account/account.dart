@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import '../account_sql_helper.dart';
-import '../http.dart';
 
 class Account extends StatefulWidget {
   @override
@@ -125,6 +126,7 @@ class _AccountState extends State<Account> {
             child: Column(children: [
               Container(
                 padding: const EdgeInsets.only(top: 10, left: 10, bottom: 4),
+                // ignore: prefer_const_constructors
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -157,15 +159,15 @@ class _AccountState extends State<Account> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InfoPage(),
-                      ));
-                },
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => InfoPage(),
+              //         ));
+              //   },
+              // ),
             ]),
           )
         ],
