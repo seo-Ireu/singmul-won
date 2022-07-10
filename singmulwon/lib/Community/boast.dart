@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
+
 //뽐내기 게시판
+
 import 'package:flutter/material.dart';
 
 class Boast extends StatefulWidget {

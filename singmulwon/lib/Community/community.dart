@@ -14,6 +14,7 @@ class Community extends StatefulWidget {
 
 class _CommunityState extends State<Community> {
   var selectedPageNumber = 1;
+
   Widget category_board;
 
   Container boast_board() {
@@ -131,6 +132,7 @@ class _CommunityState extends State<Community> {
       appBar: AppBar(
         title: Text("데일리데일리"),
         // title: Text("DailyDaily"),
+
         elevation: 0,
       ),
       body: Column(
