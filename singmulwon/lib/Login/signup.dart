@@ -1,9 +1,31 @@
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:http/http.dart' as http;
+import 'package:mysql1/mysql1.dart';
 
-import '../main.dart';
+import 'dart:async';
+// import 'dart:convert';
+
 import '../home_page.dart';
 import '../account_sql_helper.dart';
+
+Future create_account_sql(
+    user_id, pw, nickname, phone_number, profile_intro) async {
+  final conn = await MySqlConnection.connect(ConnectionSettings(
+      host: '54.177.126.159',
+      port: 3306,
+      user: 'root',
+      db: 'singmulwon',
+      password: 'hanium'));
+
+  await conn.query(
+      'insert into account (user_id, pw, nickname, phone_number, profile_intro) values (?, ?, ?, ?, ?)',
+      [user_id, pw, nickname, phone_number, profile_intro]);
+
+  await conn.close();
+}
 
 class SignUp extends StatefulWidget {
   @override
@@ -16,6 +38,12 @@ class _SignUp extends State<SignUp> {
   final _nicknameTextController = TextEditingController();
   final _phoneTextController = TextEditingController();
   final _profileintroTextController = TextEditingController();
+
+  String user_id = '';
+  String pw = '';
+  String nick_name = '';
+  String phone_number = '';
+  String profile_intro = '';
 
   @override
   void dispose() {
@@ -83,6 +111,11 @@ class _SignUp extends State<SignUp> {
                           ),
                           labelText: 'Id',
                           hintText: 'Type your Id'),
+                      onSaved: (val) {
+                        setState(() {
+                          this.user_id = val;
+                        });
+                      },
                       validator: (String value) {
                         if (value.length < 1) {
                           return 'Id is required';
@@ -101,6 +134,11 @@ class _SignUp extends State<SignUp> {
                           icon: Icon(Icons.lock),
                           labelText: 'Password',
                           hintText: 'Type password'),
+                      onSaved: (val) {
+                        setState(() {
+                          this.pw = val;
+                        });
+                      },
                       validator: (String value) {
                         if (value.trim().isEmpty) {
                           return 'Password is required';
@@ -121,6 +159,11 @@ class _SignUp extends State<SignUp> {
                           icon: Icon(Icons.badge),
                           labelText: 'Nickname',
                           hintText: 'Type Nickname'),
+                      onSaved: (val) {
+                        setState(() {
+                          this.nick_name = val;
+                        });
+                      },
                       validator: (String value) {
                         if (value.trim().isEmpty) {
                           return 'Nickname is required';
@@ -141,6 +184,11 @@ class _SignUp extends State<SignUp> {
                           icon: Icon(Icons.phone),
                           labelText: 'Phone Number',
                           hintText: 'Type PhoneNum'),
+                      onSaved: (val) {
+                        setState(() {
+                          this.phone_number = val;
+                        });
+                      },
                       validator: (String value) {
                         if (value.trim().isEmpty) {
                           return 'PhoneNum is required';
@@ -161,6 +209,11 @@ class _SignUp extends State<SignUp> {
                           icon: Icon(Icons.contact_page),
                           labelText: 'ProfileIntro',
                           hintText: 'Type Profile'),
+                      onSaved: (val) {
+                        setState(() {
+                          this.profile_intro = val;
+                        });
+                      },
                       validator: (String value) {
                         if (value.trim().isEmpty) {
                           return 'ProfileIntro is required';
@@ -204,6 +257,8 @@ class _SignUp extends State<SignUp> {
                             _nicknameTextController.toString(),
                             _phoneTextController.toString(),
                             _profileintroTextController.toString());
+                        create_account_sql(user_id, pw, nick_name, phone_number,
+                            profile_intro);
                       },
                     ),
                   ),

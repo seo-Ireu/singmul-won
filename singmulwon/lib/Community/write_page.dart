@@ -24,6 +24,17 @@ class _WritePageState extends State<WritePage> {
     });
   }
 
+  Widget showImage() {
+    return Container(
+        color: const Color(0xffd0cece),
+        width: MediaQuery.of(context).size.width * 0.3,
+        height: MediaQuery.of(context).size.width * 0.3,
+        child: Center(
+            child: _image == null
+                ? Text('No image selected.')
+                : Image.file(File(_image.path))));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +79,7 @@ class _WritePageState extends State<WritePage> {
                       },
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 120,
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -78,6 +89,7 @@ class _WritePageState extends State<WritePage> {
                     ),
                   ],
                 ),
+                showImage(),
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
@@ -105,7 +117,7 @@ class _WritePageState extends State<WritePage> {
                       '글쓰기',
                       style: TextStyle(color: Colors.white),
                     ),
-                    color: Colors.blue,
+                    color: Colors.green,
                     height: 50,
                     minWidth: 400,
                   ),

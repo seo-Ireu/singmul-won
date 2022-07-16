@@ -1,4 +1,9 @@
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import './signup.dart';
 import '../home_page.dart';
@@ -107,7 +112,6 @@ class _SignIn extends State<SignIn> {
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(12.0),
-//                    side: BorderSide(color: Colors.red)
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +144,6 @@ class _SignIn extends State<SignIn> {
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(12.0),
-//                    side: BorderSide(color: Colors.red)
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
