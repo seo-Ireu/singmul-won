@@ -93,7 +93,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = Content1(context);
+                  category_board = Content2(context);
                   color_category1 = Colors.green;
                   color_category2 = Colors.white;
                   color_category3 = Colors.green;
@@ -115,7 +115,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = Content1(context);
+                  category_board = Content3(context);
                   color_category1 = Colors.green;
                   color_category2 = Colors.green;
                   color_category3 = Colors.white;
