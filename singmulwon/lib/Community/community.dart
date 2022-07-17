@@ -14,6 +14,12 @@ class Community extends StatefulWidget {
 
 class _CommunityState extends State<Community> {
   var selectedPageNumber = 1;
+  var color_category1;
+  var color_category1_bg;
+  var color_category2;
+  var color_category2_bg;
+  var color_category3;
+  var color_category3_bg;
 
   Widget category_board;
 
@@ -58,9 +64,20 @@ class _CommunityState extends State<Community> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
+              style: TextButton.styleFrom(
+                primary: color_category1,
+                backgroundColor: color_category1_bg,
+                side: BorderSide(color: Colors.green),
+              ),
               onPressed: () {
                 setState(() {
                   category_board = Content1(context);
+                  color_category1 = Colors.white;
+                  color_category2 = Colors.green;
+                  color_category3 = Colors.green;
+                  color_category1_bg = Colors.green;
+                  color_category2_bg = Colors.white;
+                  color_category3_bg = Colors.white;
                 });
               },
               child: Text('꿀팁'),
@@ -69,9 +86,20 @@ class _CommunityState extends State<Community> {
               width: 40,
             ),
             TextButton(
+              style: TextButton.styleFrom(
+                primary: color_category2,
+                backgroundColor: color_category2_bg,
+                side: BorderSide(color: Colors.green),
+              ),
               onPressed: () {
                 setState(() {
-                  category_board = Content2(context);
+                  category_board = Content1(context);
+                  color_category1 = Colors.green;
+                  color_category2 = Colors.white;
+                  color_category3 = Colors.green;
+                  color_category1_bg = Colors.white;
+                  color_category2_bg = Colors.green;
+                  color_category3_bg = Colors.white;
                 });
               },
               child: Text('질문'),
@@ -80,10 +108,20 @@ class _CommunityState extends State<Community> {
               width: 40,
             ),
             TextButton(
-              style: ButtonStyle(),
+              style: TextButton.styleFrom(
+                primary: color_category3,
+                backgroundColor: color_category3_bg,
+                side: BorderSide(color: Colors.green),
+              ),
               onPressed: () {
                 setState(() {
-                  category_board = Content3(context);
+                  category_board = Content1(context);
+                  color_category1 = Colors.green;
+                  color_category2 = Colors.green;
+                  color_category3 = Colors.white;
+                  color_category1_bg = Colors.white;
+                  color_category2_bg = Colors.white;
+                  color_category3_bg = Colors.green;
                 });
               },
               child: Text('나눔'),

@@ -26,9 +26,10 @@ class _WritePageState extends State<WritePage> {
 
   Widget showImage() {
     return Container(
-        color: const Color(0xffd0cece),
+        // color: const Color(0xffd0cece),
         width: MediaQuery.of(context).size.width * 0.3,
         height: MediaQuery.of(context).size.width * 0.3,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Center(
             child: _image == null
                 ? Text('No image selected.')
@@ -62,8 +63,14 @@ class _WritePageState extends State<WritePage> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Text('카테고리: '),
+                    SizedBox(
+                      width: 20,
+                    ),
                     DropdownButton(
                       value: _selectedValue,
                       items: _valueList.map((value) {
@@ -78,8 +85,16 @@ class _WritePageState extends State<WritePage> {
                         });
                       },
                     ),
+                  ],
+                ),
+                Row(
+                  children: [
                     SizedBox(
-                      width: 120,
+                      width: 30,
+                    ),
+                    showImage(),
+                    SizedBox(
+                      width: 20,
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -89,9 +104,8 @@ class _WritePageState extends State<WritePage> {
                     ),
                   ],
                 ),
-                showImage(),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
                   child: TextField(
                     onChanged: (String text) {
                       content = text;
