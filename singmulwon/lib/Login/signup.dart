@@ -2,30 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
-import 'package:mysql1/mysql1.dart';
+import 'package:http/http.dart' as http;
 
 import 'dart:async';
 // import 'dart:convert';
 
 import '../home_page.dart';
 import '../account_sql_helper.dart';
-
-Future create_account_sql(
-    user_id, pw, nickname, phone_number, profile_intro) async {
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-      host: '54.177.126.159',
-      port: 3306,
-      user: 'root',
-      db: 'singmulwon',
-      password: 'hanium'));
-
-  await conn.query(
-      'insert into account (user_id, pw, nickname, phone_number, profile_intro) values (?, ?, ?, ?, ?)',
-      [user_id, pw, nickname, phone_number, profile_intro]);
-
-  await conn.close();
-}
 
 class SignUp extends StatefulWidget {
   @override
@@ -257,8 +240,6 @@ class _SignUp extends State<SignUp> {
                             _nicknameTextController.toString(),
                             _phoneTextController.toString(),
                             _profileintroTextController.toString());
-                        create_account_sql(user_id, pw, nick_name, phone_number,
-                            profile_intro);
                       },
                     ),
                   ),
