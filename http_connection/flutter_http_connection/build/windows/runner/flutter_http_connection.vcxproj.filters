@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\runner\flutter_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\runner\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\runner\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\runner\win32_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\generated_plugin_registrant.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\runner\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\runner\Runner.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{EAFDBDBF-153A-38E2-964D-E0795054187F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

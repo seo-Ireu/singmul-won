@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\ephemeral\cpp_client_wrapper\core_implementations.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\ephemeral\cpp_client_wrapper\standard_codec.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\ephemeral\cpp_client_wrapper\flutter_engine.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\ephemeral\cpp_client_wrapper\flutter_view_controller.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{48AA57FE-01E5-3F81-9F0A-62F77A343E21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{EAFDBDBF-153A-38E2-964D-E0795054187F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

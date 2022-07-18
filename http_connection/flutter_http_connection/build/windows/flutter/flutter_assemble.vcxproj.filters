@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\build\windows\CMakeFiles\2eb46b5fbaa64c1b2d2d24224f807a94\flutter_windows.dll.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\build\windows\CMakeFiles\0eaedb390cc72a05505987a10dd35065\flutter_assemble.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\windows\flutter\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\lyhth\OneDrive\Desktop\Programming\한이음\22_hf016\http_connection\flutter_http_connection\build\windows\flutter\CMakeFiles\flutter_assemble" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{48AA57FE-01E5-3F81-9F0A-62F77A343E21}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
