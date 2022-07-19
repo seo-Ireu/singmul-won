@@ -1,3 +1,7 @@
+# 0719
+기존 코드에 http 통신 코드 삽입
+- 주석 처리로 실제 와이파이 실험 해 봐야함 -> 공유기 포트포워딩 필요
+- 서버에 arduino/input.php, process.php 추가 -> input.php는 후에 필요없고 테스트용, 아두이노에서 process.php로 get방식 사용하도록 넘김
 
 # 0717
 온습도 센서를 php를 통해 mysql에 저장하는 예시 코드
