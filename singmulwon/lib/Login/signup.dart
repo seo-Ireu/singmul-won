@@ -52,16 +52,29 @@ class _SignUp extends State<SignUp> {
           gravity: ToastGravity.CENTER,
           fontSize: 16);
     } else {
-      var url = "http://54.177.126.159/ubuntu/flutter/account/insert.php";
       var userid = _useridTextController.text;
       var pw = _passwordTextController.text;
       var nickname = _nicknameTextController.text;
       var phone_number = _phoneTextController.text;
       var profile_intro = _profileintroTextController.text;
-      await http.get(Uri.parse(
-          '$url?userid=$userid&pw=$pw&nickname=$nickname&phone_number=$phone_number&profile_intro=$profile_intro'));
-
-      Navigator.of(context).pushNamed(HomePage.routeName);
+      var url_bf =
+          "http://54.177.126.159/ubuntu/flutter/account/signup_validate.php";
+      var response = await http.post(Uri.parse(url_bf), body: {
+        "userid": userid,
+      });
+      var vld = await json.decode(json.encode(response.body));
+      if (vld == '"catch"\n') {
+        Fluttertoast.showToast(
+            msg: "아이디가 중복되었습니다.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            fontSize: 16);
+      } else {
+        var url = "http://54.177.126.159/ubuntu/flutter/account/insert.php";
+        await http.get(Uri.parse(
+            '$url?userid=$userid&pw=$pw&nickname=$nickname&phone_number=$phone_number&profile_intro=$profile_intro'));
+        Navigator.of(context).pushNamed(HomePage.routeName);
+      }
     }
   }
   // _setIsLogin() async {
@@ -200,7 +213,6 @@ class _SignUp extends State<SignUp> {
                   SizedBox(
                     width: 360,
                     child: TextField(
-                      obscureText: true,
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           icon: Icon(Icons.badge),
@@ -244,7 +256,6 @@ class _SignUp extends State<SignUp> {
                   SizedBox(
                     width: 360,
                     child: TextField(
-                      obscureText: true,
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           icon: Icon(Icons.phone),
@@ -288,7 +299,6 @@ class _SignUp extends State<SignUp> {
                   SizedBox(
                     width: 360,
                     child: TextField(
-                      obscureText: true,
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           icon: Icon(Icons.contact_page),
