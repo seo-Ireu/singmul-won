@@ -10,7 +10,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
-  final account = AccountSQLHelper.getAccounts;
+  // final account = AccountSQLHelper.getAccounts;
 
   @override
   Widget build(BuildContext context) {

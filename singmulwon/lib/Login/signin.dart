@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 import './signup.dart';
 import '../home_page.dart';
@@ -14,20 +15,43 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignIn extends State<SignIn> {
-  final _useridTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-  final _nicknameTextController = TextEditingController();
-  final _phoneTextController = TextEditingController();
-  final _profileintroTextController = TextEditingController();
+  TextEditingController userid = TextEditingController();
+  TextEditingController pw = TextEditingController();
 
-  @override
-  void dispose() {
-    _useridTextController.dispose();
-    _passwordTextController.dispose();
-    _nicknameTextController.dispose();
-    _phoneTextController.dispose();
-    _profileintroTextController.dispose();
-    super.dispose();
+  // @override
+  // void dispose() {
+  //   userid.dispose();
+  //   pw.dispose();
+  //   super.dispose();
+  // }
+
+  Future login(BuildContext cont) async {
+    if (userid.text == "" || pw.text == "") {
+      Fluttertoast.showToast(
+          msg: "아이디와 비밀번호를 입력해주세요.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          fontSize: 16);
+    } else {
+      var url = "http://54.177.126.159/ubuntu/flutter/account/signin.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "userid": userid.text,
+        "pw": pw.text,
+      });
+      // var vld = json.decode(response.body);
+      var vld = await json.decode(json.encode(response.body));
+      if (vld == '"Success"') {
+        // Navigator.push(
+        //     cont, MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.of(context).pushNamed(HomePage.routeName);
+      } else {
+        Fluttertoast.showToast(
+            msg: "아이디와 비밀번호가 일치하지 않습니다.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            fontSize: 16);
+      }
+    }
   }
 
   @override
@@ -63,7 +87,7 @@ class _SignIn extends State<SignIn> {
               children: <Widget>[
                 SizedBox(
                   width: 360,
-                  child: TextFormField(
+                  child: TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         icon: Icon(
@@ -71,34 +95,34 @@ class _SignIn extends State<SignIn> {
                         ),
                         labelText: 'Id',
                         hintText: 'Type your Id'),
-                    validator: (String value) {
-                      if (value.trim().isEmpty) {
-                        return 'Id is required';
-                      } else {
-                        return null;
-                      }
-                    },
-                    controller: _useridTextController,
+                    // validator: (String value) {
+                    //   if (value.trim().isEmpty) {
+                    //     return 'Id is required';
+                    //   } else {
+                    //     return null;
+                    //   }
+                    // },
+                    controller: userid,
                   ),
                 ),
                 Divider(),
                 SizedBox(
                   width: 360,
-                  child: TextFormField(
+                  child: TextField(
                     obscureText: true,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         icon: Icon(Icons.lock),
                         labelText: 'Password',
                         hintText: 'Type password'),
-                    validator: (String value) {
-                      if (value.trim().isEmpty) {
-                        return 'Password is required';
-                      } else {
-                        return null;
-                      }
-                    },
-                    controller: _passwordTextController,
+                    // validator: (String value) {
+                    //   if (value.trim().isEmpty) {
+                    //     return 'Password is required';
+                    //   } else {
+                    //     return null;
+                    //   }
+                    // },
+                    controller: pw,
                   ),
                 ),
               ],
@@ -126,7 +150,8 @@ class _SignIn extends State<SignIn> {
                     color: Colors.green[700],
                     padding: EdgeInsets.all(10),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(HomePage.routeName);
+                      // Navigator.of(context).pushNamed(HomePage.routeName);
+                      login(context);
                     },
                   ),
                 ),

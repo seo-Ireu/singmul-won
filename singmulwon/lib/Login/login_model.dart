@@ -1,20 +1,24 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
 
-// import 'package:json_annotation/json_annotation.dart';
-// import 'package:freezed_annotation/freezed_annotation.dart';
+class LoginModel {
+  String userId;
+  String pw;
+  String nickName;
+  String phoneNum;
+  String profileIntro;
 
-// part 'login_model.freezed.dart';
-// part 'login_model.g.dart';
+  LoginModel(
+      {this.userId, this.pw, this.nickName, this.phoneNum, this.profileIntro});
 
-// @freezed
-// class LoginModel with _$LoginModel{
-//   factory LoginModel({
-//     @required String userid,
-//     @required String pw,
-//     @required String nickname,
-//     @JsonKey(name: 'phone_number') @required String phoneNumber,
-//     @JsonKey(name: 'profile_intro') @required String profileIntro,
-//   }) =_LoginModel;
-//   factory LoginModel.fromJson(Map<String, dynamic> json)=> _$LoginModelFromjson(json);
-// }
-
+  factory LoginModel.fromJson(Map<String, dynamic> parsedJson) {
+    return LoginModel(
+      userId: parsedJson['userid'],
+      pw: parsedJson['pw'],
+      nickName: parsedJson['nickname'],
+      phoneNum: parsedJson['phone_number'],
+      profileIntro: parsedJson['profile_intro'],
+    );
+  }
+}
