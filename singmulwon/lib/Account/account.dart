@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../account_sql_helper.dart';
-
 class Account extends StatefulWidget {
   @override
   State<Account> createState() => _AccountState();

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Feed/insta_home.dart';
-import '../account_sql_helper.dart';
 import '../feed_sql_helper.dart';
 import 'insta_list.dart';
 import 'dart:developer';

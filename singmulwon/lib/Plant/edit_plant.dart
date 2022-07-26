@@ -74,6 +74,8 @@ class _EditPlantState extends State<EditPlant> {
     double waterValue = _currentWaterValue;
     double lightValue = _currentLightValue;
     final plantData = Provider.of<Plants>(context);
+    // final arguments = (ModalRoute.of(context).settings.arguments ??
+    //     <String, String>{}) as Map;
 
     return Scaffold(
       appBar: AppBar(

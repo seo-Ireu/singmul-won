@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_singmulwon_app/Plant/user_plant.dart';
 import 'package:provider/provider.dart';
 
 import '../Provider/plants.dart';
@@ -33,6 +32,9 @@ var description = [
 class _ManagePlantState extends State<ManagePlant> {
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context).settings.arguments ??
+        <String, String>{}) as Map;
+    final userid = arguments['userid'];
     double width = MediaQuery.of(context).size.width * 0.6;
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +44,8 @@ class _ManagePlantState extends State<ManagePlant> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(EditPlant.routeName);
+              Navigator.of(context).pushNamed(
+                  EditPlant.routeName); //, arguments: {'userid': userid} 추가 예정
               //수정: arguments(plantId) 추가
             },
             icon: const Icon(Icons.add),

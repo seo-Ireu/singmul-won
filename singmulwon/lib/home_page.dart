@@ -1,15 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 import 'Feed/insta_home.dart';
 import 'Feed/my_feed.dart';
 import 'Plant/manage_plant.dart';
-import './home.dart';
 import 'Community/community.dart';
 import 'Account/account.dart';
 
 class HomePage extends StatefulWidget {
+  String userid = '';
+  HomePage(this.userid);
   static const routeName = '/homepage';
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     Community(),
     Account(),
   ];
+
   void _onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -32,6 +35,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context).settings.arguments ??
+        <String, String>{}) as Map;
+    log(arguments['userid']);
     return Scaffold(
       body: SafeArea(
         child: widgetOptions.elementAt(selectedIndex),

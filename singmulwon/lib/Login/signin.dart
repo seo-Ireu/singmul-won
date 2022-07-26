@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors
+// ignore_for_file: deprecated_member_use, prefer_const_constructors, use_key_in_widget_constructors
 import 'dart:async';
 import 'dart:convert';
 
@@ -38,12 +38,10 @@ class _SignIn extends State<SignIn> {
         "userid": userid.text,
         "pw": pw.text,
       });
-      // var vld = json.decode(response.body);
       var vld = await json.decode(json.encode(response.body));
       if (vld == '"Success"') {
-        // Navigator.push(
-        //     cont, MaterialPageRoute(builder: (context) => HomePage()));
-        Navigator.of(context).pushNamed(HomePage.routeName);
+        Navigator.of(context)
+            .pushNamed(HomePage.routeName, arguments: {'userid': userid.text});
       } else {
         Fluttertoast.showToast(
             msg: "아이디와 비밀번호가 일치하지 않습니다.",
@@ -95,13 +93,7 @@ class _SignIn extends State<SignIn> {
                         ),
                         labelText: 'Id',
                         hintText: 'Type your Id'),
-                    // validator: (String value) {
-                    //   if (value.trim().isEmpty) {
-                    //     return 'Id is required';
-                    //   } else {
-                    //     return null;
-                    //   }
-                    // },
+                    //validation 추가 필요
                     controller: userid,
                   ),
                 ),
@@ -115,13 +107,7 @@ class _SignIn extends State<SignIn> {
                         icon: Icon(Icons.lock),
                         labelText: 'Password',
                         hintText: 'Type password'),
-                    // validator: (String value) {
-                    //   if (value.trim().isEmpty) {
-                    //     return 'Password is required';
-                    //   } else {
-                    //     return null;
-                    //   }
-                    // },
+                    //validation 추가 필요
                     controller: pw,
                   ),
                 ),
@@ -137,8 +123,10 @@ class _SignIn extends State<SignIn> {
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(12.0),
                     ),
+                    // ignore: sort_child_properties_last
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      // ignore: prefer_const_literals_to_create_immutables
                       children: <Widget>[
                         Text(
                           'Sign in',
@@ -150,7 +138,6 @@ class _SignIn extends State<SignIn> {
                     color: Colors.green[700],
                     padding: EdgeInsets.all(10),
                     onPressed: () {
-                      // Navigator.of(context).pushNamed(HomePage.routeName);
                       login(context);
                     },
                   ),
@@ -170,8 +157,10 @@ class _SignIn extends State<SignIn> {
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(12.0),
                     ),
+                    // ignore: sort_child_properties_last
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      // ignore: prefer_const_literals_to_create_immutables
                       children: <Widget>[
                         Text(
                           'Sign up',

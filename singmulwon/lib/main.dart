@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           CreatePage.routeName: (ctx) => CreatePage(),
           InstaList.routeName: (ctx) => InstaList(),
           InstaHome.routeName: (ctx) => InstaHome(),
-          HomePage.routeName: (ctx) => HomePage(),
+          HomePage.routeName: (ctx) => HomePage('?'),
           MyFeed.routeName: (ctx) => MyFeed(),
           MyFeedDetail.routeName: (ctx) => MyFeedDetail(),
         });
@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return !_isLogin ? _signInWidget() : HomePage();
+    return !_isLogin ? _signInWidget() : HomePage('?');
   }
 
   Widget _signInWidget() {
