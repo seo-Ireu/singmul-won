@@ -8,12 +8,12 @@
 #define txPin 2 
 SoftwareSerial esp01(txPin, rxPin); // SoftwareSerial NAME(TX, RX);
 
-char ssid[] = "Inha_Dormitory1";   // 공유기 ID
-char pass[] = "inha2000";        // 공유기 비밀번호
+char ssid[] = "공유기 ID";   // 공유기 ID
+char pass[] = "공유기 비밀번호";        // 공유기 비밀번호
 int status = WL_IDLE_STATUS;       // the Wifi radio's status
 
-const char* host = "54.177.126.159";
-const String url = "/ubuntu/arduino/suitablePlantData.php?userid=test1&plantInfoId=1";
+const char* host = "ip";
+const String url = "경로/파일.php?userid=test1&plantInfoId=1";
 
 WiFiEspClient client; // WiFiEspClient 객체 선언
 
