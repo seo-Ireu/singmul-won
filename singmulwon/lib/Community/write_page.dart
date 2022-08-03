@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../home_page.dart';
+import 'community.dart';
+
 class WritePage extends StatefulWidget {
   @override
   _WritePageState createState() => _WritePageState();
@@ -16,9 +19,9 @@ class _WritePageState extends State<WritePage> {
   TextEditingController _title = TextEditingController();
   TextEditingController _content = TextEditingController();
 
-  final List<String> _valueList = ['꿀팁', '질문', '나눔'];
+  final List<String> _categoryValueList = ['','꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
-  int _selectedIndex =0;
+  int _selectedCategoryIndex =1;
 
   final picker = ImagePicker();
   File _image;
@@ -32,13 +35,18 @@ class _WritePageState extends State<WritePage> {
   }
 
   Future _create() async{
+    print(_selectedCategoryIndex);
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_create.php";
 
-    print(_title.text);
-    print(_content.text);
-    print(_selectedIndex);
-
-
+    var response = await http.post(Uri.parse(url), body: {
+      "categoryId": _selectedCategoryIndex.toString(),
+      "userId": "admin",
+      "title": _title.text,
+      "content": _content.text
+    });
+    Navigator.of(context).pop();
   }
+
   Widget showImage() {
     return Container(
         // color: const Color(0xffd0cece),
@@ -86,7 +94,7 @@ class _WritePageState extends State<WritePage> {
                     ),
                     DropdownButton(
                       value: _selectedValue,
-                      items: _valueList.map((value) {
+                      items: _categoryValueList.map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Text(value),
@@ -94,9 +102,9 @@ class _WritePageState extends State<WritePage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          var index = _valueList.indexOf(value);
+                          var index = _categoryValueList.indexOf(value);
                           _selectedValue = value;
-                          _selectedIndex = index;
+                          _selectedCategoryIndex = index;
                         });
                       },
                     ),

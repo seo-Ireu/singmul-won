@@ -15,24 +15,14 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Community extends StatefulWidget {
+  static const routeName = '/community.dart';
+
   @override
   State<Community> createState() => _CommunityState();
 }
 
 class _CommunityState extends State<Community> {
-  Future<List<CommunityModel>> cmDataFuture = getCmData();
-
-  static Future <List<CommunityModel>> getCmData() async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php";
-    var response = await http.get(Uri.parse(url));
-
-    String jsonData = response.body;
-    var myJson = await jsonDecode(jsonData)['community'];
-
-    return myJson.map<CommunityModel>(CommunityModel.fromJson).toList();
-
-
-  }
+  var categoryValue =['','꿀팁','질문','나눔'];
   var selectedPageNumber = 1;
   var color_category1;
   var color_category1_bg;
@@ -95,7 +85,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = Content1(context);
+                  category_board = BodyContent(context,1);
                   color_category1 = Colors.white;
                   color_category2 = Colors.green;
                   color_category3 = Colors.green;
@@ -117,7 +107,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = Content2(context);
+                  category_board = BodyContent(context,2);
                   color_category1 = Colors.green;
                   color_category2 = Colors.white;
                   color_category3 = Colors.green;
@@ -139,7 +129,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = Content3(context);
+                  category_board = BodyContent(context,3);
                   color_category1 = Colors.green;
                   color_category2 = Colors.green;
                   color_category3 = Colors.white;
@@ -239,11 +229,11 @@ class _CommunityState extends State<Community> {
     );
   }
 
-  Widget Content1(BuildContext context) {
+  Widget BodyContent(BuildContext context, int index) {
     return Card(
-      child: Column(children: <Widget>[
-        FutureBuilder<String>(
-            future: _read(),
+      child:
+        FutureBuilder(
+            future: _read(index),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
               if (snapshot.hasData == false) {
@@ -261,115 +251,38 @@ class _CommunityState extends State<Community> {
               }
               // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
               else {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    snapshot.data.toString(),
-                    style: TextStyle(fontSize: 15),
-                  ),
-                );
+                return ListView.builder(itemCount: snapshot.data.length,itemBuilder: (context,i){
+                  return ListTile(
+                    title: Text(snapshot.data[i].title),
+                    subtitle:Text(categoryValue[snapshot.data[i].categoryId]),
+                    trailing: Text(snapshot.data[i].userId),
+                  );
+                });
               }
             })
-        ],
-      ),
     );
   }
 
-  Widget Content2(BuildContext context) {
-    return Card(
-      child: Column(children: [
-        Container(
-          padding:
-          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '다육이 Plant Care 꿀조합 찾았음2',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        Divider(),
-
-      ]),
-    );
-  }
-
-  Widget Content3(BuildContext context) {
-    return Card(
-      child: Column(children: [
-        Container(
-          padding:
-          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '다육이 Plant Care 꿀조합 찾았음3',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        Divider(),
-        Container(
-          padding:
-          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '강낭콩 키우는 꿀팁3',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        Divider(),
-        Container(
-          padding:
-          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '선인장 키울 때 세팅할 습도3',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        Divider(),
-        Container(
-          padding:
-          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '<종합> 식물별 적정 습도. 조도3',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        Divider(),
-      ]),
-    );
-  }
-
-  Future<String> _read() async{
+  Future _read(int categoryIndex) async{
     var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php";
-    var response = await http.get(Uri.parse(url));
+
+    var response = await http.post(Uri.parse(url), body: {
+      "idx": categoryIndex.toString(),
+    });
     String jsonData = response.body;
     var myJson = await jsonDecode(jsonData)['community'];
 
+    List<CommunityModel> communities =[];
+    for (var c in myJson){
+      CommunityModel cm = CommunityModel(communityId:int.parse(c['communityId']), categoryId:int.parse(c['categoryId']),userId: c['userId'],title: c['title'],content: c['content']);
+      communities.add(cm);
+    }
     // var vld = await json.decode(json.encode(response.body));
     // CommunityModel cm = CommunityModel.fromJson(jsonDecode(myJson[0]));
-    print(myJson[0]);
-    return myJson.toString();
+    print("!!!");
+    print(communities.length);
+    // print(communities[0]);
+    return communities;
   }
 
 

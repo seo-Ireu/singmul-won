@@ -1,9 +1,9 @@
 class CommunityModel{
-  int communityId;
-  int categoryId;
-  String userId;
-  String title;
-  String content;
+  final int communityId;
+  final int categoryId;
+  final String userId;
+  final String title;
+  final String content;
 
   CommunityModel(
   {this.communityId,this.categoryId,this.userId,this.title,this.content}
