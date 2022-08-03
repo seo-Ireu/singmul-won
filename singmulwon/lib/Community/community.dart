@@ -1,11 +1,18 @@
 // ignore_for_file: deprecated_member_use, prefer_const_literals_to_create_immutables, prefer_const_constructors, non_constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Community/community_model.dart';
 import 'package:number_pagination/number_pagination.dart';
 
 import './write_page.dart';
 import './boast.dart';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -13,6 +20,19 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> {
+  Future<List<CommunityModel>> cmDataFuture = getCmData();
+
+  static Future <List<CommunityModel>> getCmData() async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php";
+    var response = await http.get(Uri.parse(url));
+
+    String jsonData = response.body;
+    var myJson = await jsonDecode(jsonData)['community'];
+
+    return myJson.map<CommunityModel>(CommunityModel.fromJson).toList();
+
+
+  }
   var selectedPageNumber = 1;
   var color_category1;
   var color_category1_bg;
@@ -37,7 +57,10 @@ class _CommunityState extends State<Community> {
       ),
       child: SizedBox(
         height: 60,
-        width: MediaQuery.of(context).size.width * 0.8,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.8,
         child: TextButton(
           onPressed: () {
             Navigator.push(
@@ -58,7 +81,8 @@ class _CommunityState extends State<Community> {
     );
   }
 
-  Container category() => Container(
+  Container category() =>
+      Container(
         margin: EdgeInsets.only(top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +154,8 @@ class _CommunityState extends State<Community> {
         ),
       );
 
-  Container community_edit() => Container(
+  Container community_edit() =>
+      Container(
         margin: EdgeInsets.fromLTRB(240, 10, 30, 0),
         child: TextButton(
           onPressed: () {
@@ -145,19 +170,21 @@ class _CommunityState extends State<Community> {
         ),
       );
 
-  Expanded pagination() => Expanded(
+  Expanded pagination() =>
+      Expanded(
         child: NumberPagination(
           onPageChanged: (int pageNumber) {
             //do somthing for selected page
             setState(
-              () {
+                  () {
                 selectedPageNumber = pageNumber;
               },
             );
           },
           threshold: 4,
           pageTotal: 100,
-          pageInit: selectedPageNumber, // picked number when init page
+          pageInit: selectedPageNumber,
+          // picked number when init page
           colorPrimary: Colors.white,
           colorSub: Colors.green,
         ),
@@ -214,14 +241,72 @@ class _CommunityState extends State<Community> {
 
   Widget Content1(BuildContext context) {
     return Card(
+      child: Column(children: <Widget>[
+        FutureBuilder<String>(
+            future: _read(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+              if (snapshot.hasData == false) {
+                return CircularProgressIndicator();
+              }
+              //error가 발생하게 될 경우 반환하게 되는 부분
+              else if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              }
+              // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
+              else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    snapshot.data.toString(),
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              }
+            })
+        ],
+      ),
+    );
+  }
+
+  Widget Content2(BuildContext context) {
+    return Card(
       child: Column(children: [
         Container(
           padding:
-              const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
+          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '다육이 Plant Care 꿀조합 찾았음',
+              '다육이 Plant Care 꿀조합 찾았음2',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        Divider(),
+
+      ]),
+    );
+  }
+
+  Widget Content3(BuildContext context) {
+    return Card(
+      child: Column(children: [
+        Container(
+          padding:
+          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '다육이 Plant Care 꿀조합 찾았음3',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -231,11 +316,11 @@ class _CommunityState extends State<Community> {
         Divider(),
         Container(
           padding:
-              const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
+          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '강낭콩 키우는 꿀팁',
+              '강낭콩 키우는 꿀팁3',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -245,11 +330,11 @@ class _CommunityState extends State<Community> {
         Divider(),
         Container(
           padding:
-              const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
+          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '선인장 키울 때 세팅할 습도',
+              '선인장 키울 때 세팅할 습도3',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -259,11 +344,11 @@ class _CommunityState extends State<Community> {
         Divider(),
         Container(
           padding:
-              const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
+          const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '<종합> 식물별 적정 습도. 조도',
+              '<종합> 식물별 적정 습도. 조도3',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -274,130 +359,19 @@ class _CommunityState extends State<Community> {
       ]),
     );
   }
-}
 
-Widget Content2(BuildContext context) {
-  return Card(
-    child: Column(children: [
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '다육이 Plant Care 꿀조합 찾았음2',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '강낭콩 키우는 꿀팁2',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '선인장 키울 때 세팅할 습도2',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '<종합> 식물별 적정 습도. 조도2',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-    ]),
-  );
-}
+  Future<String> _read() async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php";
+    var response = await http.get(Uri.parse(url));
+    String jsonData = response.body;
+    var myJson = await jsonDecode(jsonData)['community'];
 
-Widget Content3(BuildContext context) {
-  return Card(
-    child: Column(children: [
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '다육이 Plant Care 꿀조합 찾았음3',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '강낭콩 키우는 꿀팁3',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '선인장 키울 때 세팅할 습도3',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-      Container(
-        padding:
-            const EdgeInsets.only(top: 10, left: 16, right: 10, bottom: 12),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            '<종합> 식물별 적정 습도. 조도3',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
-      Divider(),
-    ]),
-  );
+    // var vld = await json.decode(json.encode(response.body));
+    // CommunityModel cm = CommunityModel.fromJson(jsonDecode(myJson[0]));
+    print(myJson[0]);
+    return myJson.toString();
+  }
+
+
+
 }

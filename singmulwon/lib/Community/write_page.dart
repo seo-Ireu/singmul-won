@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 class WritePage extends StatefulWidget {
   @override
@@ -8,10 +13,12 @@ class WritePage extends StatefulWidget {
 }
 
 class _WritePageState extends State<WritePage> {
-  String title = ' '; //제목
-  String content = ' '; //내용
+  TextEditingController _title = TextEditingController();
+  TextEditingController _content = TextEditingController();
+
   final List<String> _valueList = ['꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
+  int _selectedIndex =0;
 
   final picker = ImagePicker();
   File _image;
@@ -24,6 +31,14 @@ class _WritePageState extends State<WritePage> {
     });
   }
 
+  Future _create() async{
+
+    print(_title.text);
+    print(_content.text);
+    print(_selectedIndex);
+
+
+  }
   Widget showImage() {
     return Container(
         // color: const Color(0xffd0cece),
@@ -51,9 +66,7 @@ class _WritePageState extends State<WritePage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: TextField(
-                    onChanged: (String text) {
-                      title = text;
-                    },
+                      controller:_title,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       hintText: '제목을 적어주세요',
@@ -81,7 +94,9 @@ class _WritePageState extends State<WritePage> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
+                          var index = _valueList.indexOf(value);
                           _selectedValue = value;
+                          _selectedIndex = index;
                         });
                       },
                     ),
@@ -107,9 +122,7 @@ class _WritePageState extends State<WritePage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
                   child: TextField(
-                    onChanged: (String text) {
-                      content = text;
-                    },
+                    controller:_content,
                     keyboardType: TextInputType.multiline,
                     maxLines: 16,
                     decoration: InputDecoration(
@@ -123,9 +136,7 @@ class _WritePageState extends State<WritePage> {
                   padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                   child: FlatButton(
                     onPressed: () {
-                      Navigator.pop(
-                        context,
-                      );
+                      _create();
                     },
                     child: Text(
                       '글쓰기',
