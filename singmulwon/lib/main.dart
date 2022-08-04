@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Community/community.dart';
+import 'package:flutter_singmulwon_app/Community/community_detail.dart';
 import 'package:flutter_singmulwon_app/Feed/insta_create.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
           HomePage.routeName: (ctx) => HomePage('?'),
           MyFeed.routeName: (ctx) => MyFeed(),
           MyFeedDetail.routeName: (ctx) => MyFeedDetail(),
-          Community.routeName: (ctx) => Community()
+          Community.routeName: (ctx) => Community(),
+          CommunityDetail.routeName:(ctx) => CommunityDetail()
         });
   }
 }

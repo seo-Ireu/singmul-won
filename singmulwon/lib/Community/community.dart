@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Community/community_detail.dart';
 import 'package:flutter_singmulwon_app/Community/community_model.dart';
 import 'package:number_pagination/number_pagination.dart';
 
@@ -256,6 +257,10 @@ class _CommunityState extends State<Community> {
                     title: Text(snapshot.data[i].title),
                     subtitle:Text(categoryValue[snapshot.data[i].categoryId]),
                     trailing: Text(snapshot.data[i].userId),
+                    onTap: ()=>
+                    Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => CommunityDetail()))
+
                   );
                 });
               }
