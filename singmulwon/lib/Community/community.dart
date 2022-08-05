@@ -258,8 +258,9 @@ class _CommunityState extends State<Community> {
                     subtitle:Text(categoryValue[snapshot.data[i].categoryId]),
                     trailing: Text(snapshot.data[i].userId),
                     onTap: ()=>
-                    Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => CommunityDetail()))
+                      Navigator.of(context).pushNamed(
+                      CommunityDetail.routeName,
+                      arguments: (snapshot.data[i].communityId))
 
                   );
                 });
@@ -284,9 +285,7 @@ class _CommunityState extends State<Community> {
     }
     // var vld = await json.decode(json.encode(response.body));
     // CommunityModel cm = CommunityModel.fromJson(jsonDecode(myJson[0]));
-    print("!!!");
-    print(communities.length);
-    // print(communities[0]);
+
     return communities;
   }
 

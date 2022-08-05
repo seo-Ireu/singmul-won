@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'community_model.dart';
 
 class CommunityDetail extends StatefulWidget {
   static const routeName = '/community_detail.dart';
@@ -9,6 +14,32 @@ class CommunityDetail extends StatefulWidget {
 }
 
 class _CommunityDetailState extends State<CommunityDetail> {
+
+  final List<String> _categoryValueList = ['','꿀팁', '질문', '나눔'];
+  String _selectedValue = '꿀팁';
+  int _selectedCategoryIndex =1;
+
+  Future _read(BuildContext context, int categoryIndex) async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
+
+    var response = await http.post(Uri.parse(url), body: {
+      "communityId": categoryIndex.toString(),
+    });
+    String jsonData = response.body;
+    var myJson = await jsonDecode(jsonData)['community'];
+
+    CommunityModel cm;
+    for (var c in myJson){
+      cm = CommunityModel(communityId:int.parse(c['communityId']), categoryId:int.parse(c['categoryId']),userId: c['userId'],title: c['title'],content: c['content']);
+    }
+
+    // var vld = await json.decode(json.encode(response.body));
+    // CommunityModel cm = CommunityModel.fromJson(jsonDecode(myJson[0]));
+    print(cm);
+    return cm;
+  }
+
+
   Widget _buildComment(int index) {
     return Padding(
       padding: EdgeInsets.all(10.0),
@@ -57,135 +88,162 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final _cIdx = ModalRoute.of(context).settings.arguments as int;
+
     return Scaffold(
       backgroundColor: Color(0xFFEDF0F6),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 40.0),
-              width: double.infinity,
-              height:600.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25.0),
+      body: FutureBuilder(
+        future:_read(context, _cIdx),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if(snapshot.hasData ==false){
+            return CircularProgressIndicator();
+
+          }else if(snapshot.hasError){
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: TextStyle(fontSize: 15),
               ),
+            );
+          }else{
+            return SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.0),
+                  Container(
+                    padding: EdgeInsets.only(top: 40.0),
+                    width: double.infinity,
+                    height:600.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
                     child: Column(
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              iconSize: 30.0,
-                              color: Colors.black,
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: ListTile(
-                                title: Text(
-                                  "widget.post.authorName",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text("widget.post.timeAgo"),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.more_horiz),
-                                  color: Colors.black,
-                                  onPressed: () => print('More'),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        InkWell(
-                          onDoubleTap: () => print('Like post'),
-                          child: Container(
-                            width: double.infinity,
-                            height: 300.0,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                              ],
-                              image: DecorationImage(
-                                image: AssetImage("assets/plant_3.jfif"),
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          ),
-                        ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          padding: EdgeInsets.symmetric(vertical: 10.0),
+                          child: Column(
                             children: <Widget>[
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(Icons.favorite_border),
-                                        iconSize: 30.0,
-                                        onPressed: () => print('Like post'),
-                                      ),
-                                      Text(
-                                        '2,515',
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_back),
+                                    iconSize: 30.0,
+                                    color: Colors.black,
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * 0.8,
+                                    child: ListTile(
+                                      title: Text(
+                                        snapshot.data.title,
                                         style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ],
+                                      subtitle: Text(snapshot.data.userId),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.more_horiz),
+                                        color: Colors.black,
+                                        onPressed: () => print('More'),
+                                      ),
+                                    ),
                                   ),
-
                                 ],
+                              ),
+                              InkWell(
+                                onDoubleTap: () => print('Like post'),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 300.0,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                    ],
+                                    image: DecorationImage(
+                                      image: AssetImage("assets/plant_3.jfif"),
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            IconButton(
+                                              icon: Icon(Icons.favorite_border),
+                                              iconSize: 30.0,
+                                              onPressed: () => print('Like post'),
+                                            ),
+                                            Text(
+                                              '2,515',
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                child:Row(
+                                  children: <Widget>[
+                                    Text(snapshot.data.content),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                child:Row(
+                                  children: <Widget>[
+                                    Text(""),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child:Row(
-                        children: <Widget>[
-                          Text("hihihi"),
-
-                        ],
-                        ),
-                        ),
                       ],
                     ),
                   ),
+                  Container(
+                    width: double.infinity,
+                    height: 300.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        _buildComment(0),
+                        _buildComment(1),
+                        _buildComment(2),
+                        _buildComment(3),
+                        _buildComment(4),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 300.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  _buildComment(0),
-                  _buildComment(1),
-                  _buildComment(2),
-                  _buildComment(3),
-                  _buildComment(4),
-                ],
-              ),
-            )
-          ],
-        ),
+            );
+          }
+        }
       ),
       bottomNavigationBar: Transform.translate(
         offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
