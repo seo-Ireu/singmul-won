@@ -1,41 +1,51 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-import '../Provider/plants.dart';
 import './user_plant.dart';
 import './edit_plant.dart';
 
 class ManagePlant extends StatefulWidget {
   static const routeName = '/manage-plant';
-
   @override
   State<ManagePlant> createState() => _ManagePlantState();
 }
 
-var titleList = [
-  '새싹이',
-  '민들민들',
-];
+Future myPlantList(String user) async {
+  var url = "http://54.177.126.159/ubuntu/flutter/plant/manage_plant.php";
+  var response = await http.post(Uri.parse(url), body: {
+    "userid": user,
+  });
+  String jsonData = response.body;
+  var vld = await json.decode(jsonData)['myplant']; //List<dynamic>
 
-var imageList = [
-  'assets/plant_1.jfif',
-  'assets/plant_3.jfif',
-];
-
-var description = [
-  '수선화',
-  '민들레',
-];
+  List<UserPlant> myplants = [];
+  for (var item in vld) {
+    UserPlant myitem = UserPlant(
+        myPlantId: item['myPlantId'],
+        myPlantNickname: item['myPlantNickname'],
+        plantName: item['plantName'],
+        humi: item['humi'],
+        lumi: item['lumi'],
+        image: item['image']);
+    myplants.add(myitem);
+  }
+  return myplants;
+}
 
 class _ManagePlantState extends State<ManagePlant> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context).settings.arguments ??
         <String, String>{}) as Map;
-    final userid = arguments['userid'];
-    double width = MediaQuery.of(context).size.width * 0.6;
+    String user = arguments['userid'];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -53,67 +63,79 @@ class _ManagePlantState extends State<ManagePlant> {
         ],
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
-        itemCount: titleList.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.of(context).pushNamed(EditPlant.routeName);
-            },
-            child: Container(
-              height: 160,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(6),
-              color: Color(0xffD9F8C4),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: SizedBox(
-                      width: 100,
-                      height: 140,
-                      child: Image.asset(imageList[index]),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "별명 :  " + titleList[index],
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: width,
-                        child: Text(
-                          "     종류 :  " + description[index],
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+      body: MyPlantView(context, user),
     );
   }
 }
 
-
-// UserPlant(
-//                 plantData.plants[i].id,
-//                 plantData.plants[i].name,
-//                 plantData.plants[i].sort,
-//                 plantData.plants[i].image,
-//               ),
+Card MyPlantView(BuildContext context, user) {
+  double width = MediaQuery.of(context).size.width;
+  double height = MediaQuery.of(context).size.height;
+  return Card(
+    child: FutureBuilder(
+      future: myPlantList(user),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          // buildColumn(snapshot);
+          return ListView.builder(
+              padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(EditPlant.routeName,
+                        arguments: (snapshot.data[index].myPlantId));
+                  },
+                  child: Container(
+                    height: height * 0.2,
+                    margin: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(6),
+                    color: Color(0xffD9F8C4),
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: SizedBox(
+                            width: width * 0.25,
+                            child: Image.network(snapshot.data[index].image),
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              // ignore: prefer_interpolation_to_compose_strings
+                              "별명 :  " + snapshot.data[index].myPlantNickname,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.028,
+                            ),
+                            SizedBox(
+                              width: width * 0.5,
+                              child: Text(
+                                // ignore: prefer_interpolation_to_compose_strings
+                                "     종류 :  " + snapshot.data[index].plantName,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}에러!!");
+        }
+        return const CircularProgressIndicator();
+      },
+    ),
+  );
+}

@@ -23,7 +23,7 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> {
-  var categoryValue =['','꿀팁','질문','나눔'];
+  var categoryValue = ['', '꿀팁', '질문', '나눔'];
   var selectedPageNumber = 1;
   var color_category1;
   var color_category1_bg;
@@ -48,10 +48,7 @@ class _CommunityState extends State<Community> {
       ),
       child: SizedBox(
         height: 60,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.8,
+        width: MediaQuery.of(context).size.width * 0.8,
         child: TextButton(
           onPressed: () {
             Navigator.push(
@@ -72,8 +69,7 @@ class _CommunityState extends State<Community> {
     );
   }
 
-  Container category() =>
-      Container(
+  Container category() => Container(
         margin: EdgeInsets.only(top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +82,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = BodyContent(context,1);
+                  category_board = BodyContent(context, 1);
                   color_category1 = Colors.white;
                   color_category2 = Colors.green;
                   color_category3 = Colors.green;
@@ -108,7 +104,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = BodyContent(context,2);
+                  category_board = BodyContent(context, 2);
                   color_category1 = Colors.green;
                   color_category2 = Colors.white;
                   color_category3 = Colors.green;
@@ -130,7 +126,7 @@ class _CommunityState extends State<Community> {
               ),
               onPressed: () {
                 setState(() {
-                  category_board = BodyContent(context,3);
+                  category_board = BodyContent(context, 3);
                   color_category1 = Colors.green;
                   color_category2 = Colors.green;
                   color_category3 = Colors.white;
@@ -145,8 +141,7 @@ class _CommunityState extends State<Community> {
         ),
       );
 
-  Container community_edit() =>
-      Container(
+  Container community_edit() => Container(
         margin: EdgeInsets.fromLTRB(240, 10, 30, 0),
         child: TextButton(
           onPressed: () {
@@ -161,13 +156,12 @@ class _CommunityState extends State<Community> {
         ),
       );
 
-  Expanded pagination() =>
-      Expanded(
+  Expanded pagination() => Expanded(
         child: NumberPagination(
           onPageChanged: (int pageNumber) {
             //do somthing for selected page
             setState(
-                  () {
+              () {
                 selectedPageNumber = pageNumber;
               },
             );
@@ -232,8 +226,7 @@ class _CommunityState extends State<Community> {
 
   Widget BodyContent(BuildContext context, int index) {
     return Card(
-      child:
-        FutureBuilder(
+        child: FutureBuilder(
             future: _read(index),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
@@ -252,35 +245,40 @@ class _CommunityState extends State<Community> {
               }
               // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
               else {
-                return ListView.builder(itemCount: snapshot.data.length,itemBuilder: (context,i){
-                  return ListTile(
-                    title: Text(snapshot.data[i].title),
-                    subtitle:Text(categoryValue[snapshot.data[i].categoryId]),
-                    trailing: Text(snapshot.data[i].userId),
-                    onTap: ()=>
-                      Navigator.of(context).pushNamed(
-                      CommunityDetail.routeName,
-                      arguments: (snapshot.data[i].communityId))
-
-                  );
-                });
+                return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, i) {
+                      return ListTile(
+                          title: Text(snapshot.data[i].title),
+                          subtitle:
+                              Text(categoryValue[snapshot.data[i].categoryId]),
+                          trailing: Text(snapshot.data[i].userId),
+                          onTap: () => Navigator.of(context).pushNamed(
+                              CommunityDetail.routeName,
+                              arguments: (snapshot.data[i].communityId)));
+                    });
               }
-            })
-    );
+            }));
   }
 
-  Future _read(int categoryIndex) async{
+  Future _read(int categoryIndex) async {
     var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "idx": categoryIndex.toString(),
     });
     String jsonData = response.body;
+
     var myJson = await jsonDecode(jsonData)['community'];
 
-    List<CommunityModel> communities =[];
-    for (var c in myJson){
-      CommunityModel cm = CommunityModel(communityId:int.parse(c['communityId']), categoryId:int.parse(c['categoryId']),userId: c['userId'],title: c['title'],content: c['content']);
+    List<CommunityModel> communities = [];
+    for (var c in myJson) {
+      CommunityModel cm = CommunityModel(
+          communityId: int.parse(c['communityId']),
+          categoryId: int.parse(c['categoryId']),
+          userId: c['userId'],
+          title: c['title'],
+          content: c['content']);
       communities.add(cm);
     }
     // var vld = await json.decode(json.encode(response.body));
@@ -288,7 +286,4 @@ class _CommunityState extends State<Community> {
 
     return communities;
   }
-
-
-
 }
