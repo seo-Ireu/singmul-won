@@ -1,53 +1,46 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
+import 'package:provider/provider.dart';
 import '/Provider/plant.dart';
-import './edit_button.dart';
 import '/Provider/plants.dart';
+
+import './edit_button.dart';
 import './plant_detail.dart';
+import './user_plant.dart';
 
 class EditPlant extends StatefulWidget {
   static const routeName = '/edit-plant';
-
   @override
   State<EditPlant> createState() => _EditPlantState();
 }
 
+Future myPlant() async {
+  //(String myPlantId)
+  String myPlantId = "6";
+  var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
+  var response = await http.post(Uri.parse(url), body: {
+    "myPlantId": myPlantId,
+  });
+  String jsonData = response.body;
+  var vld = await json.decode(jsonData)['plantid']; //List<dynamic>
+
+  List<SinglePlant> sig_plants = [];
+  for (var item in vld) {
+    SinglePlant myitem = SinglePlant(
+        myPlantId: item['myPlantId'], humi: item['humi'], lumi: item['lumi']);
+    sig_plants.add(myitem);
+  }
+  return sig_plants;
+}
+
 class _EditPlantState extends State<EditPlant> {
   final _form = GlobalKey<FormState>();
-
   var _editedPlant = Plant(
       id: null, name: '', sort: '', image: '', water: 0, light: 0, favorite: 0);
-  var _initValues = {
-    '별명': '',
-    '종류': '',
-    '습도': '',
-    '조도': '',
-  };
-  var _isInit = true;
-
-  @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      final plantId = ModalRoute.of(context).settings.arguments as String;
-      print("palntId:$plantId");
-      //확인용
-      if (plantId != null) {
-        _editedPlant =
-            Provider.of<Plants>(context, listen: false).findById(plantId);
-        _initValues = {
-          'name': _editedPlant.name,
-          'sort': _editedPlant.sort,
-          'water': _editedPlant.water.toString(),
-          'light': _editedPlant.light.toString(),
-        };
-      }
-    }
-    _isInit = false;
-    super.didChangeDependencies();
-  }
 
   void _saveForm() {
     final isValid = _form.currentState.validate();
@@ -64,18 +57,20 @@ class _EditPlantState extends State<EditPlant> {
     Navigator.of(context).pop();
   }
 
-  // double _currentWaterValue = _editedPlant.water;
   double _currentWaterValue = 20;
-  // double _currentLightValue = _editedPlant.light;
   double _currentLightValue = 20;
 
   @override
   Widget build(BuildContext context) {
-    double waterValue = _currentWaterValue;
-    double lightValue = _currentLightValue;
-    final plantData = Provider.of<Plants>(context);
+    myPlant();
     // final arguments = (ModalRoute.of(context).settings.arguments ??
     //     <String, String>{}) as Map;
+    // String plantId = arguments['plantId'];
+
+    // var singlePlant = myPlant(myplantId);
+
+    double waterValue = _currentWaterValue;
+    double lightValue = _currentLightValue;
 
     return Scaffold(
       appBar: AppBar(
@@ -100,7 +95,7 @@ class _EditPlantState extends State<EditPlant> {
               children: [
                 WaterValue(waterValue),
                 LightValue(lightValue),
-                FavoriteValue(_editedPlant.favorite),
+                FavoriteValue(20),
               ],
             ),
             SizedBox(

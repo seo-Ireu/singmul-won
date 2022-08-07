@@ -83,8 +83,10 @@ Card MyPlantView(BuildContext context, user) {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed(EditPlant.routeName,
-                        arguments: (snapshot.data[index].myPlantId));
+                    Navigator.of(context).pushNamed(
+                      EditPlant.routeName,
+                      // arguments: (snapshot.data[index].myPlantId),
+                    );
                   },
                   child: Container(
                     height: height * 0.2,

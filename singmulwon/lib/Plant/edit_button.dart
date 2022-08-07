@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: non_constant_identifier_names, deprecated_member_use, prefer_const_constructors
 
-import './edit_plant.dart';
+import 'package:flutter/material.dart';
 
 Expanded WaterValue(value) {
   return Expanded(
     child: FlatButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       height: 100,
       onPressed: () {},
       child: Text(

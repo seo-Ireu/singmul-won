@@ -23,3 +23,14 @@ class UserPlant {
         image: json['image'],
       );
 }
+
+class SinglePlant {
+  final String myPlantId;
+  final String humi;
+  final String lumi;
+
+  SinglePlant({this.myPlantId, this.humi, this.lumi});
+
+  static SinglePlant fromJson(json) => SinglePlant(
+      myPlantId: json['myPlantId'], humi: json['humi'], lumi: json['lumi']);
+}
