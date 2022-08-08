@@ -35,7 +35,9 @@ double _currentLightValue = 20;
 
 class _EditPlantState extends State<EditPlant> {
   final plantidController = TextEditingController();
-  final plantSortController = TextEditingController();
+  final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
+  String _selectedValue = '수선화';
+  int _selectedSortIndex = 1;
   final picker = ImagePicker();
   File _image;
 
@@ -50,7 +52,7 @@ class _EditPlantState extends State<EditPlant> {
   Widget showImage() {
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.25,
-        height: MediaQuery.of(context).size.height * 0.1,
+        height: MediaQuery.of(context).size.height * 0.2,
         child: Center(
             child: _image == null
                 ? CircleAvatar(
@@ -117,33 +119,51 @@ class _EditPlantState extends State<EditPlant> {
                             ),
                           ],
                         ),
+                        SizedBox(
+                          width: 40,
+                        ),
                         Column(
                           children: [
                             SizedBox(
-                              width: 100,
+                              width: 200,
                               child: TextField(
                                 // ignore: prefer_const_constructors
                                 decoration: InputDecoration(
-                                  border: InputBorder.none,
+                                  border: OutlineInputBorder(),
                                   labelText: 'snapshot.data.name',
                                   hintText: 'snapshot.data.name',
                                 ),
                                 controller: plantidController,
                               ),
                             ),
-                            Divider(),
                             SizedBox(
-                              width: 100,
-                              child: TextField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  labelText: '식물 종류',
-                                ),
-                                controller: plantSortController,
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: 200,
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 100, child: Text("식물 종류")),
+                                  DropdownButton(
+                                    value: _selectedValue,
+                                    items: _sortValueList.map((value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        var index =
+                                            _sortValueList.indexOf(value);
+                                        _selectedValue = value;
+                                        _selectedSortIndex = index;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
-                            Divider(),
                           ],
                         ),
                       ],
@@ -157,7 +177,7 @@ class _EditPlantState extends State<EditPlant> {
                       ],
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 60,
                     ),
                     Row(
                       children: [
@@ -225,7 +245,7 @@ class _EditPlantState extends State<EditPlant> {
                             textColor: Colors.white,
                             color: Colors.green,
                             child: Text(
-                              "식물편집",
+                              "자동설정",
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () {},
@@ -241,7 +261,7 @@ class _EditPlantState extends State<EditPlant> {
                             textColor: Colors.white,
                             color: Colors.green,
                             child: Text(
-                              "자동설정",
+                              "식물저장",
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () {},

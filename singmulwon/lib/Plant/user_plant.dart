@@ -44,4 +44,12 @@ class AiSetting {
 
   static AiSetting fromJson(json) => AiSetting(
       plantInfoId: json['plantInfoId'], humi: json['humi'], lumi: json['lumi']);
+
+  String humidity() {
+    return humi;
+  }
+
+  String luminance() {
+    return lumi;
+  }
 }

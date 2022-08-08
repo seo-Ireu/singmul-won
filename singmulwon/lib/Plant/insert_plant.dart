@@ -14,44 +14,51 @@ class InsertPlant extends StatefulWidget {
   State<InsertPlant> createState() => _InsertPlantState();
 }
 
-Future insertPlant(
-    BuildContext context, userid, sort, name, humi, lumi, image) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/insert_plant.php";
-  var response = await http.post(Uri.parse(url), body: {
-    "userid": userid,
-    "sort": sort,
-    "name": name,
-    "humi": humi,
-    "lumi": lumi,
-    "image": image
-  });
-  Navigator.of(context).pop();
-}
-
-Future AutoSetting(String plantInfoId) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/auto_setting.php";
-  var response = await http.post(Uri.parse(url), body: {
-    "plantInfoId": plantInfoId,
-  });
-  String jsonData = response.body;
-  var vld = await json.decode(jsonData)['setting']; //List<dynamic>
-
-  AiSetting setting_plant;
-  for (var item in vld) {
-    setting_plant = AiSetting(
-        plantInfoId: item['plantInfoId'],
-        humi: item['humi'],
-        lumi: item['lumi']);
-  }
-  return setting_plant;
-}
-
 double _currentWaterValue = 20;
 double _currentLightValue = 20;
 
 class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
-  final plantSortController = TextEditingController();
+  final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
+  String _selectedValue = '수선화';
+  int _selectedSortIndex = 1;
+
+  Future insertPlant(
+      BuildContext context, userid, name, humi, lumi, image) async {
+    var url = "http://54.177.126.159/ubuntu/flutter/plant/insert_plant.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "userid": userid,
+      "sort": _selectedSortIndex.toString(),
+      "name": name,
+      "humi": humi,
+      "lumi": lumi,
+      "image": image
+    });
+    Navigator.of(context).pop();
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(builder: (BuildContext context) => ManagePlant()),
+    //     (route) => false);
+  }
+
+  Future AutoSetting() async {
+    var url = "http://54.177.126.159/ubuntu/flutter/plant/auto_setting.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "plantInfoId": _selectedSortIndex,
+    });
+    String jsonData = response.body;
+    var vld = await json.decode(jsonData)['setting']; //List<dynamic>
+
+    AiSetting setting_plant;
+    for (var item in vld) {
+      setting_plant = AiSetting(
+          plantInfoId: item['plantInfoId'],
+          humi: item['humi'],
+          lumi: item['lumi']);
+    }
+    return setting_plant;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userId = ModalRoute.of(context).settings.arguments;
@@ -120,18 +127,33 @@ class _InsertPlantState extends State<InsertPlant> {
                           controller: plantidController,
                         ),
                       ),
-                      Divider(),
+                      SizedBox(
+                        height: 20,
+                      ),
                       SizedBox(
                         width: 200,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: '식물 종류',
-                          ),
-                          controller: plantSortController,
+                        child: Row(
+                          children: [
+                            SizedBox(width: 100, child: Text("식물 종류")),
+                            DropdownButton(
+                              value: _selectedValue,
+                              items: _sortValueList.map((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  var index = _sortValueList.indexOf(value);
+                                  _selectedValue = value;
+                                  _selectedSortIndex = index;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                      Divider(),
                     ],
                   ),
                 ],
@@ -217,7 +239,12 @@ class _InsertPlantState extends State<InsertPlant> {
                         style: TextStyle(fontSize: 20),
                       ),
                       //수정
-                      onPressed: () {},
+                      onPressed: () {
+                        var autosetting = AutoSetting();
+                        setState(() {
+                          // waterValue = autosetting.humidity;
+                        });
+                      },
                     ),
                   ),
                   SizedBox(
@@ -237,7 +264,7 @@ class _InsertPlantState extends State<InsertPlant> {
                         insertPlant(
                             context,
                             userId,
-                            plantSortController.text,
+                            // _selectedSortIndex.toString(),
                             plantidController.text,
                             waterValue.toString(),
                             lightValue.toString(),
