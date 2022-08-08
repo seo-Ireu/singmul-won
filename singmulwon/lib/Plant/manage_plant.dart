@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import './user_plant.dart';
 import './edit_plant.dart';
+import './insert_plant.dart';
 
 class ManagePlant extends StatefulWidget {
   static const routeName = '/manage-plant';
@@ -54,9 +55,8 @@ class _ManagePlantState extends State<ManagePlant> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                  EditPlant.routeName); //, arguments: {'userid': userid} 추가 예정
-              //수정: arguments(plantId) 추가
+              Navigator.of(context).pushNamed(InsertPlant.routeName,
+                  arguments: user); //, arguments: {'userid': userid} 추가 예정
             },
             icon: const Icon(Icons.add),
           ),
@@ -85,7 +85,7 @@ Card MyPlantView(BuildContext context, user) {
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       EditPlant.routeName,
-                      // arguments: (snapshot.data[index].myPlantId),
+                      arguments: (snapshot.data[index].myPlantId),
                     );
                   },
                   child: Container(

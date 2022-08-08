@@ -13,10 +13,10 @@ import 'Feed/insta_list.dart';
 import 'Feed/my_feed.dart';
 import 'Feed/my_feed_detail.dart';
 import 'Plant/edit_plant.dart';
+import 'Plant/insert_plant.dart';
 import 'Plant/manage_plant.dart';
 import 'Provider/feeds.dart';
 import 'Provider/plants.dart';
-import 'Plant/plant_detail.dart';
 import 'Login/signin.dart';
 import 'home_page.dart';
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         routes: {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
-          PlantDetail.routeName: (ctx) => PlantDetail(),
+          InsertPlant.routeName: (ctx) => InsertPlant(),
           CreatePage.routeName: (ctx) => CreatePage(),
           InstaList.routeName: (ctx) => InstaList(),
           InstaHome.routeName: (ctx) => InstaHome(),
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           MyFeed.routeName: (ctx) => MyFeed(),
           MyFeedDetail.routeName: (ctx) => MyFeedDetail(),
           Community.routeName: (ctx) => Community(),
-          CommunityDetail.routeName:(ctx) => CommunityDetail()
+          CommunityDetail.routeName: (ctx) => CommunityDetail()
         });
   }
 }

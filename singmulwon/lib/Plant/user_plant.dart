@@ -34,3 +34,14 @@ class SinglePlant {
   static SinglePlant fromJson(json) => SinglePlant(
       myPlantId: json['myPlantId'], humi: json['humi'], lumi: json['lumi']);
 }
+
+class AiSetting {
+  final String plantInfoId;
+  final String humi;
+  final String lumi;
+
+  AiSetting({this.plantInfoId, this.humi, this.lumi});
+
+  static AiSetting fromJson(json) => AiSetting(
+      plantInfoId: json['plantInfoId'], humi: json['humi'], lumi: json['lumi']);
+}

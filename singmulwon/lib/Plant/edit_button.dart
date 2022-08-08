@@ -11,7 +11,7 @@ Expanded WaterValue(value) {
       height: 100,
       onPressed: () {},
       child: Text(
-        'water\n${value.toInt().toString()}%',
+        'water\n${value}%',
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ),
@@ -25,7 +25,7 @@ Expanded LightValue(value) {
       height: 100,
       onPressed: () {},
       child: Text(
-        'light\n${value.toInt().toString()}',
+        'light\n${value}',
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ),
