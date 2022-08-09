@@ -18,7 +18,7 @@ Future myPlantList(String user) async {
   var response = await http.post(Uri.parse(url), body: {
     "userid": user,
   });
-  String jsonData = response.body;
+  String jsonData = utf8.decode(response.bodyBytes);
   var vld = await json.decode(jsonData)['myplant']; //List<dynamic>
 
   List<UserPlant> myplants = [];

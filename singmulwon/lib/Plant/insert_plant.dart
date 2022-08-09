@@ -14,8 +14,8 @@ class InsertPlant extends StatefulWidget {
   State<InsertPlant> createState() => _InsertPlantState();
 }
 
-double _currentWaterValue = 20;
-double _currentLightValue = 20;
+double _currentWaterValue = 0;
+double _currentLightValue = 0;
 
 class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
@@ -46,7 +46,7 @@ class _InsertPlantState extends State<InsertPlant> {
     var response = await http.post(Uri.parse(url), body: {
       "plantInfoId": _selectedSortIndex,
     });
-    String jsonData = response.body;
+    String jsonData = utf8.decode(response.bodyBytes);
     var vld = await json.decode(jsonData)['setting']; //List<dynamic>
 
     AiSetting setting_plant;
@@ -56,7 +56,7 @@ class _InsertPlantState extends State<InsertPlant> {
           humi: item['humi'],
           lumi: item['lumi']);
     }
-    return setting_plant;
+    return [setting_plant.humidity(), setting_plant.luminance()];
   }
 
   @override
@@ -81,10 +81,7 @@ class _InsertPlantState extends State<InsertPlant> {
           height: MediaQuery.of(context).size.height * 0.2,
           child: Center(
               child: _image == null
-                  ? CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage: AssetImage('assets/plant_1.jfif'),
-                    )
+                  ? Text('Picture')
                   : Image.file(File(_image.path))));
     }
 
@@ -111,12 +108,12 @@ class _InsertPlantState extends State<InsertPlant> {
                     ],
                   ),
                   SizedBox(
-                    width: 40,
+                    width: 20,
                   ),
                   Column(
                     children: [
                       SizedBox(
-                        width: 200,
+                        width: 140,
                         child: TextField(
                           // ignore: prefer_const_constructors
                           decoration: InputDecoration(
@@ -131,7 +128,7 @@ class _InsertPlantState extends State<InsertPlant> {
                         height: 20,
                       ),
                       SizedBox(
-                        width: 200,
+                        width: 180,
                         child: Row(
                           children: [
                             SizedBox(width: 100, child: Text("식물 종류")),
@@ -167,7 +164,7 @@ class _InsertPlantState extends State<InsertPlant> {
                 ],
               ),
               SizedBox(
-                height: 60,
+                height: 30,
               ),
               Row(
                 children: [
@@ -223,7 +220,7 @@ class _InsertPlantState extends State<InsertPlant> {
                 ],
               ),
               SizedBox(
-                height: 100,
+                height: 60,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -240,10 +237,7 @@ class _InsertPlantState extends State<InsertPlant> {
                       ),
                       //수정
                       onPressed: () {
-                        var autosetting = AutoSetting();
-                        setState(() {
-                          // waterValue = autosetting.humidity;
-                        });
+                        setState(() {});
                       },
                     ),
                   ),
