@@ -3,12 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'my_feed_test.dart';
 
 import 'insta_create.dart';
 import 'insta_list.dart';
 
 Future fetchFeed() async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed.php';
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed.php?userId=lyhthy6';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -24,7 +25,17 @@ Future fetchFeed() async {
 }
 
 
-void main() => runApp(const FeedPage());
+void main() => runApp(MaterialApp(
+  home: FeedPage(),
+  initialRoute: '/',
+  routes: {
+    // When we navigate to the "/" route, build the FirstScreen Widget
+    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
+    '/myfeed': (context) => MyFeedPage(),
+    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
+    '/feed': (context) => FeedPage(),
+  },
+));
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key key}) : super(key: key);
@@ -157,7 +168,7 @@ class _FeedPageState extends State<FeedPage> {
                               decoration: const InputDecoration(
                                 icon: CircleAvatar(
                                   radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                                suffixIcon: Icon(Icons.star),
+                                suffixIcon: Icon(Icons.arrow_forward),
                                 labelText: '댓글 달기...',
                               ),
                             ),
@@ -196,7 +207,12 @@ class _FeedPageState extends State<FeedPage> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
+            icon: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/myfeed');
+                  },
+                  icon: Icon(Icons.chat),
+              ),
               label: 'My Feed',
             ),
             BottomNavigationBarItem(
