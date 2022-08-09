@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, sized_box_for_whitespace
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import './edit_button.dart';
-import './user_plant.dart';
+import './future_plant.dart';
 
 class EditPlant extends StatefulWidget {
   static const routeName = '/edit-plant';
@@ -17,10 +16,10 @@ class EditPlant extends StatefulWidget {
 class _EditPlantState extends State<EditPlant> {
   final _form = GlobalKey<FormState>();
   final plantidController = TextEditingController();
+  final picker = ImagePicker();
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
-  final picker = ImagePicker();
   File _image;
 
   double _currentWaterValue = 20;
@@ -49,26 +48,6 @@ class _EditPlantState extends State<EditPlant> {
                     ),
                   )
                 : Image.file(File(_image.path))));
-  }
-
-  Future myPlant(String plantId) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "myPlantId": plantId,
-    });
-    String jsonData = utf8.decode(response.bodyBytes);
-    var vld = await json.decode(jsonData)['plantid']; //List<dynamic>
-
-    SinglePlant sig_plants;
-    for (var item in vld) {
-      sig_plants = SinglePlant(
-          myPlantId: item['myPlantId'],
-          myPlantNickname: item['myPlantNickname'],
-          plantInfoId: item['plantInfoId'],
-          humi: item['humi'],
-          lumi: item['lumi']);
-    }
-    return sig_plants;
   }
 
   Future updatePlant(
