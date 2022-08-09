@@ -14,8 +14,8 @@ class InsertPlant extends StatefulWidget {
   State<InsertPlant> createState() => _InsertPlantState();
 }
 
-double _currentWaterValue = 20;
-double _currentLightValue = 20;
+double _currentWaterValue = 0;
+double _currentLightValue = 0;
 
 class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
