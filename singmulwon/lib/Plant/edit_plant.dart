@@ -15,6 +15,7 @@ class EditPlant extends StatefulWidget {
 }
 
 class _EditPlantState extends State<EditPlant> {
+  final _form = GlobalKey<FormState>();
   final plantidController = TextEditingController();
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
@@ -39,9 +40,13 @@ class _EditPlantState extends State<EditPlant> {
         height: MediaQuery.of(context).size.height * 0.2,
         child: Center(
             child: _image == null
-                ? CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: AssetImage('assets/plant_1.jfif'),
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.24,
+                    height: MediaQuery.of(context).size.height * 0.18,
+                    child: CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: AssetImage('assets/plant_1.jfif'),
+                    ),
                   )
                 : Image.file(File(_image.path))));
   }
@@ -51,7 +56,7 @@ class _EditPlantState extends State<EditPlant> {
     var response = await http.post(Uri.parse(url), body: {
       "myPlantId": plantId,
     });
-    String jsonData = response.body;
+    String jsonData = utf8.decode(response.bodyBytes);
     var vld = await json.decode(jsonData)['plantid']; //List<dynamic>
 
     SinglePlant sig_plants;
@@ -66,10 +71,20 @@ class _EditPlantState extends State<EditPlant> {
     return sig_plants;
   }
 
-  Future updatePlant(BuildContext context, myplantId, humi, lumi) async {
+  Future updatePlant(
+      BuildContext context, name, myplantId, humi, lumi, image) async {
     var url = "http://54.177.126.159/ubuntu/flutter/plant/edit_plant.php";
-    var response = await http.post(Uri.parse(url),
-        body: {"myplantId": myplantId, "humi": humi, "lumi": lumi});
+
+    await http.get(Uri.parse(
+        '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi&image=$image'));
+    // await http.post(Uri.parse(url), body: {
+    //   "myplantId": myplantId,
+    //   "name": name,
+    //   "sort": _selectedSortIndex.toString(),
+    //   "lumi": lumi,
+    //   "humi": humi,
+    //   "image": image,
+    // });
     Navigator.of(context).pop();
   }
 
@@ -106,6 +121,7 @@ class _EditPlantState extends State<EditPlant> {
             } else {
               double waterValue = changeWater(context, snapshot);
               double lightValue = changeLight(context, snapshot);
+              var nickname = snapshot.data.myPlantNickname;
               return Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -129,22 +145,33 @@ class _EditPlantState extends State<EditPlant> {
                         Column(
                           children: [
                             SizedBox(
-                              width: 200,
-                              child: TextField(
-                                // ignore: prefer_const_constructors
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: snapshot.data.myPlantNickname,
-                                  hintText: snapshot.data.myPlantNickname,
+                              width: 140,
+                              child: Form(
+                                key: _form,
+                                child: TextFormField(
+                                  // ignore: prefer_const_constructors
+                                  initialValue: nickname,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: '식물 별명',
+                                  ),
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'Please provide a value.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (val) {
+                                    nickname = val;
+                                  },
                                 ),
-                                controller: plantidController,
                               ),
                             ),
                             SizedBox(
                               height: 20,
                             ),
                             SizedBox(
-                              width: 200,
+                              width: 180,
                               child: Row(
                                 children: [
                                   SizedBox(width: 100, child: Text("식물 종류")),
@@ -181,7 +208,7 @@ class _EditPlantState extends State<EditPlant> {
                       ],
                     ),
                     SizedBox(
-                      height: 60,
+                      height: 30,
                     ),
                     Row(
                       children: [
@@ -237,7 +264,7 @@ class _EditPlantState extends State<EditPlant> {
                       ],
                     ),
                     SizedBox(
-                      height: 100,
+                      height: 60,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -269,8 +296,13 @@ class _EditPlantState extends State<EditPlant> {
                               style: TextStyle(fontSize: 20),
                             ),
                             onPressed: () {
-                              updatePlant(context, snapshot.data.myplantId,
-                                  waterValue, lightValue);
+                              updatePlant(
+                                  context,
+                                  plantId,
+                                  nickname,
+                                  _currentWaterValue.toInt().toString(),
+                                  _currentLightValue.toInt().toString(),
+                                  'https://search.pstatic.net/sunny/?src=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Fecology-logo-green-design-vector-id862500344%3Fk%3D20%26m%3D862500344%26s%3D170667a%26w%3D0%26h%3D9B59bc6G5oyJ5aLBUi909Xkmxp8JB52r_aRvlZT8QwE%3D&type=sc960_832');
                             },
                           ),
                         )
