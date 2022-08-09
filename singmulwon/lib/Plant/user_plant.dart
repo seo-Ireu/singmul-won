@@ -26,13 +26,24 @@ class UserPlant {
 
 class SinglePlant {
   final String myPlantId;
+  final String myPlantNickname;
+  final String plantInfoId;
   final String humi;
   final String lumi;
 
-  SinglePlant({this.myPlantId, this.humi, this.lumi});
+  SinglePlant(
+      {this.myPlantId,
+      this.myPlantNickname,
+      this.plantInfoId,
+      this.humi,
+      this.lumi});
 
   static SinglePlant fromJson(json) => SinglePlant(
-      myPlantId: json['myPlantId'], humi: json['humi'], lumi: json['lumi']);
+      myPlantId: json['myPlantId'],
+      myPlantNickname: json['myPlantNickname'],
+      plantInfoId: json['plantInfoId'],
+      humi: json['humi'],
+      lumi: json['lumi']);
 }
 
 class AiSetting {

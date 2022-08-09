@@ -11,7 +11,7 @@ Expanded WaterValue(value) {
       height: 100,
       onPressed: () {},
       child: Text(
-        'water\n${value}%',
+        'water\n${value}',
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ),

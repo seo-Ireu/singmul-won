@@ -14,25 +14,6 @@ class EditPlant extends StatefulWidget {
   State<EditPlant> createState() => _EditPlantState();
 }
 
-Future myPlant(String plantId) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
-  var response = await http.post(Uri.parse(url), body: {
-    "myPlantId": plantId,
-  });
-  String jsonData = response.body;
-  var vld = await json.decode(jsonData)['plantid']; //List<dynamic>
-
-  SinglePlant sig_plants;
-  for (var item in vld) {
-    sig_plants = SinglePlant(
-        myPlantId: item['myPlantId'], humi: item['humi'], lumi: item['lumi']);
-  }
-  return sig_plants;
-}
-
-double _currentWaterValue = 20;
-double _currentLightValue = 20;
-
 class _EditPlantState extends State<EditPlant> {
   final plantidController = TextEditingController();
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
@@ -40,6 +21,9 @@ class _EditPlantState extends State<EditPlant> {
   int _selectedSortIndex = 1;
   final picker = ImagePicker();
   File _image;
+
+  double _currentWaterValue = 20;
+  double _currentLightValue = 20;
 
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
@@ -60,6 +44,26 @@ class _EditPlantState extends State<EditPlant> {
                     backgroundImage: AssetImage('assets/plant_1.jfif'),
                   )
                 : Image.file(File(_image.path))));
+  }
+
+  Future myPlant(String plantId) async {
+    var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "myPlantId": plantId,
+    });
+    String jsonData = response.body;
+    var vld = await json.decode(jsonData)['plantid']; //List<dynamic>
+
+    SinglePlant sig_plants;
+    for (var item in vld) {
+      sig_plants = SinglePlant(
+          myPlantId: item['myPlantId'],
+          myPlantNickname: item['myPlantNickname'],
+          plantInfoId: item['plantInfoId'],
+          humi: item['humi'],
+          lumi: item['lumi']);
+    }
+    return sig_plants;
   }
 
   Future updatePlant(BuildContext context, myplantId, humi, lumi) async {
@@ -130,8 +134,8 @@ class _EditPlantState extends State<EditPlant> {
                                 // ignore: prefer_const_constructors
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText: 'snapshot.data.name',
-                                  hintText: 'snapshot.data.name',
+                                  labelText: snapshot.data.myPlantNickname,
+                                  hintText: snapshot.data.myPlantNickname,
                                 ),
                                 controller: plantidController,
                               ),
@@ -171,8 +175,8 @@ class _EditPlantState extends State<EditPlant> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        WaterValue(snapshot.data.humi),
-                        LightValue(snapshot.data.lumi),
+                        WaterValue(_currentWaterValue.toInt()), //waterValue
+                        LightValue(_currentLightValue.toInt()), //lightValue
                         FavoriteValue(20),
                       ],
                     ),
@@ -264,7 +268,10 @@ class _EditPlantState extends State<EditPlant> {
                               "식물저장",
                               style: TextStyle(fontSize: 20),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              updatePlant(context, snapshot.data.myplantId,
+                                  waterValue, lightValue);
+                            },
                           ),
                         )
                       ],

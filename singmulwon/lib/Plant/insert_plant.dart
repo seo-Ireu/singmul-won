@@ -56,7 +56,7 @@ class _InsertPlantState extends State<InsertPlant> {
           humi: item['humi'],
           lumi: item['lumi']);
     }
-    return setting_plant;
+    return [setting_plant.humidity(), setting_plant.luminance()];
   }
 
   @override
@@ -240,10 +240,7 @@ class _InsertPlantState extends State<InsertPlant> {
                       ),
                       //수정
                       onPressed: () {
-                        var autosetting = AutoSetting();
-                        setState(() {
-                          // waterValue = autosetting.humidity;
-                        });
+                        setState(() {});
                       },
                     ),
                   ),
