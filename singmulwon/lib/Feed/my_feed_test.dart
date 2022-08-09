@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'feed_create_test.dart';
 import 'feed_test.dart';
+import 'feed_detail_test.dart';
 
 import 'insta_create.dart';
 
@@ -32,6 +34,7 @@ void main() => runApp(MaterialApp(
     '/myfeed': (context) => MyFeedPage(),
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
+    '/feed_create': (context) => FeedCreate(),
   },
 ));
 
@@ -85,11 +88,26 @@ class _FeedPageState extends State<MyFeedPage> {
               for(int i=0; i<cnt; i+=3)
                 Row(
                   children: <Widget>[
-                    Image.asset(snapshot.data["feed"][i]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
-                    if(i+1 < cnt) Image.asset(snapshot.data["feed"][i+1]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
-                    if(i+2 < cnt) Image.asset(snapshot.data["feed"][i+2]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i]["feedId"])));
+                        },
+                        child: Image.asset(snapshot.data["feed"][i]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    ),
+                    if(i+1 < cnt) GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i+1]["feedId"])));
+                        },
+                        child: Image.asset(snapshot.data["feed"][i+1]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    ),
+                    if(i+2 < cnt) GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i+2]["feedId"])));
+                        },
+                        child: Image.asset(snapshot.data["feed"][i+2]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    ),
                   ],
-                )
+                ),
             ],
           )
       );
@@ -196,7 +214,7 @@ class _FeedPageState extends State<MyFeedPage> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(CreatePage.routeName);
+              Navigator.of(context).pushNamed('/feed_create');
             },
             icon: const Icon(Icons.add),
           ),

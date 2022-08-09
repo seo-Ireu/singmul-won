@@ -4,6 +4,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'my_feed_test.dart';
+import 'feed_test.dart';
+import 'feed_create_test.dart';
+import 'feed_detail_test.dart';
 
 import 'insta_create.dart';
 import 'insta_list.dart';
@@ -34,6 +37,8 @@ void main() => runApp(MaterialApp(
     '/myfeed': (context) => MyFeedPage(),
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
+    '/feed_create': (context) => FeedCreate(),
+    '/feed_detail': (context) => FeedDetail(),
   },
 ));
 
