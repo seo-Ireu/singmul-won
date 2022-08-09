@@ -1,12 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Community/write_page.dart';
 import 'package:http/http.dart' as http;
 
+import 'c_comment_model.dart';
 import 'community_model.dart';
 
 class CommunityDetail extends StatefulWidget {
   static const routeName = '/community_detail.dart';
+
 
   @override
   State<CommunityDetail> createState() => _CommunityDetailState();
@@ -15,15 +18,16 @@ class CommunityDetail extends StatefulWidget {
 
 class _CommunityDetailState extends State<CommunityDetail> {
 
+  List<cCommentModel> _comments = [];
   final List<String> _categoryValueList = ['','꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
   int _selectedCategoryIndex =1;
 
-  Future _read(BuildContext context, int categoryIndex) async{
+  Future _read(BuildContext context, int communityIdx) async{
     var url = "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
 
     var response = await http.post(Uri.parse(url), body: {
-      "communityId": categoryIndex.toString(),
+      "communityId": communityIdx.toString(),
     });
     String jsonData = response.body;
     var myJson = await jsonDecode(jsonData)['community'];
@@ -32,15 +36,39 @@ class _CommunityDetailState extends State<CommunityDetail> {
     for (var c in myJson){
       cm = CommunityModel(communityId:int.parse(c['communityId']), categoryId:int.parse(c['categoryId']),userId: c['userId'],title: c['title'],content: c['content']);
     }
-
+    _readComment(communityIdx);
     // var vld = await json.decode(json.encode(response.body));
     // CommunityModel cm = CommunityModel.fromJson(jsonDecode(myJson[0]));
     print(cm);
     return cm;
   }
+  Future _readComment(int communityId) async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read_comment.php";
 
+    var response = await http.post(Uri.parse(url), body: {
+      "communityId": communityId.toString(),
+    });
+    String jsonData = response.body;
+    var myJson = await jsonDecode(jsonData)['cComment'];
+    for (var c in myJson) {
+      cCommentModel cData = cCommentModel(
+          communityId: int.parse(c['communityId']),
+          userId: c['userId'],
+          comment: c['comment']);
+      _comments.add(cData);
+    }
+  }
 
-  Widget _buildComment(int index) {
+  Future _delete(int delCId) async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete.php";
+
+    var response = await http.post(Uri.parse(url), body: {
+      "communityId":delCId.toString(),
+    });
+    Navigator.of(context).pop();
+  }
+
+  Widget _buildComment() {
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: ListTile(
@@ -88,7 +116,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final _cIdx = ModalRoute.of(context).settings.arguments as int;
+    var _cIdx = ModalRoute.of(context).settings.arguments as int;
 
     return Scaffold(
       backgroundColor: Color(0xFFEDF0F6),
@@ -191,7 +219,42 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                             ),
                                           ],
                                         ),
-
+                                        Row(
+                                          children: <Widget>[
+                                            IconButton(
+                                              icon: Icon(Icons.delete),
+                                              iconSize: 30.0,
+                                              onPressed: () => _delete(snapshot.data.communityId),
+                                            ),
+                                            Text(
+                                              'Delete',
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            IconButton(
+                                              icon: Icon(Icons.update),
+                                              iconSize: 30.0,
+                                              onPressed: () {
+                                                Navigator.of(context).pushNamed(
+                                                    WritePage.routeName,
+                                                    arguments: (snapshot.data));
+                                              }
+                                            ),
+                                            Text(
+                                              'update',
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -201,15 +264,9 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                                 child:Row(
                                   children: <Widget>[
-                                    Text(snapshot.data.content),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                child:Row(
-                                  children: <Widget>[
-                                    Text(""),
+                                    Text(snapshot.data.content, style:TextStyle(
+                                      fontSize: 24.0,
+                                    )),
                                   ],
                                 ),
                               ),
@@ -219,26 +276,14 @@ class _CommunityDetailState extends State<CommunityDetail> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 300.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
-                    ),
-                    child: Column(
+                  Column(
                       children: <Widget>[
-                        _buildComment(0),
-                        _buildComment(1),
-                        _buildComment(2),
-                        _buildComment(3),
-                        _buildComment(4),
+                        _buildComment(),
+                        _buildComment(),
+                        _buildComment(),
                       ],
                     ),
-                  )
+
                 ],
               ),
             );

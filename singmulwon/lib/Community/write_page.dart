@@ -9,13 +9,31 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../home_page.dart';
 import 'community.dart';
+import 'community_model.dart';
 
 class WritePage extends StatefulWidget {
+  static const routeName = '/write_page.dart';
+
   @override
   _WritePageState createState() => _WritePageState();
 }
 
 class _WritePageState extends State<WritePage> {
+  var _cData;
+  @override
+  void initState(){
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      _cData = ModalRoute.of(context).settings.arguments as CommunityModel;
+      if (_cData!=null){
+        _title.text = _cData.title;
+        _content.text = _cData.content;
+        _selectedCategoryIndex = _cData.categoryId;
+        _selectedValue = _categoryValueList[_cData.categoryId];
+      }
+    });
+  }
+
   TextEditingController _title = TextEditingController();
   TextEditingController _content = TextEditingController();
 
@@ -42,11 +60,25 @@ class _WritePageState extends State<WritePage> {
       "categoryId": _selectedCategoryIndex.toString(),
       "userId": "admin",
       "title": _title.text,
-      "content": _content.text
+      "content": _content.text,
     });
     Navigator.of(context).pop();
   }
 
+  Future _update() async{
+    print(_title.text);
+    print(_content.text);
+  var url = "http://54.177.126.159/ubuntu/flutter/community/c_update.php";
+
+  var response = await http.post(Uri.parse(url), body: {
+    "communityId": _cData.communityId.toString(),
+    "categoryId": _selectedCategoryIndex.toString(),
+    "userId": "admin",
+    "title": _title.text,
+    "content": _content.text,
+  });
+  Navigator.of(context).pop();
+  }
   Widget showImage() {
     return Container(
         // color: const Color(0xffd0cece),
@@ -61,6 +93,7 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -132,7 +165,7 @@ class _WritePageState extends State<WritePage> {
                   child: TextField(
                     controller:_content,
                     keyboardType: TextInputType.multiline,
-                    maxLines: 16,
+                    maxLines: 10,
                     decoration: InputDecoration(
                       hintText: '내용을 적어주세요',
                       border: OutlineInputBorder(),
@@ -144,7 +177,11 @@ class _WritePageState extends State<WritePage> {
                   padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                   child: FlatButton(
                     onPressed: () {
-                      _create();
+                      if(_cData != null){
+                        _update();
+                      }else{
+                        _create();
+                      }
                     },
                     child: Text(
                       '글쓰기',
