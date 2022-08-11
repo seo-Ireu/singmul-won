@@ -3,9 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'feed_create_test.dart';
+import 'feed_create_register_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
+import 'feed_create_test.dart';
 
 import 'insta_create.dart';
 
@@ -202,7 +203,7 @@ class _FeedPageState extends State<MyFeedPage> {
     ];
 
 
-
+    int _selectedIndex = 0;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -214,7 +215,7 @@ class _FeedPageState extends State<MyFeedPage> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed('/feed_create');
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FeedCreate(userId: 'lyhthy6')));
             },
             icon: const Icon(Icons.add),
           ),
@@ -228,6 +229,10 @@ class _FeedPageState extends State<MyFeedPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (int index) {
+          setState(() {_selectedIndex = index;});
+        },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(

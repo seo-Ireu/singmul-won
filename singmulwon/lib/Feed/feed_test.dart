@@ -5,8 +5,9 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
-import 'feed_create_test.dart';
+import 'feed_create_register_test.dart';
 import 'feed_detail_test.dart';
+import 'feed_create_test.dart';
 
 import 'insta_create.dart';
 import 'insta_list.dart';
@@ -192,7 +193,7 @@ class _FeedPageState extends State<FeedPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(CreatePage.routeName);
+              Navigator.of(context).pushNamed('/feed_create');
             },
             icon: const Icon(Icons.add),
           ),

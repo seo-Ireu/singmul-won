@@ -1,30 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
+import 'feed_create_register_test.dart';
 
 
 import 'insta_create.dart';
 import 'insta_list.dart';
 
-Future fetchFeed() async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed.php?userId=lyhthy6';
-  final response = await http.get(Uri.parse(url));
-
-  if (response.statusCode == 200) {
-    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
-    print('응답했다');
-    var tmp = json.decode(utf8.decode(response.bodyBytes));
-    print(tmp);
-    return tmp;
-  } else {
-    //만약 응답이 ok가 아니면 에러를 던집니다.
-    throw Exception('Failed to load post');
-  }
-}
+final _textController = new TextEditingController();
 
 void main() => runApp(MaterialApp(
   home: FeedCreate(),
@@ -36,25 +24,23 @@ void main() => runApp(MaterialApp(
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
     '/feed_create': (context) => FeedCreate(),
+    '/feed_create_register': (context) => FeedCreateRegister(),
   },
-));
+  )
+);
 
 class FeedCreate extends StatefulWidget {
-  const FeedCreate({Key key}) : super(key: key);
+  final String userId;
+  const FeedCreate({Key key, @required this.userId}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState();
-}
-
-void saveFeed(){
-  Future feeds;
-  feeds = fetchFeed();
+  _FeedPageState createState() => _FeedPageState(userId);
 }
 
 class _FeedPageState extends State<FeedCreate> {
-  Future feeds;
-  Widget ff;
-  static const routeName = '/inst_home';
+  String userId;
+
+  _FeedPageState(this. userId);
 
   @override
   void initState() {
@@ -63,39 +49,33 @@ class _FeedPageState extends State<FeedCreate> {
 
   @override
   Widget build(BuildContext context) {
-    ff = buildColumn();
+    String trans_text;
     return MaterialApp(
-        home: Scaffold(
-            body: buildColumn(),
-        )
+      title: 'Flutter layout demo',
+      home: Scaffold(
+        body: Row(
+            children: <Widget>[
+              SizedBox(height: 50.0,),
+              Image.asset('assets/plant_1.jfif'),
+              Expanded(
+                child:
+                TextField(
+                  controller: _textController,
+                ),
+              ),
+              TextButton(child: Text("게시"), onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => FeedCreateRegister(userId: userId, feedContent: _textController.text, feedUrl: 'assets/plant_1.jfif'))),)
+            ],
+          ),
+      ),
     );
   }
 
   Widget buildColumn() {
     List<Widget> lists = [
-
     ];
-    
-    return Container(
-        margin: EdgeInsets.all(10),
-        child: ListView(
-          padding: const EdgeInsets.all(3),
-          children: <Widget>[
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Image.asset('assets/plant_1.jfif'),
-                    TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+  }
+  void _handleSubmitted(String text) {
+    print(text);
+    _textController.clear(); //입력 후 텍스트창 비워준다.
   }
 }
