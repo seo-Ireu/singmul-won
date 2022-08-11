@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 import './edit_plant.dart';
 import './insert_plant.dart';
 import './future_plant.dart';
+import './bluetooth_plant.dart';
 
 class ManagePlant extends StatefulWidget {
   static const routeName = '/manage-plant';
@@ -40,6 +42,15 @@ class _ManagePlantState extends State<ManagePlant> {
         elevation: 0,
       ),
       body: MyPlantView(context, user),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Bluetooth()),
+          );
+        },
+        child: Icon(Icons.search),
+      ),
     );
   }
 }
@@ -75,7 +86,7 @@ Card MyPlantView(BuildContext context, user) {
                         Container(
                           margin: EdgeInsets.only(left: 10),
                           child: SizedBox(
-                            width: width * 0.25,
+                            width: width * 0.20,
                             child: Image.network(snapshot.data[index].image),
                           ),
                         ),
@@ -91,7 +102,7 @@ Card MyPlantView(BuildContext context, user) {
                               ),
                             ),
                             SizedBox(
-                              height: height * 0.028,
+                              height: height * 0.01,
                             ),
                             Row(
                               children: [
@@ -108,15 +119,22 @@ Card MyPlantView(BuildContext context, user) {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: width * 0.2,
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: width * 0.3,
                                   child: Row(
-                                    children: <Widget>[
+                                    children: [
                                       IconButton(
                                         icon: Icon(Icons.delete),
                                         iconSize: 30.0,
                                         onPressed: () => deletePlant(context,
                                             snapshot.data[index].myPlantId),
                                       ),
+                                      IconButton(
+                                          icon: Icon(Icons.settings_remote),
+                                          iconSize: 30.0,
+                                          onPressed: () => {}),
                                     ],
                                   ),
                                 )

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'dart:developer';
 
 import './edit_button.dart';
 import './future_plant.dart';
@@ -10,10 +11,17 @@ import './future_plant.dart';
 class EditPlant extends StatefulWidget {
   static const routeName = '/edit-plant';
   @override
-  State<EditPlant> createState() => _EditPlantState();
+  State<EditPlant> createState() => EditPlantState();
+
+  static EditPlantState of(BuildContext context) => //추가
+      context.findAncestorStateOfType<EditPlantState>();
 }
 
-class _EditPlantState extends State<EditPlant> {
+double currentWaterValue = 60;
+double currentLightValue = 60;
+
+class EditPlantState extends State<EditPlant> {
+  //_EditPlant
   final _form = GlobalKey<FormState>();
   final plantidController = TextEditingController();
   final picker = ImagePicker();
@@ -22,14 +30,12 @@ class _EditPlantState extends State<EditPlant> {
   int _selectedSortIndex = 1;
   File _image;
 
-  double _currentWaterValue = 20;
-  double _currentLightValue = 20;
-
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
-
     setState(() {
       _image = File(image.path); // 가져온 이미지를 _image에 저장
+      print(_image);
+      log(_image.toString());
     });
   }
 
@@ -56,6 +62,7 @@ class _EditPlantState extends State<EditPlant> {
 
     await http.get(Uri.parse(
         '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi&image=$image'));
+    // '$url?myplantId=9&name=Plant2&sort=3&lumi=70&humi=70&image=$image'));
     // await http.post(Uri.parse(url), body: {
     //   "myplantId": myplantId,
     //   "name": name,
@@ -98,7 +105,10 @@ class _EditPlantState extends State<EditPlant> {
                 ),
               );
             } else {
-              double waterValue = changeWater(context, snapshot);
+              // double waterValue = changeWater(context, snapshot);
+              changeWater2(context, snapshot);
+              double waterValue = currentWaterValue;
+              // currentWaterValue = changeWater(context, snapshot);
               double lightValue = changeLight(context, snapshot);
               var nickname = snapshot.data.myPlantNickname;
               return Padding(
@@ -119,7 +129,7 @@ class _EditPlantState extends State<EditPlant> {
                           ],
                         ),
                         SizedBox(
-                          width: 40,
+                          width: 20,
                         ),
                         Column(
                           children: [
@@ -181,8 +191,8 @@ class _EditPlantState extends State<EditPlant> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        WaterValue(_currentWaterValue.toInt()), //waterValue
-                        LightValue(_currentLightValue.toInt()), //lightValue
+                        WaterValue(waterValue.toInt()), //waterValue
+                        LightValue(lightValue.toInt()), //lightValue
                         FavoriteValue(20),
                       ],
                     ),
@@ -198,18 +208,18 @@ class _EditPlantState extends State<EditPlant> {
                         Expanded(
                           flex: 7,
                           child: Slider(
-                            value: _currentWaterValue,
+                            value: currentWaterValue,
                             min: 0,
                             max: 100,
                             divisions: 100,
                             label:
-                                _currentWaterValue //double.parse(snapshot.data.humi)
+                                currentWaterValue //double.parse(snapshot.data.humi)
                                     .round()
                                     .toString(),
                             onChanged: (double value) {
                               setState(() {
-                                _currentWaterValue = value;
-                                waterValue = _currentWaterValue;
+                                currentWaterValue = value;
+                                waterValue = currentWaterValue;
                               });
                             },
                           ),
@@ -228,14 +238,14 @@ class _EditPlantState extends State<EditPlant> {
                         Expanded(
                           flex: 7,
                           child: Slider(
-                            value: _currentLightValue,
+                            value: currentLightValue,
                             max: 100,
                             divisions: 100,
-                            label: _currentLightValue.round().toString(),
+                            label: currentLightValue.round().toString(),
                             onChanged: (double value) {
                               setState(() {
-                                _currentLightValue = value;
-                                lightValue = _currentLightValue;
+                                currentLightValue = value;
+                                lightValue = currentLightValue;
                               });
                             },
                           ),
@@ -279,8 +289,8 @@ class _EditPlantState extends State<EditPlant> {
                                   context,
                                   plantId,
                                   nickname,
-                                  _currentWaterValue.toInt().toString(),
-                                  _currentLightValue.toInt().toString(),
+                                  currentWaterValue.toInt().toString(),
+                                  currentLightValue.toInt().toString(),
                                   'https://search.pstatic.net/sunny/?src=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Fecology-logo-green-design-vector-id862500344%3Fk%3D20%26m%3D862500344%26s%3D170667a%26w%3D0%26h%3D9B59bc6G5oyJ5aLBUi909Xkmxp8JB52r_aRvlZT8QwE%3D&type=sc960_832');
                             },
                           ),
@@ -298,6 +308,10 @@ class _EditPlantState extends State<EditPlant> {
 
 double changeWater(BuildContext context, snapshot) {
   return double.parse(snapshot.data.humi);
+}
+
+void changeWater2(BuildContext context, snapshot) {
+  currentWaterValue = double.parse(snapshot.data.humi);
 }
 
 double changeLight(BuildContext context, snapshot) {
