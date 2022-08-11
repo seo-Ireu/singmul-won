@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import './user_plant.dart';
+import './manage_plant.dart';
 
 Future myPlant(String plantId) async {
   var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
@@ -54,6 +55,6 @@ Future deletePlant(BuildContext context, plantId) async {
   });
   Navigator.of(context).pop();
   // Navigator.of(context).pushNamed(
-  //   ManagePlant.routeName,
+  // ManagePlant.routeName,
   // );
 }

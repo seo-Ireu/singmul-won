@@ -17,6 +17,9 @@ class _ManagePlantState extends State<ManagePlant> {
   @override
   void initState() {
     super.initState();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
