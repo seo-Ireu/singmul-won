@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls, prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
@@ -9,6 +11,7 @@ class Bluetooth extends StatefulWidget {
 }
 
 class _BluetoothState extends State<Bluetooth> {
+  final String targetDeviceName = 'HC-06';
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<ScanResult> scanResultList = [];
   bool _isScanning = false;
@@ -40,7 +43,19 @@ class _BluetoothState extends State<Bluetooth> {
       flutterBlue.startScan(timeout: Duration(seconds: 4));
       // 스캔 결과 리스너
       flutterBlue.scanResults.listen((results) {
-        scanResultList = results;
+        results.forEach((element) {
+          //찾는 장치명인지 확인
+          if (element.device.name == targetDeviceName) {
+            // 장치의 ID를 비교해 이미 등록된 장치인지 확인
+            if (scanResultList
+                    .indexWhere((e) => e.device.id == element.device.id) <
+                0) {
+              // 찾는 장치명이고 scanResultList에 등록된적이 없는 장치라면 리스트에 추가
+              scanResultList.add(element);
+            }
+          }
+        });
+
         // UI 갱신
         setState(() {});
       });
@@ -83,6 +98,7 @@ class _BluetoothState extends State<Bluetooth> {
   /* BLE 아이콘 위젯 */
   Widget leading(ScanResult r) {
     return CircleAvatar(
+      // ignore: sort_child_properties_last
       child: Icon(
         Icons.bluetooth,
         color: Colors.white,

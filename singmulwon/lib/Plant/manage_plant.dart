@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 
 import './edit_plant.dart';
 import './insert_plant.dart';
 import './future_plant.dart';
 import './bluetooth_plant.dart';
+import './Test1.dart';
 
 class ManagePlant extends StatefulWidget {
   static const routeName = '/manage-plant';
@@ -49,7 +49,8 @@ class _ManagePlantState extends State<ManagePlant> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Bluetooth()),
+            // MaterialPageRoute(builder: (context) => Bluetooth()),
+            MaterialPageRoute(builder: (context) => Test1()),
           );
         },
         child: Icon(Icons.search),
@@ -69,8 +70,8 @@ Card MyPlantView(BuildContext context, user) {
         if (snapshot.hasData) {
           // buildColumn(snapshot);
           return ListView.builder(
-              padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
               itemCount: snapshot.data.length,
+              scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {

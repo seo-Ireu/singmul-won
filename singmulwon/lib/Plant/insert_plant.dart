@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import './edit_button.dart';
 import './user_plant.dart';
@@ -24,7 +23,6 @@ class _InsertPlantState extends State<InsertPlant> {
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
-  // Notifications Plugin 생성
 
   @override
   void initState() {
