@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_blue/flutter_blue.dart';
 
-import './user_plant.dart';
 import './edit_plant.dart';
 import './insert_plant.dart';
+import './future_plant.dart';
+import './bluetooth_plant.dart';
 
 class ManagePlant extends StatefulWidget {
   static const routeName = '/manage-plant';
@@ -13,32 +13,13 @@ class ManagePlant extends StatefulWidget {
   State<ManagePlant> createState() => _ManagePlantState();
 }
 
-Future myPlantList(String user) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/manage_plant.php";
-  var response = await http.post(Uri.parse(url), body: {
-    "userid": user,
-  });
-  String jsonData = utf8.decode(response.bodyBytes);
-  var vld = await json.decode(jsonData)['myplant']; //List<dynamic>
-
-  List<UserPlant> myplants = [];
-  for (var item in vld) {
-    UserPlant myitem = UserPlant(
-        myPlantId: item['myPlantId'],
-        myPlantNickname: item['myPlantNickname'],
-        plantName: item['plantName'],
-        humi: item['humi'],
-        lumi: item['lumi'],
-        image: item['image']);
-    myplants.add(myitem);
-  }
-  return myplants;
-}
-
 class _ManagePlantState extends State<ManagePlant> {
   @override
   void initState() {
     super.initState();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -64,6 +45,15 @@ class _ManagePlantState extends State<ManagePlant> {
         elevation: 0,
       ),
       body: MyPlantView(context, user),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Bluetooth()),
+          );
+        },
+        child: Icon(Icons.search),
+      ),
     );
   }
 }
@@ -71,6 +61,7 @@ class _ManagePlantState extends State<ManagePlant> {
 Card MyPlantView(BuildContext context, user) {
   double width = MediaQuery.of(context).size.width;
   double height = MediaQuery.of(context).size.height;
+
   return Card(
     child: FutureBuilder(
       future: myPlantList(user),
@@ -98,7 +89,7 @@ Card MyPlantView(BuildContext context, user) {
                         Container(
                           margin: EdgeInsets.only(left: 10),
                           child: SizedBox(
-                            width: width * 0.25,
+                            width: width * 0.20,
                             child: Image.network(snapshot.data[index].image),
                           ),
                         ),
@@ -114,17 +105,43 @@ Card MyPlantView(BuildContext context, user) {
                               ),
                             ),
                             SizedBox(
-                              height: height * 0.028,
+                              height: height * 0.01,
                             ),
-                            SizedBox(
-                              width: width * 0.5,
-                              child: Text(
-                                // ignore: prefer_interpolation_to_compose_strings
-                                "     종류 :  " + snapshot.data[index].plantName,
-                                style: TextStyle(
-                                  fontSize: 15,
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: width * 0.3,
+                                  child: Text(
+                                    // ignore: prefer_interpolation_to_compose_strings
+                                    "     종류 :  " +
+                                        snapshot.data[index].plantName,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: width * 0.3,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.delete),
+                                        iconSize: 30.0,
+                                        onPressed: () => deletePlant(context,
+                                            snapshot.data[index].myPlantId),
+                                      ),
+                                      IconButton(
+                                          icon: Icon(Icons.settings_remote),
+                                          iconSize: 30.0,
+                                          onPressed: () => {}),
+                                    ],
+                                  ),
+                                )
+                              ],
                             )
                           ],
                         ),

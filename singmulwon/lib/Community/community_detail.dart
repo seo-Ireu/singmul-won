@@ -17,11 +17,13 @@ class CommunityDetail extends StatefulWidget {
 }
 
 class _CommunityDetailState extends State<CommunityDetail> {
+  TextEditingController _comment = TextEditingController();
 
   List<cCommentModel> _comments = [];
   final List<String> _categoryValueList = ['','꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
   int _selectedCategoryIndex =1;
+  List _images=[];
 
   Future _read(BuildContext context, int communityIdx) async{
     var url = "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
@@ -31,16 +33,34 @@ class _CommunityDetailState extends State<CommunityDetail> {
     });
     String jsonData = response.body;
     var myJson = await jsonDecode(jsonData)['community'];
+    final temp =await jsonDecode(jsonData)['communityImage'];
 
+    setState(() {
+      _images = temp;
+    });
     CommunityModel cm;
     for (var c in myJson){
       cm = CommunityModel(communityId:int.parse(c['communityId']), categoryId:int.parse(c['categoryId']),userId: c['userId'],title: c['title'],content: c['content']);
     }
     _readComment(communityIdx);
-    // var vld = await json.decode(json.encode(response.body));
-    // CommunityModel cm = CommunityModel.fromJson(jsonDecode(myJson[0]));
-    print(cm);
     return cm;
+  }
+  Future _delete(int delCId) async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete.php";
+
+    var response = await http.post(Uri.parse(url), body: {
+      "communityId":delCId.toString(),
+    });
+    Navigator.of(context).pop();
+  }
+  Future _createComment(int communityIdx) async{
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_create_comment.php";
+
+    var response = await http.post(Uri.parse(url), body: {
+      "communityId": communityIdx.toString(),
+      "userId":"admin",
+      "comment":_comment.text,
+    });
   }
   Future _readComment(int communityId) async{
     var url = "http://54.177.126.159/ubuntu/flutter/community/c_read_comment.php";
@@ -55,19 +75,10 @@ class _CommunityDetailState extends State<CommunityDetail> {
           communityId: int.parse(c['communityId']),
           userId: c['userId'],
           comment: c['comment']);
+      print("comment: ${cData.comment}, userId: ${cData.userId}");
       _comments.add(cData);
     }
   }
-
-  Future _delete(int delCId) async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete.php";
-
-    var response = await http.post(Uri.parse(url), body: {
-      "communityId":delCId.toString(),
-    });
-    Navigator.of(context).pop();
-  }
-
   Widget _buildComment() {
     return Padding(
       padding: EdgeInsets.all(10.0),
@@ -184,16 +195,20 @@ class _CommunityDetailState extends State<CommunityDetail> {
                               InkWell(
                                 onDoubleTap: () => print('Like post'),
                                 child: Container(
-                                  width: double.infinity,
-                                  height: 300.0,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                    ],
-                                    image: DecorationImage(
-                                      image: AssetImage("assets/plant_3.jfif"),
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  ),
+                                  // color: const Color(0xffd0cece),
+                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    height: MediaQuery.of(context).size.width * 0.3,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                    child:  ListView.builder(
+                                        itemCount: _images.length,
+                                        itemBuilder: (context, i) {
+                                          return ListTile(
+                                              subtitle: Image.network('http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/'+_images[i]['url']));
+                                        })
+                                  // Center(
+                                  //     child: _image == null
+                                  //         ? Text('No image selected.')
+                                  //         : Image.file(File(_image.path)))
                                 ),
                               ),
                               Padding(
@@ -243,7 +258,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                               onPressed: () {
                                                 Navigator.of(context).pushNamed(
                                                     WritePage.routeName,
-                                                    arguments: (snapshot.data));
+                                                    arguments: {"data":snapshot.data,"image":_images});
                                               }
                                             ),
                                             Text(
@@ -311,6 +326,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
           child: Padding(
             padding: EdgeInsets.all(12.0),
             child: TextField(
+              controller: _comment,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
@@ -332,7 +348,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     color: Color(0xFF23B66F),
-                    onPressed: () => print('Post comment'),
+                    onPressed: () => {_createComment(_cIdx)},
                     child: Icon(
                       Icons.send,
                       size: 25.0,

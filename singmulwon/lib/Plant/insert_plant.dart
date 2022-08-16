@@ -1,12 +1,14 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors
+// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, use_build_context_synchronously
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import './edit_button.dart';
 import './user_plant.dart';
+import './notification.dart';
 
 class InsertPlant extends StatefulWidget {
   static const routeName = '/insert-plant';
@@ -22,6 +24,14 @@ class _InsertPlantState extends State<InsertPlant> {
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
+  // Notifications Plugin 생성
+
+  @override
+  void initState() {
+    super.initState();
+    // 알림 초기화
+    init(); //notification.dart
+  }
 
   Future insertPlant(
       BuildContext context, userid, name, humi, lumi, image) async {
@@ -34,6 +44,7 @@ class _InsertPlantState extends State<InsertPlant> {
       "lumi": lumi,
       "image": image
     });
+    showGroupedNotifications();
     Navigator.of(context).pop();
     // Navigator.pushAndRemoveUntil(
     //     context,
@@ -272,12 +283,4 @@ class _InsertPlantState extends State<InsertPlant> {
           ),
         ));
   }
-}
-
-double changeWater(BuildContext context, snapshot) {
-  return double.parse(snapshot.data.humi);
-}
-
-double changeLight(BuildContext context, snapshot) {
-  return double.parse(snapshot.data.lumi);
 }
