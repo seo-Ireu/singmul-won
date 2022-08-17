@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 Expanded WaterValue(value) {
   return Expanded(
     child: FlatButton(
+      color: Color.fromARGB(255, 209, 226, 210),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -12,7 +13,7 @@ Expanded WaterValue(value) {
       onPressed: () {},
       child: Text(
         'water\n${value}',
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 23, 75, 25)),
         textAlign: TextAlign.center,
       ),
     ),
@@ -22,11 +23,15 @@ Expanded WaterValue(value) {
 Expanded LightValue(value) {
   return Expanded(
     child: FlatButton(
+      color: Color.fromARGB(255, 209, 226, 210),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       height: 100,
       onPressed: () {},
       child: Text(
         'light\n${value}',
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 23, 75, 25)),
         textAlign: TextAlign.center,
       ),
     ),
@@ -36,6 +41,10 @@ Expanded LightValue(value) {
 Expanded FavoriteValue(value) {
   return Expanded(
     child: FlatButton(
+      color: Color.fromARGB(255, 209, 226, 210),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       height: 100,
       onPressed: () {},
       child: Column(
@@ -43,7 +52,8 @@ Expanded FavoriteValue(value) {
           Icon(Icons.favorite),
           Text(
             value.toInt().toString(),
-            style: TextStyle(fontSize: 20),
+            style:
+                TextStyle(fontSize: 20, color: Color.fromARGB(255, 23, 75, 25)),
             textAlign: TextAlign.center,
           ),
         ],

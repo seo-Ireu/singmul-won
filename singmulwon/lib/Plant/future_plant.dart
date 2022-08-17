@@ -39,6 +39,7 @@ Future myPlantList(String user) async {
         myPlantId: item['myPlantId'],
         myPlantNickname: item['myPlantNickname'],
         plantName: item['plantName'],
+        plantImage: item['plantImage'],
         humi: item['humi'],
         lumi: item['lumi'],
         image: item['image']);

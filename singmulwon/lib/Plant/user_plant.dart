@@ -2,6 +2,7 @@ class UserPlant {
   final String myPlantId;
   final String myPlantNickname;
   final String plantName;
+  final String plantImage;
   final String image;
   final String humi;
   final String lumi;
@@ -10,6 +11,7 @@ class UserPlant {
       {this.myPlantId,
       this.myPlantNickname,
       this.plantName,
+      this.plantImage,
       this.humi,
       this.lumi,
       this.image});
@@ -18,6 +20,7 @@ class UserPlant {
         myPlantId: json['myPlantId'],
         myPlantNickname: json['myPlantNickname'],
         plantName: json['plantName'],
+        plantImage: json['plantImage'],
         humi: json['humi'],
         lumi: json['lumi'],
         image: json['image'],
