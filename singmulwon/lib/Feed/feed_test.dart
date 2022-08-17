@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'feed_delete_test.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
 import 'feed_create_register_test.dart';
@@ -117,7 +118,9 @@ class _FeedPageState extends State<FeedPage> {
                             mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
                             children: <Widget>[
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDelete(userId: '${snapshot.data["feed"][i]["userId"]}', feedId: '${snapshot.data["feed"][i]["feedId"]}')));
+                                  },
                                   icon: Icon(Icons.more_horiz)),
                             ],
                           ),
@@ -125,8 +128,7 @@ class _FeedPageState extends State<FeedPage> {
                       ),
 
                       SizedBox(height: 5.0,),
-                      Image.asset(
-                          '${snapshot.data["feed"][i]["feedImage"]}', width: 400, height: 400, fit: BoxFit.fill),
+                      Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i]["feedImage"], width: 400, height: 400, fit: BoxFit.fill),
                       SizedBox(height: 5.0,), // 여백
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,

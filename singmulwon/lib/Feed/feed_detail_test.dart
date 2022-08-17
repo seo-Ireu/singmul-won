@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Feed/feed_delete_test.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -7,8 +8,8 @@ import 'my_feed_test.dart';
 import 'feed_test.dart';
 import 'feed_create_test.dart';
 
-Future fetchFeed(String feedId) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_detail.php?userId=lyhthy6&feedId='+feedId;
+Future fetchFeed(String feedId, String userId) async {
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_detail.php?userId='+userId+'&feedId='+feedId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -41,23 +42,25 @@ String all_feedId;
 
 class FeedDetail extends StatefulWidget {
   final String feedId;
-  FeedDetail({Key key, @required this.feedId}) : super(key: key);
+  final String userId;
+  FeedDetail({Key key, @required this.feedId, @required this.userId}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(feedId);
+  _FeedPageState createState() => _FeedPageState(feedId, userId);
 }
 
 class _FeedPageState extends State<FeedDetail> {
   Future feeds;
   String feedId;
+  String userId;
   static const routeName = '/inst_home';
 
-  _FeedPageState(this. feedId);
+  _FeedPageState(this. feedId, this. userId);
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed(feedId);
+    feeds = fetchFeed(feedId, userId);
   }
 
   @override
@@ -117,7 +120,9 @@ class _FeedPageState extends State<FeedDetail> {
                           mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
                           children: <Widget>[
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDelete(userId: userId, feedId: feedId)));
+                                },
                                 icon: Icon(Icons.more_horiz)),
                           ],
                         ),
@@ -125,8 +130,7 @@ class _FeedPageState extends State<FeedDetail> {
                     ),
 
                     SizedBox(height: 5.0,),
-                    Image.asset(
-                        '${snapshot.data["feed"][i]["feedImage"]}', width: 400, height: 400, fit: BoxFit.fill),
+                    Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i]["feedImage"], width: 400, height: 400, fit: BoxFit.fill),
                     SizedBox(height: 5.0,), // 여백
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,

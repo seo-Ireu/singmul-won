@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_create_register_test.dart';
+import 'feed_follower_test.dart';
+import 'feed_following_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
@@ -15,13 +17,9 @@ Future fetchFeed() async {
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
-    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
-    print('응답했다');
     var tmp = json.decode(utf8.decode(response.bodyBytes));
-    print(tmp);
     return tmp;
   } else {
-    //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('Failed to load post');
   }
 }
@@ -83,6 +81,9 @@ class _FeedPageState extends State<MyFeedPage> {
     List<Widget> feedList = [];
     List<Widget> imgList = [];
     int cnt = snapshot.data["count"];
+    String feedCount = '${snapshot.data["count"]}';//snapshot.data["count"] as String;
+    String follower = '${snapshot.data["follower"]}';//snapshot.data["follower"] as String;
+    String following = '${snapshot.data["following"]}';//snapshot.data["following"] as String;
     feedList.add(
           Column(
             children: <Widget>[
@@ -91,24 +92,27 @@ class _FeedPageState extends State<MyFeedPage> {
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i]["feedId"])));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i]["feedId"], userId: userid)));
                         },
-                        child: Image.asset(snapshot.data["feed"][i]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                        child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
                     ),
+                    SizedBox(width: 1.0,),
                     if(i+1 < cnt) GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i+1]["feedId"])));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i+1]["feedId"], userId: userid)));
                         },
-                        child: Image.asset(snapshot.data["feed"][i+1]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                        child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i+1]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
                     ),
+                    SizedBox(width: 1.0,),
                     if(i+2 < cnt) GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i+2]["feedId"])));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i+2]["feedId"], userId: userid)));
                         },
-                        child: Image.asset(snapshot.data["feed"][i+2]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                        child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i+2]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
                     ),
                   ],
                 ),
+                SizedBox(height: 10.0,),
             ],
           )
       );
@@ -133,19 +137,39 @@ class _FeedPageState extends State<MyFeedPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 CircleAvatar(
-                  radius: 40.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
+                  radius: 40.0, backgroundImage: AssetImage("assets/human_2.jpg"),),
                 Column(children: <Widget>[
-                  Text('7', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  Text(feedCount, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
                   Text('게시글', style: const TextStyle(fontSize: 17)),
                 ]), //게시물 수
-                Column(children: <Widget>[
-                  Text('206', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                  Text('팔로워', style: const TextStyle(fontSize: 17)),
-                ]), //팔로워 수
-                Column(children: <Widget>[
-                  Text('150', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                  Text('팔로잉', style: const TextStyle(fontSize: 17)),
-                ]),//팔로잉 수
+                TextButton(
+                  onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFollower(userId: 'lyhthy6')));
+                      },
+                  child:
+                    Column(children: <Widget>[
+                      Text(follower, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                      Text('팔로워', style: const TextStyle(fontSize: 17)),
+                    ]
+                  ),
+                  style: TextButton.styleFrom(
+                    primary: Colors.black, //글자색
+                  ),
+                ), //팔로워 수
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyFollowing(userId: 'lyhthy6')));
+                  },
+                  child:
+                  Column(children: <Widget>[
+                      Text(following, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                      Text('팔로잉', style: const TextStyle(fontSize: 17)),
+                    ]
+                  ),
+                  style: TextButton.styleFrom(
+                    primary: Colors.black, //글자색
+                  ),
+                ),//팔로잉 수
                 SizedBox(width: 7.0,),
               ],
             ), // 프사, 게시물 수, 팔로워 수, 팔로잉 수
@@ -207,12 +231,6 @@ class _FeedPageState extends State<MyFeedPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/feed');
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
           IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => FeedCreate(userId: 'lyhthy6')));

@@ -6,12 +6,27 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'feed_create_last_test.dart';
 import 'feed_test.dart';
 import 'my_feed_test.dart';
 
+Future fetchFeed(String userId, String feedContent, String feedUrl) async {
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_create.php?userId='+userId+'&feedContent='+feedContent+'&feedUrl='+feedUrl;
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
+    print('응답했다');
+    var tmp = json.decode(utf8.decode(response.bodyBytes));
+    print(tmp);
+    return tmp;
+  } else {
+    //만약 응답이 ok가 아니면 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
 void main() => runApp(MaterialApp(
-  home: FeedCreateImage(),
+  home: FeedCreateRegister(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -19,27 +34,29 @@ void main() => runApp(MaterialApp(
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
     '/feed_create': (context) => FeedCreate(),
-    '/feed_create_register': (context) => FeedCreateImage(),
+    '/feed_create_register': (context) => FeedCreateRegister(),
     '/myfeed': (context) => MyFeedPage(),
   },
 ));
 
-class FeedCreateImage extends StatefulWidget {
+class FeedCreateRegister extends StatefulWidget {
   final String userId;
   final String feedContent;
-
-  const FeedCreateImage({Key key, @required this.userId, @required this.feedContent}) : super(key: key);
+  final String feedUrl;
+  FeedCreateRegister({Key key, @required this.userId, @required this.feedContent, @required this.feedUrl}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId, feedContent);
+  _FeedPageState createState() => _FeedPageState(userId, feedContent, feedUrl);
 }
 
-class _FeedPageState extends State<FeedCreateImage> {
+class _FeedPageState extends State<FeedCreateRegister> {
   Future feeds;
   String userId;
   String feedContent;
+  String feedUrl;
+  static const routeName = '/inst_home';
 
-  _FeedPageState(this. userId, this. feedContent);
+  _FeedPageState(this. userId, this. feedContent, this. feedUrl);
 
 
   XFile image;
@@ -52,7 +69,7 @@ class _FeedPageState extends State<FeedCreateImage> {
   //we can upload image from camera or from gallery based on parameter
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
-    var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
+    var uri = "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     if(img != null){
@@ -155,21 +172,7 @@ class _FeedPageState extends State<FeedCreateImage> {
   void initState() {
     super.initState();
     getImageServer();
-  }
-
-  void myAlert() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            content: Container(
-              height: MediaQuery.of(context).size.height / 6,
-              child: Text('Please upload image!!')
-            ),
-          );
-        });
+    feeds = fetchFeed(userId, feedContent, feedUrl);
   }
 
   @override
@@ -197,59 +200,21 @@ class _FeedPageState extends State<FeedCreateImage> {
   Widget buildColumn(snapshot) {
     List<Widget> lists = [
       Center(
-        child: Column(
-          children: <Widget>[
-            ElevatedButton(
-              //if user click this button, user can upload image from gallery
-              onPressed: () {
-                Navigator.pop(context);
-                pickImages();
-                // sendImage(ImageSource.gallery);
-              },
-              child: Row(
-                children: [
-                  Icon(Icons.image),
-                  Text('From Gallery'),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              //if user click this button. user can upload image from camera
-              onPressed: () {
-                Navigator.pop(context);
-                sendImage(ImageSource.camera);
-              },
-              child: Row(
-                children: [
-                  Icon(Icons.camera),
-                  Text('From Camera'),
-                ],
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                  if(_images.length != 0) {
-                    for (int i = 0; i < _images.length; i++)
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              FeedCreateRegister(
-                                  userId: userId,
-                                  feedContent: feedContent,
-                                  feedUrl: 'http://54.177.126.159/ubuntu/flutter/feed/image/' +
-                                      _images[i]['url'])));
-                  }
-                  else{
-                    myAlert();
-                  }
+          child: Column(
+            children: <Widget>[
+              Text("게시가 완료되었습니다!"),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage()));
                 },
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 150)),
-              ),
-              child: Text('게시하기'),
-            )
-          ],
-        )
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                      const EdgeInsets.symmetric(horizontal: 150)),
+                ),
+                child: Text('돌아가기'),
+              )
+            ],
+          )
       ),
     ];
     //Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage()));
@@ -258,7 +223,7 @@ class _FeedPageState extends State<FeedCreateImage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage()));
             },
             icon: const Icon(Icons.arrow_back),
           ),
