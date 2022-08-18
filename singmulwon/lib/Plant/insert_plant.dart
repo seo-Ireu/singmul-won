@@ -55,206 +55,239 @@ class _InsertPlantState extends State<InsertPlant> {
     double lightValue = _currentLightValue;
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('식물 등록'),
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(
+        title: Text('식물 등록'),
+        elevation: 0,
+      ),
+      body: FutureBuilder(
+          future: properData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData == false) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) => Column(
                   children: [
-                    Container(
-                      height: 20,
-                    ),
-                    Container(
-                      width: 240,
-                      height: 50,
-                      child: TextField(
-                        // ignore: prefer_const_constructors
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: '식물 이름',
-                          hintText: '별명 입력',
-                        ),
-                        controller: plantidController,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        style: TextStyle(fontSize: 15),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Color.fromARGB(255, 165, 171, 166),
-                              width: 1),
-                          borderRadius: BorderRadius.circular(5)),
-                      width: 240,
-                      child: Row(
+                  ],
+                ),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 5,
+                            height: 20,
+                          ),
+                          Container(
+                            width: 240,
+                            height: 50,
+                            child: TextField(
+                              // ignore: prefer_const_constructors
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: '식물 이름',
+                                hintText: '별명 입력',
+                              ),
+                              controller: plantidController,
+                            ),
                           ),
                           SizedBox(
-                              width: 130,
-                              child: Text(
-                                "식물 종류",
-                                style: TextStyle(fontSize: 15),
-                              )),
-                          DropdownButton(
-                            value: _selectedValue,
-                            items: _sortValueList.map((value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                var index = _sortValueList.indexOf(value);
-                                _selectedValue = value;
-                                _selectedSortIndex = index;
-                              });
-                            },
+                            height: 20,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 165, 171, 166),
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(5)),
+                            width: 240,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 5,
+                                ),
+                                SizedBox(
+                                    width: 130,
+                                    child: Text(
+                                      "식물 종류",
+                                      style: TextStyle(fontSize: 15),
+                                    )),
+                                DropdownButton(
+                                  value: _selectedValue,
+                                  items: _sortValueList.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      var index = _sortValueList.indexOf(value);
+                                      _selectedValue = value;
+                                      _selectedSortIndex = index;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 60,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    WaterValue(waterValue.toInt()),
-                    Container(
-                      width: 10,
-                    ),
-                    LightValue(lightValue.toInt()),
-                    Container(
-                      width: 10,
-                    ),
-                    FavoriteValue(0),
-                  ],
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Icon(Icons.water_drop_outlined),
-                    ),
-                    Expanded(
-                      flex: 7,
-                      child: Slider(
-                        value: _currentWaterValue,
-                        min: 0,
-                        max: 100,
-                        divisions: 100,
-                        label:
-                            _currentWaterValue //double.parse(snapshot.data.humi)
-                                .round()
-                                .toString(),
-                        onChanged: (double value) {
-                          setState(() {
-                            _currentWaterValue = value;
-                            waterValue = _currentWaterValue;
-                          });
-                        },
+                      Container(
+                        height: 60,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Icon(Icons.sunny),
-                    ),
-                    Expanded(
-                      flex: 7,
-                      child: Slider(
-                        value: _currentLightValue,
-                        max: 100,
-                        divisions: 100,
-                        label: _currentLightValue.round().toString(),
-                        onChanged: (double value) {
-                          setState(() {
-                            _currentLightValue = value;
-                            lightValue = _currentLightValue;
-                          });
-                        },
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          WaterValue(waterValue.toInt()),
+                          Container(
+                            width: 10,
+                          ),
+                          LightValue(lightValue.toInt()),
+                          Container(
+                            width: 10,
+                          ),
+                          FavoriteValue(0),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 110,
-                      height: 40,
-                      child: FlatButton(
-                        textColor: Colors.white,
-                        color: Color.fromARGB(255, 75, 143, 77),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Icon(Icons.water_drop_outlined),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Slider(
+                              value: _currentWaterValue,
+                              min: 0,
+                              max: 100,
+                              divisions: 100,
+                              label:
+                                  _currentWaterValue //double.parse(snapshot.data.humi)
+                                      .round()
+                                      .toString(),
+                              onChanged: (double value) {
+                                setState(() {
+                                  _currentWaterValue = value;
+                                  waterValue = _currentWaterValue;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Icon(Icons.sunny),
+                          ),
+                          Expanded(
+                            flex: 7,
+                            child: Slider(
+                              value: _currentLightValue,
+                              max: 100,
+                              divisions: 100,
+                              label: _currentLightValue.round().toString(),
+                              onChanged: (double value) {
+                                setState(() {
+                                  _currentLightValue = value;
+                                  lightValue = _currentLightValue;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 110,
+                            height: 40,
+                            child: FlatButton(
+                              textColor: Colors.white,
+                              color: Color.fromARGB(255, 75, 143, 77),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
 
-                        child: Text(
-                          "자동설정",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        //수정
-                        onPressed: () {
-                          setState(() {});
-                        },
+                              child: Text(
+                                "자동설정",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              //수정
+                              onPressed: () {
+                                setState(() {
+                                  _currentWaterValue =
+                                      double.parse(snapshot.data.humidity);
+                                  waterValue =
+                                      double.parse(snapshot.data.humidity);
+                                  _currentLightValue =
+                                      double.parse(snapshot.data.luminance);
+                                  lightValue =
+                                      double.parse(snapshot.data.luminance);
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 50,
+                          ),
+                          SizedBox(
+                            width: 110,
+                            height: 40,
+                            child: FlatButton(
+                              textColor: Colors.white,
+                              color: Color.fromARGB(255, 75, 143, 77),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Text(
+                                "식물등록",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {
+                                insertPlant(
+                                    context,
+                                    userId,
+                                    // _selectedSortIndex.toString(),
+                                    plantidController.text,
+                                    waterValue.toString(),
+                                    lightValue.toString());
+                              },
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      width: 50,
-                    ),
-                    SizedBox(
-                      width: 110,
-                      height: 40,
-                      child: FlatButton(
-                        textColor: Colors.white,
-                        color: Color.fromARGB(255, 75, 143, 77),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          "식물등록",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          insertPlant(
-                              context,
-                              userId,
-                              // _selectedSortIndex.toString(),
-                              plantidController.text,
-                              waterValue.toString(),
-                              lightValue.toString());
-                        },
-                      ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ));
+              );
+            }
+          }),
+    );
   }
 }

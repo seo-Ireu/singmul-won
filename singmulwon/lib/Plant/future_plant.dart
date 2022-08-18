@@ -70,13 +70,13 @@ Future properValue(String plantInfoId) async {
   });
   String jsonData = utf8.decode(response.bodyBytes);
   var vld = await json.decode(jsonData)['setting'];
-
+  print(vld);
   SuitableData suitable_data;
   for (var item in vld) {
     suitable_data = SuitableData(
         plantInfoId: item['plantInfoId'],
-        humidity: item['humi'],
-        luminance: item['lumi']);
+        humidity: item['humidity'],
+        luminance: item['luminance']);
   }
   return suitable_data;
 }
