@@ -335,8 +335,8 @@ class EditPlantState extends State<EditPlant> {
                               onPressed: () {
                                 updatePlant(
                                     context,
-                                    plantId,
                                     nickname,
+                                    plantId,
                                     currentWaterValue.toInt().toString(),
                                     currentLightValue.toInt().toString());
                               },

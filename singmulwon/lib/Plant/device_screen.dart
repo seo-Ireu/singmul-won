@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -100,7 +103,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
     /* 
       타임아웃을 10초(10000ms)로 설정 및 autoconnect 해제
-       참고로 autoconnect가 true되어있으면 연결이 지연되는 경우가 있음.
+      참고로 autoconnect가 true되어있으면 연결이 지연되는 경우가 있음.
      */
     await widget.device
         .connect(autoConnect: false)
@@ -117,7 +120,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
       if (returnValue == null) {
         //returnValue가 null이면 timeout이 발생한 것이 아니므로 연결 성공
         debugPrint('connection successful');
-        print('start discover service');
         List<BluetoothService> bleServices =
             await widget.device.discoverServices();
         setState(() {
@@ -125,18 +127,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
         });
         // 각 속성을 디버그에 출력
         for (BluetoothService service in bleServices) {
-          print('============================================');
-          print('Service UUID: ${service.uuid}');
-          for (BluetoothCharacteristic c in service.characteristics) {
-            print('\tcharacteristic UUID: ${c.uuid.toString()}');
-            print('\t\twrite: ${c.properties.write}');
-            print('\t\tread: ${c.properties.read}');
-            print('\t\tnotify: ${c.properties.notify}');
-            print('\t\tisNotifying: ${c.isNotifying}');
-            print(
-                '\t\twriteWithoutResponse: ${c.properties.writeWithoutResponse}');
-            print('\t\tindicate: ${c.properties.indicate}');
-          }
+          for (BluetoothCharacteristic c in service.characteristics) {}
         }
         returnValue = Future.value(true);
       }
@@ -212,6 +203,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
       name += '\t\t${c.uuid}\n';
       if (c.properties.write) {
         properties += 'Write ';
+        // c.write(utf8.encode(_writeController.value.text));
       }
       if (c.properties.read) {
         properties += 'Read ';
