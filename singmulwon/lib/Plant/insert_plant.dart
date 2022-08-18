@@ -1,13 +1,10 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, use_build_context_synchronously, sized_box_for_whitespace
-import 'dart:io';
+// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, use_build_context_synchronously, sized_box_for_whitespace, unused_element
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 
 import './edit_button.dart';
-import './user_plant.dart';
 import './notification.dart';
+import './future_plant.dart';
 
 class InsertPlant extends StatefulWidget {
   static const routeName = '/insert-plant';
@@ -23,6 +20,8 @@ class _InsertPlantState extends State<InsertPlant> {
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
+  var humidity;
+  var luminance;
 
   @override
   void initState() {
@@ -48,56 +47,12 @@ class _InsertPlantState extends State<InsertPlant> {
     //     (route) => false);
   }
 
-  Future AutoSetting() async {
-    var url = "http://54.177.126.159/ubuntu/flutter/plant/auto_setting.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "plantInfoId": _selectedSortIndex,
-    });
-    String jsonData = utf8.decode(response.bodyBytes);
-    var vld = await json.decode(jsonData)['setting']; //List<dynamic>
-
-    AiSetting setting_plant;
-    for (var item in vld) {
-      setting_plant = AiSetting(
-          plantInfoId: item['plantInfoId'],
-          humi: item['humi'],
-          lumi: item['lumi']);
-    }
-    return [setting_plant.humidity(), setting_plant.luminance()];
-  }
-
   @override
   Widget build(BuildContext context) {
     final userId = ModalRoute.of(context).settings.arguments;
+    var properData = properValue(_selectedSortIndex.toString());
     double waterValue = _currentWaterValue;
     double lightValue = _currentLightValue;
-    final picker = ImagePicker();
-    File _image;
-
-    Future getImage(ImageSource imageSource) async {
-      final image = await picker.pickImage(source: imageSource);
-
-      setState(() {
-        _image = File(image.path); // 가져온 이미지를 _image에 저장
-      });
-    }
-
-    Widget showImage() {
-      return SizedBox(
-          width: MediaQuery.of(context).size.width * 0.25,
-          height: MediaQuery.of(context).size.height * 0.2,
-          child: Center(
-              child: _image == null
-                  ? SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.24,
-                      height: MediaQuery.of(context).size.height * 0.18,
-                      child: CircleAvatar(
-                        radius: 20.0,
-                        backgroundImage: AssetImage('assets/plant_1.jfif'),
-                      ),
-                    )
-                  : Image.file(File(_image.path))));
-    }
 
     return Scaffold(
         appBar: AppBar(

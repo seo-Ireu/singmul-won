@@ -33,37 +33,37 @@ class SinglePlant {
   final String plantInfoId;
   final String humi;
   final String lumi;
+  final String humidity;
+  final String luminance;
 
   SinglePlant(
       {this.myPlantId,
       this.myPlantNickname,
       this.plantInfoId,
       this.humi,
-      this.lumi});
+      this.lumi,
+      this.humidity,
+      this.luminance});
 
   static SinglePlant fromJson(json) => SinglePlant(
       myPlantId: json['myPlantId'],
       myPlantNickname: json['myPlantNickname'],
       plantInfoId: json['plantInfoId'],
       humi: json['humi'],
-      lumi: json['lumi']);
+      lumi: json['lumi'],
+      humidity: json['humidity'],
+      luminance: json['luminance']);
 }
 
-class AiSetting {
+class SuitableData {
   final String plantInfoId;
-  final String humi;
-  final String lumi;
+  final String humidity;
+  final String luminance;
 
-  AiSetting({this.plantInfoId, this.humi, this.lumi});
+  SuitableData({this.plantInfoId, this.humidity, this.luminance});
 
-  static AiSetting fromJson(json) => AiSetting(
-      plantInfoId: json['plantInfoId'], humi: json['humi'], lumi: json['lumi']);
-
-  String humidity() {
-    return humi;
-  }
-
-  String luminance() {
-    return lumi;
-  }
+  static SuitableData fromJson(json) => SuitableData(
+      plantInfoId: json['plantInfoId'],
+      humidity: json['humi'],
+      luminance: json['lumi']);
 }

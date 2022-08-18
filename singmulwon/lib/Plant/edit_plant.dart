@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, sized_box_for_whitespace, use_build_context_synchronously, missing_return
+// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, sized_box_for_whitespace, use_build_context_synchronously, missing_return, prefer_typing_uninitialized_variables
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -38,6 +38,8 @@ class EditPlantState extends State<EditPlant> {
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
   File _image;
+  var humidity;
+  var luminance;
 
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
@@ -300,7 +302,19 @@ class EditPlantState extends State<EditPlant> {
                                 "자동설정",
                                 style: TextStyle(fontSize: 20),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  currentWaterValue =
+                                      double.parse(snapshot.data.humidity);
+                                  waterValue =
+                                      double.parse(snapshot.data.humidity);
+                                  currentLightValue =
+                                      double.parse(snapshot.data.luminance);
+                                  lightValue =
+                                      double.parse(snapshot.data.luminance);
+                                });
+                                //자동세팅
+                              },
                             ),
                           ),
                           SizedBox(
