@@ -33,7 +33,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
   // 연결된 장치의 서비스 정보를 저장하기 위한 변수
   List<BluetoothService> bluetoothService = [];
-
+  //
+  Map<String, List<int>> notifyDatas = {};
   @override
   initState() {
     super.initState();
@@ -127,7 +128,39 @@ class _DeviceScreenState extends State<DeviceScreen> {
         });
         // 각 속성을 디버그에 출력
         for (BluetoothService service in bleServices) {
-          for (BluetoothCharacteristic c in service.characteristics) {}
+          for (BluetoothCharacteristic c in service.characteristics) {
+            if (c.properties.notify && c.descriptors.isNotEmpty) {
+              // 진짜 0x2902 가 있는지 단순 체크용!
+              for (BluetoothDescriptor d in c.descriptors) {
+                print('BluetoothDescriptor uuid ${d.uuid}');
+                if (d.uuid == BluetoothDescriptor.cccd) {
+                  print('d.lastValue: ${d.lastValue}');
+                }
+              }
+
+              // notify가 설정 안되었다면...
+              if (!c.isNotifying) {
+                try {
+                  await c.setNotifyValue(true);
+                  // 받을 데이터 변수 Map 형식으로 키 생성
+                  notifyDatas[c.uuid.toString()] = List.empty();
+                  c.value.listen((value) {
+                    // 데이터 읽기 처리!
+                    print('${c.uuid}: $value');
+                    setState(() {
+                      // 받은 데이터 저장 화면 표시용
+                      notifyDatas[c.uuid.toString()] = value;
+                    });
+                  });
+
+                  // 설정 후 일정시간 지연
+                  await Future.delayed(const Duration(milliseconds: 500));
+                } catch (e) {
+                  print('error ${c.uuid} $e');
+                }
+              }
+            }
+          }
         }
         returnValue = Future.value(true);
       }
@@ -177,6 +210,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   child: Text(connectButtonText)),
             ],
           ),
+          /* 연결된 BLE의 서비스 정보 출력 */
           Expanded(
             child: ListView.separated(
               itemCount: bluetoothService.length,
@@ -197,9 +231,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
   Widget characteristicInfo(BluetoothService r) {
     String name = '';
     String properties = '';
+    String data = '';
     // 캐릭터리스틱을 한개씩 꺼내서 표시
     for (BluetoothCharacteristic c in r.characteristics) {
       properties = '';
+      data = '';
       name += '\t\t${c.uuid}\n';
       if (c.properties.write) {
         properties += 'Write ';
@@ -210,6 +246,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
       }
       if (c.properties.notify) {
         properties += 'Notify ';
+        if (notifyDatas.containsKey(c.uuid.toString())) {
+          // notify 데이터가 존재한다면
+          if (notifyDatas[c.uuid.toString()].isNotEmpty) {
+            data = notifyDatas[c.uuid.toString()].toString();
+          }
+        }
       }
       if (c.properties.writeWithoutResponse) {
         properties += 'WriteWR ';
@@ -218,6 +260,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
         properties += 'Indicate ';
       }
       name += '\t\t\tProperties: $properties\n';
+      if (data.isNotEmpty) {
+        // 받은 데이터 화면에 출력!
+        name += '\t\t\t\t$data\n';
+      }
     }
     return Text(name);
   }

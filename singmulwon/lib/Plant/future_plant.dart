@@ -57,7 +57,7 @@ Future deletePlant(BuildContext context, plantId) async {
   var response = await http.post(Uri.parse(url), body: {
     "myPlantId": plantId,
   });
-  Navigator.of(context).pop();
+  // Navigator.of(context).pop();
   // Navigator.of(context).pushNamed(
   // ManagePlant.routeName,
   // );

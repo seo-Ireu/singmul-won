@@ -256,8 +256,8 @@ class _ManagePlantState extends State<ManagePlant> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(InsertPlant.routeName,
-                  arguments: user); //, arguments: {'userid': userid} 추가 예정
+              Navigator.of(context)
+                  .pushNamed(InsertPlant.routeName, arguments: user);
             },
             icon: const Icon(Icons.add),
           ),
@@ -477,12 +477,16 @@ class _ManagePlantState extends State<ManagePlant> {
                                                   BorderRadius.circular(50),
                                               color: Colors.white),
                                           child: IconButton(
-                                            icon: Icon(Icons.delete),
-                                            iconSize: 30.0,
-                                            onPressed: () => deletePlant(
-                                                context,
-                                                snapshot.data[index].myPlantId),
-                                          ),
+                                              icon: Icon(Icons.delete),
+                                              iconSize: 30.0,
+                                              onPressed: () {
+                                                setState(() {
+                                                  deletePlant(
+                                                      context,
+                                                      snapshot.data[index]
+                                                          .myPlantId);
+                                                });
+                                              }),
                                         ),
                                       ]),
                                 ],
@@ -503,13 +507,3 @@ class _ManagePlantState extends State<ManagePlant> {
     );
   }
 }
-
-
-                          // IconButton(
-                          //                     icon: Icon(Icons.delete),
-                          //                     iconSize: 30.0,
-                          //                     onPressed: () => deletePlant(
-                          //                         context,
-                          //                         snapshot
-                          //                             .data[index].myPlantId),
-                          //                   ),

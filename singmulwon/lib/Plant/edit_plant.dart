@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, sized_box_for_whitespace, use_build_context_synchronously, missing_return, prefer_typing_uninitialized_variables
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'dart:developer';
 
 import './edit_button.dart';
 import './future_plant.dart';
@@ -33,47 +30,13 @@ class EditPlantState extends State<EditPlant> {
   //_EditPlant
   final _form = GlobalKey<FormState>();
   final plantidController = TextEditingController();
-  final picker = ImagePicker();
+
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
-  File _image;
+
   var humidity;
   var luminance;
-
-  Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
-    setState(() {
-      _image = File(image.path); // 가져온 이미지를 _image에 저장
-      log(_image.toString());
-    });
-  }
-
-  Widget showImage() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.25,
-        height: MediaQuery.of(context).size.height * 0.2,
-        child: Center(
-            child: _image == null
-                ? SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.24,
-                    height: MediaQuery.of(context).size.height * 0.18,
-                    child: CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage: AssetImage('assets/plant_1.jfif'),
-                    ),
-                  )
-                : SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.24,
-                    height: MediaQuery.of(context).size.height * 0.18,
-                    child: CircleAvatar(
-                      radius: 20.0,
-                      child: Image.file(
-                        File(_image.path),
-                      ),
-                    ),
-                  )));
-  }
 
   Future updatePlant(BuildContext context, name, myplantId, humi, lumi) async {
     var url = "http://54.177.126.159/ubuntu/flutter/plant/edit_plant.php";
@@ -276,6 +239,7 @@ class EditPlantState extends State<EditPlant> {
                               label: currentLightValue.round().toString(),
                               onChanged: (double value) {
                                 setState(() {
+                                  flag1 = 2;
                                   currentLightValue = value;
                                   lightValue = currentLightValue;
                                 });

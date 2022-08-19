@@ -40,11 +40,6 @@ class _InsertPlantState extends State<InsertPlant> {
       "lumi": lumi,
     });
     showGroupedNotifications();
-    Navigator.of(context).pop();
-    // Navigator.pushAndRemoveUntil(
-    //     context,
-    //     MaterialPageRoute(builder: (BuildContext context) => ManagePlant()),
-    //     (route) => false);
   }
 
   @override
@@ -277,6 +272,8 @@ class _InsertPlantState extends State<InsertPlant> {
                                     plantidController.text,
                                     waterValue.toString(),
                                     lightValue.toString());
+
+                                Navigator.of(context).pop();
                               },
                             ),
                           )
