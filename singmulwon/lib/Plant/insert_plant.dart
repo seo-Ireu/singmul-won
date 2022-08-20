@@ -1,72 +1,61 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, sized_box_for_whitespace, use_build_context_synchronously, missing_return, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, use_build_context_synchronously, sized_box_for_whitespace, unused_element
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import './edit_button.dart';
+import './notification.dart';
 import './future_plant.dart';
 
-class EditPlant extends StatefulWidget {
-  static const routeName = '/edit-plant';
+class InsertPlant extends StatefulWidget {
+  static const routeName = '/insert-plant';
   @override
-  State<EditPlant> createState() => EditPlantState();
-
-  static EditPlantState of(BuildContext context) => //추가
-      context.findAncestorStateOfType<EditPlantState>();
+  State<InsertPlant> createState() => _InsertPlantState();
 }
 
-class EditPlantState extends State<EditPlant> {
-  double currentWaterValue;
-  double currentLightValue;
-  var flag1 = 1;
+double _currentWaterValue = 0;
+double _currentLightValue = 0;
 
-  void changeWater(BuildContext context, snapshot) {
-    currentWaterValue = double.parse(snapshot.data.humi);
-  }
-
-  double changeLight(BuildContext context, snapshot) {
-    currentLightValue = double.parse(snapshot.data.lumi);
-  }
-
-  //_EditPlant
-  final _form = GlobalKey<FormState>();
+class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
-
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
-
   var humidity;
   var luminance;
 
-  Future updatePlant(BuildContext context, name, myplantId, humi, lumi) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/plant/edit_plant.php";
+  @override
+  void initState() {
+    super.initState();
+    // 알림 초기화
+    init(); //notification.dart
+  }
 
-    await http.get(Uri.parse(
-        '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi'));
-    // '$url?myplantId=9&name=Plant2&sort=3&lumi=70&humi=70&image=$image'));
-    // await http.post(Uri.parse(url), body: {
-    //   "myplantId": myplantId,
-    //   "name": name,
-    //   "sort": _selectedSortIndex.toString(),
-    //   "lumi": lumi,
-    //   "humi": humi,
-    //   "image": image,
-    // });
-    Navigator.of(context).pop();
+  Future insertPlant(BuildContext context, userid, name, humi, lumi) async {
+    var url = "http://54.177.126.159/ubuntu/flutter/plant/insert_plant.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "userid": userid,
+      "sort": _selectedSortIndex.toString(),
+      "name": name,
+      "humi": humi,
+      "lumi": lumi,
+    });
+    showGroupedNotifications();
   }
 
   @override
   Widget build(BuildContext context) {
-    final plantId = ModalRoute.of(context).settings.arguments;
-    var singlePlant = myPlant(plantId);
+    final userId = ModalRoute.of(context).settings.arguments;
+    var properData = properValue(_selectedSortIndex.toString());
+    double waterValue = _currentWaterValue;
+    double lightValue = _currentLightValue;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('식물 편집'),
+        title: Text('식물 등록'),
         elevation: 0,
       ),
       body: FutureBuilder(
-          future: singlePlant,
+          future: properData,
           builder: (context, snapshot) {
             if (snapshot.hasData == false) {
               return CircularProgressIndicator();
@@ -86,19 +75,10 @@ class EditPlantState extends State<EditPlant> {
                 ),
               );
             } else {
-              // double waterValue = changeWater(context, snapshot);
-              if (flag1 == 1) {
-                changeWater(context, snapshot);
-                changeLight(context, snapshot);
-              }
-              double waterValue = currentWaterValue;
-              double lightValue = currentLightValue;
-              var nickname = snapshot.data.myPlantNickname;
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -110,29 +90,18 @@ class EditPlantState extends State<EditPlant> {
                           Container(
                             width: 240,
                             height: 50,
-                            child: Form(
-                              key: _form,
-                              child: TextFormField(
-                                // ignore: prefer_const_constructors
-                                initialValue: nickname,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: '식물 별명',
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please provide a value.';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (val) {
-                                  nickname = val;
-                                },
+                            child: TextField(
+                              // ignore: prefer_const_constructors
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: '식물 이름',
+                                hintText: '별명 입력',
                               ),
+                              controller: plantidController,
                             ),
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -179,19 +148,19 @@ class EditPlantState extends State<EditPlant> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          WaterValue(waterValue.toInt()), //waterValue
+                          WaterValue(waterValue.toInt()),
                           Container(
                             width: 10,
                           ),
-                          LightValue(lightValue.toInt()), //lightValue
+                          LightValue(lightValue.toInt()),
                           Container(
                             width: 10,
                           ),
-                          FavoriteValue(20),
+                          FavoriteValue(0),
                         ],
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 40,
                       ),
                       Row(
                         children: [
@@ -202,19 +171,18 @@ class EditPlantState extends State<EditPlant> {
                           Expanded(
                             flex: 7,
                             child: Slider(
-                              value: currentWaterValue,
+                              value: _currentWaterValue,
                               min: 0,
                               max: 100,
                               divisions: 100,
                               label:
-                                  currentWaterValue //double.parse(snapshot.data.humi)
+                                  _currentWaterValue //double.parse(snapshot.data.humi)
                                       .round()
                                       .toString(),
                               onChanged: (double value) {
                                 setState(() {
-                                  flag1 = 2;
-                                  currentWaterValue = value;
-                                  waterValue = currentWaterValue;
+                                  _currentWaterValue = value;
+                                  waterValue = _currentWaterValue;
                                 });
                               },
                             ),
@@ -233,15 +201,14 @@ class EditPlantState extends State<EditPlant> {
                           Expanded(
                             flex: 7,
                             child: Slider(
-                              value: currentLightValue,
+                              value: _currentLightValue,
                               max: 100,
                               divisions: 100,
-                              label: currentLightValue.round().toString(),
+                              label: _currentLightValue.round().toString(),
                               onChanged: (double value) {
                                 setState(() {
-                                  flag1 = 2;
-                                  currentLightValue = value;
-                                  lightValue = currentLightValue;
+                                  _currentLightValue = value;
+                                  lightValue = _currentLightValue;
                                 });
                               },
                             ),
@@ -249,12 +216,12 @@ class EditPlantState extends State<EditPlant> {
                         ],
                       ),
                       SizedBox(
-                        height: 60,
+                        height: 50,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
+                          Container(
                             width: 110,
                             height: 40,
                             child: FlatButton(
@@ -262,27 +229,28 @@ class EditPlantState extends State<EditPlant> {
                               color: Color.fromARGB(255, 75, 143, 77),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
+
                               child: Text(
                                 "자동설정",
                                 style: TextStyle(fontSize: 20),
                               ),
+                              //수정
                               onPressed: () {
                                 setState(() {
-                                  currentWaterValue =
+                                  _currentWaterValue =
                                       double.parse(snapshot.data.humidity);
                                   waterValue =
                                       double.parse(snapshot.data.humidity);
-                                  currentLightValue =
+                                  _currentLightValue =
                                       double.parse(snapshot.data.luminance);
                                   lightValue =
                                       double.parse(snapshot.data.luminance);
                                 });
-                                //자동세팅
                               },
                             ),
                           ),
                           SizedBox(
-                            width: 60,
+                            width: 50,
                           ),
                           SizedBox(
                             width: 110,
@@ -293,16 +261,19 @@ class EditPlantState extends State<EditPlant> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               child: Text(
-                                "식물저장",
+                                "식물등록",
                                 style: TextStyle(fontSize: 20),
                               ),
                               onPressed: () {
-                                updatePlant(
+                                insertPlant(
                                     context,
-                                    nickname,
-                                    plantId,
-                                    currentWaterValue.toInt().toString(),
-                                    currentLightValue.toInt().toString());
+                                    userId,
+                                    // _selectedSortIndex.toString(),
+                                    plantidController.text,
+                                    waterValue.toString(),
+                                    lightValue.toString());
+
+                                Navigator.of(context).pop();
                               },
                             ),
                           )

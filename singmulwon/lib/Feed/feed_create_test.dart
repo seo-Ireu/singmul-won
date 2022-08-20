@@ -27,6 +27,7 @@ void main() => runApp(MaterialApp(
 );
 
 class FeedCreate extends StatefulWidget {
+  static const routeName = '/feed_create_test.dart';
   final String userId;
   const FeedCreate({Key key, @required this.userId}) : super(key: key);
 

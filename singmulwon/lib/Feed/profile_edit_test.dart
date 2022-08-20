@@ -160,32 +160,6 @@ class _FeedPageState extends State<ProfileEdit> {
           children: lists,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/feed');
-              },
-              icon: Icon(Icons.home),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
-              },
-              icon: Icon(Icons.chat),
-            ),
-            label: 'My Feed',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Community',
-          ),
-        ],
-      ),
     );
   }
 

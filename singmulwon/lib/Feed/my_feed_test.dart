@@ -37,6 +37,7 @@ void main() => runApp(MaterialApp(
 ));
 
 class MyFeedPage extends StatefulWidget {
+  static const routeName = '/my_feed_test.dart';
   final String userId;
 
   MyFeedPage({Key key, @required this.userId}) : super(key: key);
@@ -88,146 +89,146 @@ class _FeedPageState extends State<MyFeedPage> {
     String follower = '${snapshot.data["follower"]}';//snapshot.data["follower"] as String;
     String following = '${snapshot.data["following"]}';//snapshot.data["following"] as String;
     feedList.add(
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                  for(int i=cnt-1; i>=0; i-=3)
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i]["feedId"], userId: userId)));
-                          },
-                          child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
-                      ),
-                      SizedBox(width: 1.0,),
-                      if(i-1 >= 0) GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i-1]["feedId"], userId: userId)));
-                          },
-                          child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i-1]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
-                      ),
-                      SizedBox(width: 1.0,),
-                      if(i-2 >= 0) GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i-2]["feedId"], userId: userId)));
-                          },
-                          child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i-2]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.0,),
-              ],
-            ),
-          )
-      );
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              for(int i=cnt-1; i>=0; i-=3)
+                Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i]["feedId"], userId: userId)));
+                      },
+                      child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    ),
+                    SizedBox(width: 1.0,),
+                    if(i-1 >= 0) GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i-1]["feedId"], userId: userId)));
+                      },
+                      child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i-1]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    ),
+                    SizedBox(width: 1.0,),
+                    if(i-2 >= 0) GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDetail(feedId: snapshot.data["feed"][i-2]["feedId"], userId: userId)));
+                      },
+                      child: Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i-2]["feedImage"], width: 120, height: 120, fit: BoxFit.fill),
+                    ),
+                  ],
+                ),
+              SizedBox(height: 10.0,),
+            ],
+          ),
+        )
+    );
 
     List<Widget> lists = [
       Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                    '${userid}',
-                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)
-                ),
-              ],
-            ),// ID, Setting 아이콘
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 40.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["image"]}'),),
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                  '${userid}',
+                  style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)
+              ),
+            ],
+          ),// ID, Setting 아이콘
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 40.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["image"]}'),),
+              Column(children: <Widget>[
+                Text(feedCount, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                Text('게시글', style: const TextStyle(fontSize: 17)),
+              ]), //게시물 수
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFollower(userId: userid)));
+                },
+                child:
                 Column(children: <Widget>[
-                  Text(feedCount, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                  Text('게시글', style: const TextStyle(fontSize: 17)),
-                ]), //게시물 수
-                TextButton(
-                  onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFollower(userId: userid)));
-                      },
-                  child:
-                    Column(children: <Widget>[
-                      Text(follower, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                      Text('팔로워', style: const TextStyle(fontSize: 17)),
-                    ]
-                  ),
-                  style: TextButton.styleFrom(
-                    primary: Colors.black, //글자색
-                  ),
-                ), //팔로워 수
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyFollowing(userId: userid)));
-                  },
-                  child:
-                  Column(children: <Widget>[
-                      Text(following, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                      Text('팔로잉', style: const TextStyle(fontSize: 17)),
-                    ]
-                  ),
-                  style: TextButton.styleFrom(
-                    primary: Colors.black, //글자색
-                  ),
-                ),//팔로잉 수
-                SizedBox(width: 7.0,),
-              ],
-            ), // 프사, 게시물 수, 팔로워 수, 팔로잉 수
-            SizedBox(height: 10.0,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                    snapshot.data["name"],
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                  Text(follower, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  Text('팔로워', style: const TextStyle(fontSize: 17)),
+                ]
                 ),
-              ],
-            ), // 이름
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                    child: RichText(
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 5,
-                      strutStyle: StrutStyle(fontSize: 16.0),
-                      text: TextSpan(
-                        text: snapshot.data["profileIntro"],
-                          style: TextStyle(
-                              color: Colors.black,
-                              height: 1.4,
-                              fontSize: 16.0,)
-                      ),
-                    ),
+                style: TextButton.styleFrom(
+                  primary: Colors.black, //글자색
                 ),
-              ],
-            ), // 자기소개
-            SizedBox(height: 10.0,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                //OutlinedButton(
-                  //onPressed: () {
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEdit(userId: userId)));
-                  //},
-                  //style: ButtonStyle(
-                  //    padding: MaterialStateProperty.all(
-                  //        const EdgeInsets.symmetric(horizontal: 150)),
-                  //),
-                  //child: Text('프로필 편집'),
-                 // )
-                ],
-            ), // 프로필 편집 or 팔로잉 or 팔로잉 취소
-            SizedBox(height: 10.0,),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: feedList,
-            ),
-            // 뒤에 GridView로 마이 피드 구성
-          ],
+              ), //팔로워 수
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFollowing(userId: userid)));
+                },
+                child:
+                Column(children: <Widget>[
+                  Text(following, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  Text('팔로잉', style: const TextStyle(fontSize: 17)),
+                ]
+                ),
+                style: TextButton.styleFrom(
+                  primary: Colors.black, //글자색
+                ),
+              ),//팔로잉 수
+              SizedBox(width: 7.0,),
+            ],
+          ), // 프사, 게시물 수, 팔로워 수, 팔로잉 수
+          SizedBox(height: 10.0,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                  snapshot.data["name"],
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+              ),
+            ],
+          ), // 이름
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Flexible(
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                  strutStyle: StrutStyle(fontSize: 16.0),
+                  text: TextSpan(
+                      text: snapshot.data["profileIntro"],
+                      style: TextStyle(
+                        color: Colors.black,
+                        height: 1.4,
+                        fontSize: 16.0,)
+                  ),
+                ),
+              ),
+            ],
+          ), // 자기소개
+          SizedBox(height: 10.0,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //OutlinedButton(
+              //onPressed: () {
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEdit(userId: userId)));
+              //},
+              //style: ButtonStyle(
+              //    padding: MaterialStateProperty.all(
+              //        const EdgeInsets.symmetric(horizontal: 150)),
+              //),
+              //child: Text('프로필 편집'),
+              // )
+            ],
+          ), // 프로필 편집 or 팔로잉 or 팔로잉 취소
+          SizedBox(height: 10.0,),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: feedList,
+          ),
+          // 뒤에 GridView로 마이 피드 구성
+        ],
       ),
     ];
 
@@ -250,36 +251,6 @@ class _FeedPageState extends State<MyFeedPage> {
           padding: const EdgeInsets.all(3),
           children: lists,
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
-          setState(() {_selectedIndex = index;});
-        },
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/feed');
-              },
-              icon: Icon(Icons.home),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
-                },
-                icon: Icon(Icons.chat),
-            ),
-            label: 'My Feed',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Community',
-          ),
-        ],
       ),
     );
   }

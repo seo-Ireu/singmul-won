@@ -44,6 +44,7 @@ void main() => runApp(MaterialApp(
 String all_feedId;
 
 class FeedDetail extends StatefulWidget {
+  static const routeName = '/feed_detail_test.dart';
   final String feedId;
   final String userId;
   FeedDetail({Key key, @required this.feedId, @required this.userId}) : super(key: key);
@@ -227,27 +228,6 @@ class _FeedPageState extends State<FeedDetail> {
           padding: const EdgeInsets.all(3),
           children: lists,
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
-              },
-              icon: Icon(Icons.chat),
-            ),
-            label: 'My Feed',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Community',
-          ),
-        ],
       ),
     );
   }

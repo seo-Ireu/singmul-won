@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
+import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'dart:developer';
 
 import 'Plant/manage_plant.dart';
@@ -10,6 +12,7 @@ import 'Account/account.dart';
 class HomePage extends StatefulWidget {
   String userid = '';
   HomePage(this.userid);
+
   static const routeName = '/homepage';
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,7 +21,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 2;
   final List<Widget> widgetOptions = <Widget>[
+    MyFeedPage(userId: "lyhthy6"),
     ManagePlant(),
+    FeedPage(),
     Community(),
     Account(),
   ];

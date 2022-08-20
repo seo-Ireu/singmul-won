@@ -1,60 +1,69 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import './edit_plant.dart';
-import '../Provider/plants.dart';
-
-class UserPlant extends StatelessWidget {
-  final String id;
-  final String name;
-  final String sort;
+class UserPlant {
+  final String myPlantId;
+  final String myPlantNickname;
+  final String plantName;
+  final String plantImage;
   final String image;
+  final String humi;
+  final String lumi;
 
-  UserPlant(this.id, this.name, this.sort, this.image);
+  UserPlant(
+      {this.myPlantId,
+      this.myPlantNickname,
+      this.plantName,
+      this.plantImage,
+      this.humi,
+      this.lumi,
+      this.image});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 100,
-      padding: EdgeInsets.all(10),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: AssetImage(image),
-          ),
-          Column(
-            children: [
-              Text(name),
-              Text(sort),
-            ],
-          ),
-          Container(
-            width: 100,
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(EditPlant.routeName, arguments: id);
-                  },
-                  icon: Icon(Icons.edit),
-                  color: Theme.of(context).primaryColor,
-                ),
-                IconButton(
-                  onPressed: () {
-                    Provider.of<Plants>(context, listen: false).deletePlant(id);
-                  },
-                  icon: Icon(Icons.delete),
-                  color: Theme.of(context).errorColor,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  static UserPlant fromJson(json) => UserPlant(
+        myPlantId: json['myPlantId'],
+        myPlantNickname: json['myPlantNickname'],
+        plantName: json['plantName'],
+        plantImage: json['plantImage'],
+        humi: json['humi'],
+        lumi: json['lumi'],
+        image: json['image'],
+      );
+}
+
+class SinglePlant {
+  final String myPlantId;
+  final String myPlantNickname;
+  final String plantInfoId;
+  final String humi;
+  final String lumi;
+  final String humidity;
+  final String luminance;
+
+  SinglePlant(
+      {this.myPlantId,
+      this.myPlantNickname,
+      this.plantInfoId,
+      this.humi,
+      this.lumi,
+      this.humidity,
+      this.luminance});
+
+  static SinglePlant fromJson(json) => SinglePlant(
+      myPlantId: json['myPlantId'],
+      myPlantNickname: json['myPlantNickname'],
+      plantInfoId: json['plantInfoId'],
+      humi: json['humi'],
+      lumi: json['lumi'],
+      humidity: json['humidity'],
+      luminance: json['luminance']);
+}
+
+class SuitableData {
+  final String plantInfoId;
+  final String humidity;
+  final String luminance;
+
+  SuitableData({this.plantInfoId, this.humidity, this.luminance});
+
+  static SuitableData fromJson(json) => SuitableData(
+      plantInfoId: json['plantInfoId'],
+      humidity: json['humi'],
+      luminance: json['lumi']);
 }

@@ -193,32 +193,6 @@ class _FeedPageState extends State<FeedComment> {
           children: lists,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedPage()));
-                },
-                icon: Icon(Icons.home)
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
-              },
-              icon: Icon(Icons.chat),
-            ),
-            label: 'My Feed',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Community',
-          ),
-        ],
-      ),
     );
   }
 }

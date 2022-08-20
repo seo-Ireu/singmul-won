@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_singmulwon_app/Feed/feed_delete_test.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'dart:core';
+import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_comment_test.dart';
@@ -118,30 +119,6 @@ class _FeedPageState extends State<CommentCreate> {
           padding: const EdgeInsets.all(3),
           children: lists,
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.home)
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
-              },
-              icon: Icon(Icons.chat),
-            ),
-            label: 'My Feed',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Community',
-          ),
-        ],
       ),
     );
   }
