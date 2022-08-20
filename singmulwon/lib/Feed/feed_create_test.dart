@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 final _textController = new TextEditingController();
 
 void main() => runApp(MaterialApp(
-  home: FeedCreate(),
+  home: FeedCreates(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -20,22 +20,22 @@ void main() => runApp(MaterialApp(
     '/myfeed': (context) => MyFeedPage(),
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
-    '/feed_create': (context) => FeedCreate(),
+    '/feed_create': (context) => FeedCreates(),
     '/feed_create_register': (context) => FeedCreateImage(),
   },
   )
 );
 
-class FeedCreate extends StatefulWidget {
+class FeedCreates extends StatefulWidget {
   static const routeName = '/feed_create_test.dart';
   final String userId;
-  const FeedCreate({Key key, @required this.userId}) : super(key: key);
+  const FeedCreates({Key key, @required this.userId}) : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState(userId);
 }
 
-class _FeedPageState extends State<FeedCreate> {
+class _FeedPageState extends State<FeedCreates> {
   String userId;
 
   _FeedPageState(this. userId);

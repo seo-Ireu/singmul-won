@@ -10,6 +10,7 @@ import 'feed_following_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
+import 'image_upload.dart';
 
 Future fetchFeed(String userId) async {
   var url = 'http://54.177.126.159/ubuntu/flutter/feed/myfeed.php?userId=$userId';

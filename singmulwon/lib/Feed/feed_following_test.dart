@@ -7,6 +7,7 @@ import 'feed_create_register_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
+import 'image_upload.dart';
 import 'my_feed_test.dart';
 
 Future fetchFeed(String userId) async {

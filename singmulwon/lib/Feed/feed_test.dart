@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'feed_comment_create_test.dart';
 import 'feed_comment_test.dart';
 import 'feed_delete_test.dart';
+import 'image_upload.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
 import 'feed_create_register_test.dart';

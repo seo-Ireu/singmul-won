@@ -15,6 +15,7 @@ import 'Community/screens/community_write_screen.dart';
 import 'Community/write_page.dart';
 import 'Feed/feed_create_test.dart';
 import 'Feed/feed_detail_test.dart';
+import 'Feed/image_upload.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/insert_plant.dart';
 import 'Plant/manage_plant.dart';

@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_create_last_test.dart';
 import 'feed_test.dart';
+import 'image_upload.dart';
 import 'my_feed_test.dart';
 
 void main() => runApp(MaterialApp(
@@ -228,14 +229,7 @@ class _FeedPageState extends State<FeedCreateImage> {
             OutlinedButton(
               onPressed: () {
                   if(_images.length != 0) {
-                    for (int i = 0; i < _images.length; i++)
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              FeedCreateRegister(
-                                  userId: userId,
-                                  feedContent: feedContent,
-                                  feedUrl: 'http://54.177.126.159/ubuntu/flutter/feed/image/' +
-                                      _images[i]['url'])));
+
                   }
                   else{
                     myAlert();

@@ -6,24 +6,63 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_test.dart';
+import 'image_upload.dart';
 import 'my_feed_test.dart';
 
-Future fetchFeed(String userId, String feedContent, String feedUrl) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_create.php?userId='+userId+'&feedContent='+feedContent+'&feedUrl='+feedUrl;
+Future fetchFeed(String userId, List images, String feedContent) async {
+  print("userId: ${userId}, feedContent: ${feedContent}");
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_create.php?userId='+userId+'&feedContent='+feedContent;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
-    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
-    print('응답했다');
-    var tmp = json.decode(utf8.decode(response.bodyBytes));
-    print(tmp);
-    return tmp;
+    if(response.body.isNotEmpty) {
+      var message = json.decode(response.body);
+
+      String id = message["feedId"].toString();
+      print("!!!!${id}");
+      sendImages(id, images);
+    }
   } else {
     //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('Failed to load post');
   }
 }
+Future sendImages(String feedId, List images)async{
+  var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
+  var request = http.MultipartRequest('POST', Uri.parse(uri));
 
+  try{
+    if (images.isNotEmpty){
+      for (int i = 0; i < images.length; i++) {
+        var pic = await http.MultipartFile.fromPath(
+            "image[]", images[i].path);
+        print("pick${i}: ${images[i].path}");
+        request.files.add(pic);
+      }
+      request.fields["feedId"] = feedId;
+
+      await request.send().then((result) {
+        http.Response.fromStream(result).then((response) {
+
+          if(response.body.isNotEmpty) {
+            var message = json.decode(response.body);
+            print("!!!${message['message']}");
+          }
+        });
+
+      }).catchError((e) {
+        print(e);
+      });
+    }else{
+      print("image is not selected!");
+    }
+
+  }catch(e){
+    print(e);
+  }
+  print("image list length:${images.length.toString()}");
+
+}
 void main() => runApp(MaterialApp(
   home: FeedCreateRegister(),
   initialRoute: '/',
@@ -40,22 +79,23 @@ void main() => runApp(MaterialApp(
 
 class FeedCreateRegister extends StatefulWidget {
   final String userId;
+  final List images;
   final String feedContent;
-  final String feedUrl;
-  FeedCreateRegister({Key key, @required this.userId, @required this.feedContent, @required this.feedUrl}) : super(key: key);
+
+  FeedCreateRegister({Key key, @required this.userId, @required this.feedContent, @required this.images}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId, feedContent, feedUrl);
+  _FeedPageState createState() => _FeedPageState(userId, feedContent, images);
 }
 
 class _FeedPageState extends State<FeedCreateRegister> {
   Future feeds;
   String userId;
   String feedContent;
-  String feedUrl;
+  List images;
   static const routeName = '/inst_home';
 
-  _FeedPageState(this. userId, this. feedContent, this. feedUrl);
+  _FeedPageState(this. userId, this. feedContent, this. images);
 
 
   XFile image;
@@ -65,37 +105,7 @@ class _FeedPageState extends State<FeedCreateRegister> {
   List<XFile> _selectedFiles = [];
   final ImagePicker picker = ImagePicker();
 
-  //we can upload image from camera or from gallery based on parameter
-  Future sendImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
-    var uri = "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
-    var request = http.MultipartRequest('POST', Uri.parse(uri));
 
-    if(img != null){
-      var pic = await http.MultipartFile.fromPath("image", img.path);
-      print("pic: ${img.path}");
-      request.files.add(pic);
-      await request.send().then((result) {
-        http.Response.fromStream(result).then((response) {
-
-          if(response.body.isNotEmpty) {
-            var message = json.decode(response.body);
-
-            print("!!!${message}");
-            // show snackbar if input data successfully
-            final snackBar = SnackBar(content: Text(message['message']));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-          //get new list images
-          getImageServer();
-        });
-
-      }).catchError((e) {
-        print(e);
-      });
-    }
-
-  }
   Future sendImages()async{
     var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
@@ -170,8 +180,7 @@ class _FeedPageState extends State<FeedCreateRegister> {
   @override
   void initState() {
     super.initState();
-    getImageServer();
-    feeds = fetchFeed(userId, feedContent, feedUrl);
+    feeds = fetchFeed(userId, images, feedContent);
   }
 
   @override
