@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Feed/feed_delete_test.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_comment_create_test.dart';
 import 'feed_comment_test.dart';
-import 'feed_delete_test.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
-import 'feed_create_register_test.dart';
-import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
 
 final _textController = new TextEditingController();
 
-Future fetchFeed() async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed.php?userId=lyhthy6';
+Future fetchFeed(String feedId, String userId) async {
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_detail.php?userId='+userId+'&feedId='+feedId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -30,9 +28,8 @@ Future fetchFeed() async {
   }
 }
 
-
 void main() => runApp(MaterialApp(
-  home: FeedPage(),
+  home: FeedDetail(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -41,26 +38,33 @@ void main() => runApp(MaterialApp(
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
     '/feed_create': (context) => FeedCreate(),
-    '/feed_detail': (context) => FeedDetail(),
   },
 ));
 
-class FeedPage extends StatefulWidget {
-  static const routeName = '/feed_test.dart';
-  const FeedPage({Key key}) : super(key: key);
+String all_feedId;
+
+class FeedDetail extends StatefulWidget {
+  static const routeName = '/feed_detail_test.dart';
+  final String feedId;
+  final String userId;
+  FeedDetail({Key key, @required this.feedId, @required this.userId}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState();
+  _FeedPageState createState() => _FeedPageState(feedId, userId);
 }
 
-class _FeedPageState extends State<FeedPage> {
+class _FeedPageState extends State<FeedDetail> {
   Future feeds;
+  String feedId;
+  String userId;
   static const routeName = '/inst_home';
+
+  _FeedPageState(this. feedId, this. userId);
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed();
+    feeds = fetchFeed(feedId, userId);
   }
 
   @override
@@ -87,15 +91,13 @@ class _FeedPageState extends State<FeedPage> {
 
   //bool isPressed = false; // 좋아요 변수
   List<bool> isPressed = [];
-  String userId = 'lyhthy6';
   var now = new DateTime.now(); // 임시 시간 변수
 
   Widget buildColumn(snapshot) {
     List<Widget> lists = [];
+
     for(int i=0; i<snapshot.data["count"]; i++){
       isPressed.add(false);
-    }
-    for(int i=snapshot.data["count"]-1; i>=0; i--){
       lists.add(
           Card(
               margin: EdgeInsets.only(bottom: 20),
@@ -112,15 +114,10 @@ class _FeedPageState extends State<FeedPage> {
                           mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
                           children: <Widget>[
                             CircleAvatar(
-                              radius: 20.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["feed"][i]["image"]}'),),
-                            TextButton(
-                              child: Text('${snapshot.data["feed"][i]["userId"]}',
-                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: '${snapshot.data["feed"][i]["userId"]}')));
-                              },
-                              style: TextButton.styleFrom(primary: Colors.black,), //글자색
-                            ),
+                              radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
+                            SizedBox(width: 10.0,), // 여백
+                            Text('${snapshot.data["feed"][i]["userId"]}',
+                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                           ],
                         ),
                         Row(
@@ -128,14 +125,15 @@ class _FeedPageState extends State<FeedPage> {
                           children: <Widget>[
                             IconButton(
                                 onPressed: () {
-                                  if(userId == snapshot.data["feed"][i]["userId"]) Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDelete(userId: snapshot.data["feed"][i]["userId"], feedId: snapshot.data["feed"][i]["feedId"])));
+                                  if(userId == snapshot.data["feed"][i]["userId"]) Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDelete(userId: userId, feedId: feedId)));
                                   else null;
-                                },
-                                icon: Icon(Icons.delete)),
+                                  },
+                                icon: Icon(Icons.more_horiz)),
                           ],
                         ),
                       ],
                     ),
+
                     SizedBox(height: 5.0,),
                     Image.network('http://54.177.126.159/ubuntu/flutter/feed/image/'+snapshot.data["feed"][i]["feedImage"], width: 400, height: 400, fit: BoxFit.fill),
                     SizedBox(height: 5.0,), // 여백
@@ -153,12 +151,13 @@ class _FeedPageState extends State<FeedPage> {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => FeedComment(userId: '${snapshot.data["feed"][i]["userId"]}', feedId: '${snapshot.data["feed"][i]["feedId"]}')));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => FeedComment(userId: userId, feedId: feedId)));
                           },
                           icon: Icon(Icons.chat_bubble_outline),
                         ),
                       ],
                     ),
+
                     SizedBox(height: 5.0,), // 여백
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -173,7 +172,7 @@ class _FeedPageState extends State<FeedPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(DateFormat('yyyy년 MM월 dd일').format(now))
+                        Text(DateFormat('yyyy년 MM월 dd일 HH:mm:ss').format(now))
                       ],
                     ),
                     SizedBox(height: 5.0,), // 여백
@@ -184,9 +183,9 @@ class _FeedPageState extends State<FeedPage> {
                           child:
                           TextFormField(
                             controller: _textController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               icon: CircleAvatar(
-                                radius: 20.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["image_id"]}'),),
+                                radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
                               labelText: '댓글 달기...',
                             ),
                           ),
@@ -205,7 +204,6 @@ class _FeedPageState extends State<FeedPage> {
                         ),
                       ],
                     ),
-
                   ],
                 ),
               )
@@ -218,9 +216,9 @@ class _FeedPageState extends State<FeedPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed('/feed_create');
+              Navigator.of(context).pop();
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.arrow_back),
           ),
         ],
       ),

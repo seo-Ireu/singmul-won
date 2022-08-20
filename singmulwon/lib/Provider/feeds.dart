@@ -1,10 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+
 
 import './feed.dart';
 
+Future<Feeds> fetchInfo() async {
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed.php';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
+    print('응답했다');
+    print(json.decode(response.body));
+    return Feeds.fromJson(json.decode(response.body));
+  } else {
+    //만약 응답이 ok가 아니면 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
+
 class Feeds with ChangeNotifier {
   List<Feed> _feeds = [];
+  TextEditingController userid = TextEditingController();
+  TextEditingController pw = TextEditingController();
+
+  final int userId;
+  final int feedId;
+  final String content;
+
+  Feeds(
+  {this.userId,
+  this.feedId,
+  this.content,});
+
+  factory Feeds.fromJson(Map<String, dynamic> json) {
+    return Feeds(
+      userId: json["userId"],
+      feedId: json["feedId"],
+      content: json["content"],
+    );
+  }
+
   List<Feed> get feeds {
     _feeds.add(Feed(
         id: "1",

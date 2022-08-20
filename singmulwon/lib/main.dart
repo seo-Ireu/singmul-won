@@ -4,7 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Community/community.dart';
 import 'package:flutter_singmulwon_app/Community/community_detail.dart';
-import 'package:flutter_singmulwon_app/Feed/insta_create.dart';
+import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
+import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,10 +13,8 @@ import 'Community/screens/community_detail_screen.dart';
 import 'Community/screens/community_home_screen.dart';
 import 'Community/screens/community_write_screen.dart';
 import 'Community/write_page.dart';
-import 'Feed/insta_home.dart';
-import 'Feed/insta_list.dart';
-import 'Feed/my_feed.dart';
-import 'Feed/my_feed_detail.dart';
+import 'Feed/feed_create_test.dart';
+import 'Feed/feed_detail_test.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/insert_plant.dart';
 import 'Plant/manage_plant.dart';
@@ -44,17 +43,15 @@ class MyApp extends StatelessWidget {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
           InsertPlant.routeName: (ctx) => InsertPlant(),
-          CreatePage.routeName: (ctx) => CreatePage(),
-          InstaList.routeName: (ctx) => InstaList(),
-          InstaHome.routeName: (ctx) => InstaHome(),
+          FeedCreate.routeName: (ctx) => FeedCreate(),
+          FeedPage.routeName: (ctx) => FeedPage(),
           HomePage.routeName: (ctx) => HomePage('?'),
-          MyFeed.routeName: (ctx) => MyFeed(),
-          MyFeedDetail.routeName: (ctx) => MyFeedDetail(),
-
-          CommunityDetailScreen.routeName: (ctx) =>CommunityDetailScreen(),
-          CommunityHomeScreen.routeName: (ctx) =>CommunityHomeScreen(),
-          CommunityWriteScreen.routeName: (ctx) =>CommunityWriteScreen()
-    });
+          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "lyhthy6"),
+          FeedDetail.routeName: (ctx) => FeedDetail(),
+          Community.routeName: (ctx) => Community(),
+          CommunityDetail.routeName: (ctx) => CommunityDetail(),
+          WritePage.routeName: (ctx) => WritePage()
+        });
   }
 }
 

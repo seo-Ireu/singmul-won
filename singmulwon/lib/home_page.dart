@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
+import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'dart:developer';
 
 import 'Community/screens/community_home_screen.dart';
-import 'Feed/insta_home.dart';
-import 'Feed/my_feed.dart';
 import 'Plant/manage_plant.dart';
 import 'Community/community.dart';
 import 'Account/account.dart';
@@ -22,9 +22,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 2;
   final List<Widget> widgetOptions = <Widget>[
-    MyFeed(),
+    MyFeedPage(userId: "lyhthy6"),
     ManagePlant(),
-    InstaHome(),
+    FeedPage(),
     CommunityHomeScreen(),
     Account(),
   ];
