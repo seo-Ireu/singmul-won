@@ -19,10 +19,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+String tests_id = "";
+
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 2;
   final List<Widget> widgetOptions = <Widget>[
-    MyFeedPage(userId: "lyhthy6"),
+    // MyFeedPage(userId: tests_id),
+    MyFeedPage(userId: 'lyhthy6'),
     ManagePlant(),
     FeedPage(),
     CommunityHomeScreen(),
@@ -40,6 +43,10 @@ class _HomePageState extends State<HomePage> {
     final arguments = (ModalRoute.of(context).settings.arguments ??
         <String, String>{}) as Map;
     log(arguments['userid']);
+    setState(() {
+      tests_id = arguments['userid'];
+    });
+
     return Scaffold(
       body: SafeArea(
         child: widgetOptions.elementAt(selectedIndex),
