@@ -48,9 +48,10 @@ class MyApp extends StatelessWidget {
           HomePage.routeName: (ctx) => HomePage('?'),
           MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "lyhthy6"),
           FeedDetail.routeName: (ctx) => FeedDetail(),
-          Community.routeName: (ctx) => Community(),
-          CommunityDetail.routeName: (ctx) => CommunityDetail(),
-          WritePage.routeName: (ctx) => WritePage()
+
+          CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
+          CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),
+          CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen()
         });
   }
 }

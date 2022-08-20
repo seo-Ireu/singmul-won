@@ -194,14 +194,32 @@ class _CategorySelectorState extends State<CategorySelector> {
   }
 
   Future _read(int categoryIndex) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php";
+    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php?idx="+categoryIndex.toString();
 
-    var response = await http.post(Uri.parse(url), body: {
-      "idx": categoryIndex.toString(),
-    });
+    var response = await http.get(Uri.parse(url));
     String jsonData = response.body;
 
+    if (response.statusCode == 200) {
+      var tmp = json.decode(utf8.decode(response.bodyBytes));
+      print(tmp['community']);
+      List<CommunityModel> communities = [];
+      for (var c in tmp['community']) {
+        CommunityModel cm = CommunityModel(
+            communityId: int.parse(c['communityId']),
+            categoryId: int.parse(c['categoryId']),
+            userId: c['userId'],
+            title: c['title'],
+            content: c['content']);
+        communities.add(cm);
+        print("${cm}");
+      }
+      return communities;
+    } else {
+      throw Exception('Failed to load post');
+    }
+
     var myJson = await jsonDecode(jsonData)['community'];
+    print(myJson);
 
     List<CommunityModel> communities = [];
     for (var c in myJson) {

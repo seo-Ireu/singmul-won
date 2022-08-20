@@ -36,7 +36,8 @@ class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
             iconSize: 30.0,
             color: Colors.white,
             onPressed: () {
-              Navigator.pushNamed(context, CommunityWriteScreen.routeName);
+              Navigator.of(context)
+                  .pushNamed(CommunityWriteScreen.routeName);
               },
           ),
         ],
