@@ -1,9 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import './user_plant.dart';
-import './manage_plant.dart';
 
 Future myPlant(String plantId) async {
   var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
@@ -20,7 +21,9 @@ Future myPlant(String plantId) async {
         myPlantNickname: item['myPlantNickname'],
         plantInfoId: item['plantInfoId'],
         humi: item['humi'],
-        lumi: item['lumi']);
+        lumi: item['lumi'],
+        humidity: item['humidity'],
+        luminance: item['luminance']);
   }
   return sig_plants;
 }
@@ -39,6 +42,7 @@ Future myPlantList(String user) async {
         myPlantId: item['myPlantId'],
         myPlantNickname: item['myPlantNickname'],
         plantName: item['plantName'],
+        plantImage: item['plantImage'],
         humi: item['humi'],
         lumi: item['lumi'],
         image: item['image']);
@@ -53,8 +57,26 @@ Future deletePlant(BuildContext context, plantId) async {
   var response = await http.post(Uri.parse(url), body: {
     "myPlantId": plantId,
   });
-  Navigator.of(context).pop();
+  // Navigator.of(context).pop();
   // Navigator.of(context).pushNamed(
   // ManagePlant.routeName,
   // );
+}
+
+Future properValue(String plantInfoId) async {
+  var url = "http://54.177.126.159/ubuntu/flutter/plant/auto_setting.php";
+  var response = await http.post(Uri.parse(url), body: {
+    "plantInfoId": plantInfoId,
+  });
+  String jsonData = utf8.decode(response.bodyBytes);
+  var vld = await json.decode(jsonData)['setting'];
+  print(vld);
+  SuitableData suitable_data;
+  for (var item in vld) {
+    suitable_data = SuitableData(
+        plantInfoId: item['plantInfoId'],
+        humidity: item['humidity'],
+        luminance: item['luminance']);
+  }
+  return suitable_data;
 }

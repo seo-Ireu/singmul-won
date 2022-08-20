@@ -1,14 +1,13 @@
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import './insert_plant.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 // 알림 더미 타이틀
 List pushTitleList = ['식물 등록 완료'];
-// 알림 그룹 ID 카운트용, 알림이 올때마다 이 값을 1씩 증가 시킨다.
+// 알림 그룹 ID 카운트용, 알림이 올때마다 이 값을 1씩 증가
 int groupedNotificationCounter = 1;
 
 void init() async {
@@ -29,7 +28,7 @@ void init() async {
   });
 }
 
-// 알림 발생 함수!!
+// 알림 발생 함수
 Future<void> showGroupedNotifications() async {
   // 알림 그룹 키
   const String groupKey = 'com.android.example.WORK_EMAIL';
@@ -49,17 +48,17 @@ Future<void> showGroupedNotifications() async {
   const NotificationDetails notificationPlatformSpecifics =
       NotificationDetails(android: notificationAndroidSpecifics);
 
-  // 알림 발생!
+  // 알림 발생
   await flutterLocalNotificationsPlugin.show(
       groupedNotificationCounter,
       pushTitleList[0],
       '식물이 정상적으로 등록되었습니다.- ${pushTitleList[0]}',
       notificationPlatformSpecifics);
-  // 알림 그룹 ID를 1씩 증가 시킨다.
+  // 알림 그룹 ID 1씩 증가
   groupedNotificationCounter++;
 
   // 그룹용 알림 설정
-  // 특징 setAsGroupSummary 가 true 이다.
+  // 특징 setAsGroupSummary가 true
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(groupChannelId, groupChannelName,
           onlyAlertOnce: true, groupKey: groupKey, setAsGroupSummary: true);
@@ -68,7 +67,7 @@ Future<void> showGroupedNotifications() async {
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
   // 그룹용 알림 출력
-  // 이때는 ID를 0으로 고정시켜 새로 생성되지 않게 한다.
+  // 이때는 ID를 0으로 고정시켜 새로 생성되지 않게함.
   await flutterLocalNotificationsPlugin.show(
       0, '', '', platformChannelSpecifics);
 }

@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class DeviceScreen extends StatefulWidget {
   DeviceScreen({Key key, @required this.device}) : super(key: key);
@@ -13,7 +17,7 @@ class DeviceScreen extends StatefulWidget {
 
 class _DeviceScreenState extends State<DeviceScreen> {
   // flutterBlue
-  FlutterBlue flutterBlue = FlutterBlue.instance;
+  FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
 
   // 연결 상태 표시 문자열
   String stateText = 'Connecting';
@@ -27,6 +31,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
   // 연결 상태 리스너 핸들 화면 종료시 리스너 해제를 위함
   StreamSubscription<BluetoothDeviceState> _stateListener;
 
+  // 연결된 장치의 서비스 정보를 저장하기 위한 변수
+  List<BluetoothService> bluetoothService = [];
+  //
+  Map<String, List<int>> notifyDatas = {};
   @override
   initState() {
     super.initState();
@@ -96,11 +104,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
     /* 
       타임아웃을 10초(10000ms)로 설정 및 autoconnect 해제
-       참고로 autoconnect가 true되어있으면 연결이 지연되는 경우가 있음.
+      참고로 autoconnect가 true되어있으면 연결이 지연되는 경우가 있음.
      */
     await widget.device
         .connect(autoConnect: false)
-        .timeout(Duration(milliseconds: 10000), onTimeout: () {
+        .timeout(Duration(milliseconds: 15000), onTimeout: () {
       //타임아웃 발생
       //returnValue를 false로 설정
       returnValue = Future.value(false);
@@ -108,10 +116,52 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
       //연결 상태 disconnected로 변경
       setBleConnectionState(BluetoothDeviceState.disconnected);
-    }).then((data) {
+    }).then((data) async {
+      bluetoothService.clear();
       if (returnValue == null) {
         //returnValue가 null이면 timeout이 발생한 것이 아니므로 연결 성공
         debugPrint('connection successful');
+        List<BluetoothService> bleServices =
+        await widget.device.discoverServices();
+        setState(() {
+          bluetoothService = bleServices;
+        });
+        // 각 속성을 디버그에 출력
+        for (BluetoothService service in bleServices) {
+          for (BluetoothCharacteristic c in service.characteristics) {
+            if (c.properties.notify && c.descriptors.isNotEmpty) {
+              // 진짜 0x2902 가 있는지 단순 체크용!
+              for (BluetoothDescriptor d in c.descriptors) {
+                print('BluetoothDescriptor uuid ${d.uuid}');
+                if (d.uuid == BluetoothDescriptor.cccd) {
+                  print('d.lastValue: ${d.lastValue}');
+                }
+              }
+
+              // notify가 설정 안되었다면...
+              if (!c.isNotifying) {
+                try {
+                  await c.setNotifyValue(true);
+                  // 받을 데이터 변수 Map 형식으로 키 생성
+                  notifyDatas[c.uuid.toString()] = List.empty();
+                  c.value.listen((value) {
+                    // 데이터 읽기 처리!
+                    print('${c.uuid}: $value');
+                    setState(() {
+                      // 받은 데이터 저장 화면 표시용
+                      notifyDatas[c.uuid.toString()] = value;
+                    });
+                  });
+
+                  // 설정 후 일정시간 지연
+                  await Future.delayed(const Duration(milliseconds: 500));
+                } catch (e) {
+                  print('error ${c.uuid} $e');
+                }
+              }
+            }
+          }
+        }
         returnValue = Future.value(true);
       }
     });
@@ -138,24 +188,99 @@ class _DeviceScreenState extends State<DeviceScreen> {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          /* 연결 상태 */
-          Text('$stateText'),
-          /* 연결 및 해제 버튼 */
-          OutlinedButton(
-              onPressed: () {
-                if (deviceState == BluetoothDeviceState.connected) {
-                  /* 연결된 상태라면 연결 해제 */
-                  disconnect();
-                } else if (deviceState == BluetoothDeviceState.disconnected) {
-                  /* 연결 해재된 상태라면 연결 */
-                  connect();
-                } else {}
-              },
-              child: Text(connectButtonText)),
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  /* 연결 상태 */
+                  Text('$stateText'),
+                  /* 연결 및 해제 버튼 */
+                  OutlinedButton(
+                      onPressed: () {
+                        if (deviceState == BluetoothDeviceState.connected) {
+                          /* 연결된 상태라면 연결 해제 */
+                          disconnect();
+                        } else if (deviceState ==
+                            BluetoothDeviceState.disconnected) {
+                          /* 연결 해재된 상태라면 연결 */
+                          connect();
+                        } else {}
+                      },
+                      child: Text(connectButtonText)),
+                ],
+              ),
+              /* 연결된 BLE의 서비스 정보 출력 */
+              Expanded(
+                child: ListView.separated(
+                  itemCount: bluetoothService.length,
+                  itemBuilder: (context, index) {
+                    return listItem(bluetoothService[index]);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider();
+                  },
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
+  /* 각 캐릭터리스틱 정보 표시 위젯 */
+  Widget characteristicInfo(BluetoothService r) {
+    String name = '';
+    String properties = '';
+    String data = '';
+    // 캐릭터리스틱을 한개씩 꺼내서 표시
+    for (BluetoothCharacteristic c in r.characteristics) {
+      properties = '';
+      data = '';
+      name += '\t\t${c.uuid}\n';
+      if (c.properties.write) {
+        properties += 'Write ';
+        // c.write(utf8.encode(_writeController.value.text));
+      }
+      if (c.properties.read) {
+        properties += 'Read ';
+      }
+      if (c.properties.notify) {
+        properties += 'Notify ';
+        if (notifyDatas.containsKey(c.uuid.toString())) {
+          // notify 데이터가 존재한다면
+          if (notifyDatas[c.uuid.toString()].isNotEmpty) {
+            data = notifyDatas[c.uuid.toString()].toString();
+          }
+        }
+      }
+      if (c.properties.writeWithoutResponse) {
+        properties += 'WriteWR ';
+      }
+      if (c.properties.indicate) {
+        properties += 'Indicate ';
+      }
+      name += '\t\t\tProperties: $properties\n';
+      if (data.isNotEmpty) {
+        // 받은 데이터 화면에 출력!
+        name += '\t\t\t\t$data\n';
+      }
+    }
+    return Text(name);
+  }
+
+  /* Service UUID 위젯  */
+  Widget serviceUUID(BluetoothService r) {
+    String name = '';
+    name = r.uuid.toString();
+    return Text(name);
+  }
+
+  /* Service 정보 아이템 위젯 */
+  Widget listItem(BluetoothService r) {
+    return ListTile(
+      onTap: null,
+      title: serviceUUID(r),
+      subtitle: characteristicInfo(r),
     );
   }
 }

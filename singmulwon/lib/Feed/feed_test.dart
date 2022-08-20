@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -24,18 +26,17 @@ Future fetchFeed() async {
   }
 }
 
-
 void main() => runApp(MaterialApp(
-  home: FeedPage(),
-  initialRoute: '/',
-  routes: {
-    // When we navigate to the "/" route, build the FirstScreen Widget
-    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-    '/myfeed': (context) => MyFeedPage(),
-    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
-    '/feed': (context) => FeedPage(),
-  },
-));
+      home: FeedPage(),
+      initialRoute: '/',
+      routes: {
+        // When we navigate to the "/" route, build the FirstScreen Widget
+        // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
+        '/myfeed': (context) => MyFeedPage(),
+        // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
+        '/feed': (context) => FeedPage(),
+      },
+    ));
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key key}) : super(key: key);
@@ -59,21 +60,19 @@ class _FeedPageState extends State<FeedPage> {
     return MaterialApp(
         home: Scaffold(
             body: Center(
-              child: FutureBuilder(
-                //통신데이터 가져오기
-                future: feeds,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return buildColumn(snapshot);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}에러!!");
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            )
-        )
-    );
+      child: FutureBuilder(
+        //통신데이터 가져오기
+        future: feeds,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return buildColumn(snapshot);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}에러!!");
+          }
+          return const CircularProgressIndicator();
+        },
+      ),
+    )));
   }
 
   //bool isPressed = false; // 좋아요 변수
@@ -83,103 +82,117 @@ class _FeedPageState extends State<FeedPage> {
   Widget buildColumn(snapshot) {
     List<Widget> lists = [];
 
-    for(int i=0; i<snapshot.data["count"]; i++){
+    for (int i = 0; i < snapshot.data["count"]; i++) {
       isPressed.add(false);
-      lists.add(
-          Card(
-            margin: EdgeInsets.only(bottom: 20),
-            child:
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양쪽으로 정렬
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                              SizedBox(width: 10.0,), // 여백
-                              Text('${snapshot.data["feed"][i]["userId"]}',
-                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
-                            children: <Widget>[
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.more_horiz)),
-                            ],
-                          ),
-                        ],
-                      ),
+      lists.add(Card(
+          margin: EdgeInsets.only(bottom: 20),
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양쪽으로 정렬
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 정렬
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: AssetImage("assets/human_1.jpg"),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ), // 여백
+                        Text('${snapshot.data["feed"][i]["userId"]}',
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
+                      children: <Widget>[
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.more_horiz)),
+                      ],
+                    ),
+                  ],
+                ),
 
-                      SizedBox(height: 5.0,),
-                      Image.asset(
-                          '${snapshot.data["feed"][i]["feedImage"]}', width: 400, height: 400, fit: BoxFit.fill),
-                      SizedBox(height: 5.0,), // 여백
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            icon: Icon(isPressed[i] ? Icons.favorite : Icons.favorite_border),
-                            color: isPressed[i] ? Colors.red : Colors.black,
-                            onPressed: () {
-                              setState(() {
-                                isPressed[i] = !isPressed[i];
-                              });
-                            },
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.chat_bubble_outline),
-                          ),
-                        ],
-                      ),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Image.asset('${snapshot.data["feed"][i]["feedImage"]}',
+                    width: 400, height: 400, fit: BoxFit.fill),
+                SizedBox(
+                  height: 5.0,
+                ), // 여백
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(isPressed[i]
+                          ? Icons.favorite
+                          : Icons.favorite_border),
+                      color: isPressed[i] ? Colors.red : Colors.black,
+                      onPressed: () {
+                        setState(() {
+                          isPressed[i] = !isPressed[i];
+                        });
+                      },
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.chat_bubble_outline),
+                    ),
+                  ],
+                ),
 
-                      SizedBox(height: 5.0,), // 여백
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text('${snapshot.data["feed"][i]["userId"]}',
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                          SizedBox(width: 5.0,), // 여백
-                          Text('${snapshot.data["feed"][i]["content"]}',
-                              style: const TextStyle(fontSize: 20))
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(DateFormat('yyyy년 MM월 dd일 HH:mm:ss').format(now))
-                        ],
-                      ),
-                      SizedBox(height: 5.0,), // 여백
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child:
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                icon: CircleAvatar(
-                                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                                suffixIcon: Icon(Icons.arrow_forward),
-                                labelText: '댓글 달기...',
-                              ),
-                            ),
+                SizedBox(
+                  height: 5.0,
+                ), // 여백
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${snapshot.data["feed"][i]["userId"]}',
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      width: 5.0,
+                    ), // 여백
+                    Text('${snapshot.data["feed"][i]["content"]}',
+                        style: const TextStyle(fontSize: 20))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(DateFormat('yyyy년 MM월 dd일 HH:mm:ss').format(now))
+                  ],
+                ),
+                SizedBox(
+                  height: 5.0,
+                ), // 여백
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          icon: CircleAvatar(
+                            radius: 20.0,
+                            backgroundImage: AssetImage("assets/human_1.jpg"),
                           ),
-                        ],
+                          suffixIcon: Icon(Icons.arrow_forward),
+                          labelText: '댓글 달기...',
+                        ),
                       ),
-                    ],
-                  ),
-                )
-          )
-      );
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )));
     }
 
     return Scaffold(
@@ -194,32 +207,32 @@ class _FeedPageState extends State<FeedPage> {
         ],
       ),
       body: Container(
-          margin: EdgeInsets.all(10),
-          child: ListView(
-              padding: const EdgeInsets.all(3),
-              children: lists,
-          ),
+        margin: EdgeInsets.all(10),
+        child: ListView(
+          padding: const EdgeInsets.all(3),
+          children: lists,
         ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
             icon: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/myfeed');
-                  },
-                  icon: Icon(Icons.chat),
-              ),
-              label: 'My Feed',
-            ),
-            BottomNavigationBarItem(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/myfeed');
+              },
               icon: Icon(Icons.chat),
-              label: 'Community',
             ),
-          ],
+            label: 'My Feed',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Community',
+          ),
+        ],
       ),
     );
   }
