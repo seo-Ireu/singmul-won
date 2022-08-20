@@ -1,54 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_singmulwon_app/Feed/feed_create_last_test.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-<<<<<<< HEAD
-final _textController = new TextEditingController();
-
-void main() => runApp(MaterialApp(
-  home: FeedCreate(),
-  debugShowCheckedModeBanner: false,
-));
-=======
 // void main() => runApp(MaterialApp(
 //   home: Home(),
 //   debugShowCheckedModeBanner: false,
 // ));
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
 
-class FeedCreate extends StatefulWidget {
-  static const routeName = '/image_upload.dart';
-  final String userId;
-  final String feedId;
-
-  const FeedCreate({Key key, @required this.userId, @required this.feedId}) : super(key: key);
-
+class Home extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState(userId, feedId);
+  _HomeState createState() => _HomeState();
 }
 
-<<<<<<< HEAD
-class _HomeState extends State<FeedCreate> {
-  Future feeds;
-  String userId;
-  String feedId;
-
-=======
 class _HomeState extends State<Home> {
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
   XFile image;
   //불러온 image list
+  List _images = [];
   //저장할 image list
   List<XFile> _selectedFiles = [];
   final ImagePicker picker = ImagePicker();
 
-<<<<<<< HEAD
-  _HomeState(this. userId, this. feedId);
-
-=======
   //we can upload image from camera or from gallery based on parameter
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
@@ -117,23 +90,18 @@ class _HomeState extends State<Home> {
     }
     print("image list length:${_selectedFiles.length.toString()}");
   }
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
 
   Future pickImages() async {
     final List<XFile> selectedImages = await picker.pickMultiImage();
 
-    if (_selectedFiles.isNotEmpty) {
-      setState(() {
-        _selectedFiles.clear();
-      });
+    if (_selectedFiles != null) {
+      _selectedFiles.clear();
     }
     if (selectedImages.isNotEmpty) {
       setState(() {
         _selectedFiles.addAll(selectedImages);
       });
 
-<<<<<<< HEAD
-=======
       sendImages();
     }
   } //------------------------------------------
@@ -151,7 +119,6 @@ class _HomeState extends State<Home> {
       }
     } catch (e) {
       print(e);
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
     }
   }
 
@@ -160,6 +127,7 @@ class _HomeState extends State<Home> {
     // ignore: todo
     // TODO: implement initState
     super.initState();
+    getImageServer();
   }
 
   //show popup dialog
@@ -193,6 +161,7 @@ class _HomeState extends State<Home> {
                     //if user click this button. user can upload image from camera
                     onPressed: () {
                       Navigator.pop(context);
+                      sendImage(ImageSource.camera);
                     },
                     child: Row(
                       children: [
@@ -220,24 +189,6 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
-<<<<<<< HEAD
-        body:
-        Row(
-          children: <Widget>[
-            SizedBox(height: 50.0,),
-            Expanded(
-              child:
-              TextField(
-                controller: _textController,
-              ),
-            ),
-            (_selectedFiles.length != 0) ? TextButton(child:Text("피드 업로드"),
-                onPressed: ()=>FeedCreateRegister(userId: userId, images: _selectedFiles, feedContent: _textController.text))
-                : TextButton(child: Text("이미지 업로드"), onPressed: () => pickImages()),
-          ],
-        ),
-    );
-=======
         body: _images.length != 0
             ? GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -257,6 +208,5 @@ class _HomeState extends State<Home> {
             : Center(
                 child: Text("No Image"),
               ));
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
   }
 }

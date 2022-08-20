@@ -10,7 +10,6 @@ import 'feed_following_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
-import 'image_upload.dart';
 
 Future fetchFeed(String userId) async {
   var url =
@@ -294,9 +293,7 @@ class _FeedPageState extends State<MyFeedPage> {
           IconButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FeedCreate(userId: 'lyhthy6')));
+                  context, MaterialPageRoute(builder: (context) => FeedPage()));
             },
             icon: const Icon(Icons.add),
           ),
