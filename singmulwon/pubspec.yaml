@@ -33,6 +33,7 @@ dependencies:
   intl: ^0.17.0
   image_picker: ^0.8.5+3
   http: ^0.13.4
+  carousel_pro: ^1.0.0
   number_pagination: ^0.0.3+2
   fluttertoast: ^8.0.9
   flutter_blue: ^0.8.0

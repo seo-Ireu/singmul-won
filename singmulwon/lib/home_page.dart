@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 
+import 'Community/screens/community_home_screen.dart';
 import 'Feed/insta_home.dart';
 import 'Feed/my_feed.dart';
 import 'Plant/manage_plant.dart';
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     MyFeed(),
     ManagePlant(),
     InstaHome(),
-    Community(),
+    CommunityHomeScreen(),
     Account(),
   ];
 
