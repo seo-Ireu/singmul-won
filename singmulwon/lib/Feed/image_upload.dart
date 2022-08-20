@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-void main() => runApp(MaterialApp(
-  home: Home(),
-  debugShowCheckedModeBanner: false,
-));
+// void main() => runApp(MaterialApp(
+//   home: Home(),
+//   debugShowCheckedModeBanner: false,
+// ));
 
 class Home extends StatefulWidget {
   @override
@@ -15,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   XFile image;
   //불러온 image list
   List _images = [];
@@ -26,17 +25,17 @@ class _HomeState extends State<Home> {
   //we can upload image from camera or from gallery based on parameter
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
-    var uri = "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+    var uri =
+        "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
-    if(img != null){
+    if (img != null) {
       var pic = await http.MultipartFile.fromPath("image", img.path);
       print("pic: ${img.path}");
       request.files.add(pic);
       await request.send().then((result) {
         http.Response.fromStream(result).then((response) {
-
-          if(response.body.isNotEmpty) {
+          if (response.body.isNotEmpty) {
             var message = json.decode(response.body);
 
             print("!!!${message}");
@@ -47,19 +46,19 @@ class _HomeState extends State<Home> {
           //get new list images
           getImageServer();
         });
-
       }).catchError((e) {
         print(e);
       });
     }
-
   }
-  Future sendImages()async{
-    var uri = "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+
+  Future sendImages() async {
+    var uri =
+        "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
-    try{
-      if (_selectedFiles.isNotEmpty){
+    try {
+      if (_selectedFiles.isNotEmpty) {
         for (int i = 0; i < _selectedFiles.length; i++) {
           var pic = await http.MultipartFile.fromPath(
               "image[]", _selectedFiles[i].path);
@@ -69,8 +68,7 @@ class _HomeState extends State<Home> {
 
         await request.send().then((result) {
           http.Response.fromStream(result).then((response) {
-
-            if(response.body.isNotEmpty) {
+            if (response.body.isNotEmpty) {
               var message = json.decode(response.body);
 
               print(message);
@@ -81,20 +79,18 @@ class _HomeState extends State<Home> {
             //get new list images
             getImageServer();
           });
-
         }).catchError((e) {
           print(e);
         });
-      }else{
+      } else {
         print("image is not selected!");
       }
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
     print("image list length:${_selectedFiles.length.toString()}");
-
   }
+
   Future pickImages() async {
     final List<XFile> selectedImages = await picker.pickMultiImage();
 
@@ -108,19 +104,20 @@ class _HomeState extends State<Home> {
 
       sendImages();
     }
-  }//------------------------------------------
+  } //------------------------------------------
+
   Future getImageServer() async {
-    try{
-      final response = await http.get(Uri.parse('http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/list.php'));
-      if(response.statusCode == 200){
+    try {
+      final response = await http.get(Uri.parse(
+          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/list.php'));
+      if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print(data);
         setState(() {
           _images = data;
         });
       }
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
@@ -140,7 +137,7 @@ class _HomeState extends State<Home> {
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: Text('Please choose media to select'),
             content: Container(
               height: MediaQuery.of(context).size.height / 6,
@@ -192,22 +189,24 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
-        body: _images.length != 0 ?
-        GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2
-            ),
-            itemCount: _images.length,
-            itemBuilder: (_, index){
-              return Padding(
-                padding: EdgeInsets.all(10),
-                child: Image(
-                  image: NetworkImage('http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/'+_images[index]['url']),
-                  fit: BoxFit.cover,
-                ),
-              );
-            }
-        ) : Center(child: Text("No Image"),)
-    );
+        body: _images.length != 0
+            ? GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemCount: _images.length,
+                itemBuilder: (_, index) {
+                  return Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Image(
+                      image: NetworkImage(
+                          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/' +
+                              _images[index]['url']),
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                })
+            : Center(
+                child: Text("No Image"),
+              ));
   }
 }

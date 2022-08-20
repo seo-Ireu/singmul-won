@@ -12,13 +12,14 @@ import 'feed_create_register_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
 
-
 final _nameController = new TextEditingController();
 final _IntroController = new TextEditingController();
 final _IdController = new TextEditingController();
 
 Future fetchFeed(String userId) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/profile_edit.php?userId='+userId;
+  var url =
+      'http://54.177.126.159/ubuntu/flutter/feed/profile_edit.php?userId=' +
+          userId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -33,19 +34,19 @@ Future fetchFeed(String userId) async {
   }
 }
 
-void main() => runApp(MaterialApp(
-  home: ProfileEdit(),
-  initialRoute: '/',
-  routes: {
-    // When we navigate to the "/" route, build the FirstScreen Widget
-    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-    '/myfeed': (context) => MyFeedPage(),
-    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
-    '/feed': (context) => FeedPage(),
-    '/feed_create': (context) => FeedCreate(),
-    '/feed_detail': (context) => FeedDetail(),
-  },
-));
+// void main() => runApp(MaterialApp(
+//   home: ProfileEdit(),
+//   initialRoute: '/',
+//   routes: {
+//     // When we navigate to the "/" route, build the FirstScreen Widget
+//     // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
+//     '/myfeed': (context) => MyFeedPage(),
+//     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
+//     '/feed': (context) => FeedPage(),
+//     '/feed_create': (context) => FeedCreate(),
+//     '/feed_detail': (context) => FeedDetail(),
+//   },
+// ));
 
 class ProfileEdit extends StatefulWidget {
   final String userId;
@@ -60,7 +61,7 @@ class _FeedPageState extends State<ProfileEdit> {
   Future feeds;
   String userId;
 
-  _FeedPageState(this. userId);
+  _FeedPageState(this.userId);
 
   @override
   void initState() {
@@ -70,24 +71,21 @@ class _FeedPageState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            body: Center(
-              child: FutureBuilder(
-                //통신데이터 가져오기
-                future: feeds,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return buildColumn(snapshot);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}에러!!");
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            )
-        )
-    );
+    return Scaffold(
+        body: Center(
+      child: FutureBuilder(
+        //통신데이터 가져오기
+        future: feeds,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return buildColumn(snapshot);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}에러!!");
+          }
+          return const CircularProgressIndicator();
+        },
+      ),
+    ));
   }
 
   Widget buildColumn(snapshot) {
@@ -98,48 +96,54 @@ class _FeedPageState extends State<ProfileEdit> {
     List<Widget> lists = [
       Center(
         child: Column(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 50.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/'+snapshot.data["image_id"]),),
-          OutlinedButton(onPressed: () {}, child: Text("프로필 사진 변경")),
-          Expanded(
-            child:
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                icon: CircleAvatar(
-                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                labelText: '이름',
+          children: <Widget>[
+            CircleAvatar(
+              radius: 50.0,
+              backgroundImage: NetworkImage(
+                  'http://54.177.126.159/ubuntu/flutter/account/image/' +
+                      snapshot.data["image_id"]),
+            ),
+            OutlinedButton(onPressed: () {}, child: Text("프로필 사진 변경")),
+            Expanded(
+              child: TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  icon: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: AssetImage("assets/human_1.jpg"),
+                  ),
+                  labelText: '이름',
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child:
-            TextFormField(
-              controller: _IdController,
-              decoration: const InputDecoration(
-                icon: CircleAvatar(
-                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                labelText: 'ID',
+            Expanded(
+              child: TextFormField(
+                controller: _IdController,
+                decoration: const InputDecoration(
+                  icon: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: AssetImage("assets/human_1.jpg"),
+                  ),
+                  labelText: 'ID',
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child:
-            TextFormField(
-              controller: _IntroController,
-              decoration: const InputDecoration(
-                icon: CircleAvatar(
-                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                labelText: '소개글',
+            Expanded(
+              child: TextFormField(
+                controller: _IntroController,
+                decoration: const InputDecoration(
+                  icon: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: AssetImage("assets/human_1.jpg"),
+                  ),
+                  labelText: '소개글',
+                ),
               ),
             ),
-          ),
-          // 뒤에 GridView로 마이 피드 구성
-        ],
+            // 뒤에 GridView로 마이 피드 구성
+          ],
+        ),
       ),
-      ),
-
     ];
 
     return Scaffold(
@@ -162,5 +166,4 @@ class _FeedPageState extends State<ProfileEdit> {
       ),
     );
   }
-
 }
