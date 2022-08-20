@@ -122,7 +122,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
         //returnValue가 null이면 timeout이 발생한 것이 아니므로 연결 성공
         debugPrint('connection successful');
         List<BluetoothService> bleServices =
-            await widget.device.discoverServices();
+        await widget.device.discoverServices();
         setState(() {
           bluetoothService = bleServices;
         });
@@ -188,42 +188,42 @@ class _DeviceScreenState extends State<DeviceScreen> {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              /* 연결 상태 */
-              Text('$stateText'),
-              /* 연결 및 해제 버튼 */
-              OutlinedButton(
-                  onPressed: () {
-                    if (deviceState == BluetoothDeviceState.connected) {
-                      /* 연결된 상태라면 연결 해제 */
-                      disconnect();
-                    } else if (deviceState ==
-                        BluetoothDeviceState.disconnected) {
-                      /* 연결 해재된 상태라면 연결 */
-                      connect();
-                    } else {}
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  /* 연결 상태 */
+                  Text('$stateText'),
+                  /* 연결 및 해제 버튼 */
+                  OutlinedButton(
+                      onPressed: () {
+                        if (deviceState == BluetoothDeviceState.connected) {
+                          /* 연결된 상태라면 연결 해제 */
+                          disconnect();
+                        } else if (deviceState ==
+                            BluetoothDeviceState.disconnected) {
+                          /* 연결 해재된 상태라면 연결 */
+                          connect();
+                        } else {}
+                      },
+                      child: Text(connectButtonText)),
+                ],
+              ),
+              /* 연결된 BLE의 서비스 정보 출력 */
+              Expanded(
+                child: ListView.separated(
+                  itemCount: bluetoothService.length,
+                  itemBuilder: (context, index) {
+                    return listItem(bluetoothService[index]);
                   },
-                  child: Text(connectButtonText)),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider();
+                  },
+                ),
+              ),
             ],
-          ),
-          /* 연결된 BLE의 서비스 정보 출력 */
-          Expanded(
-            child: ListView.separated(
-              itemCount: bluetoothService.length,
-              itemBuilder: (context, index) {
-                return listItem(bluetoothService[index]);
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider();
-              },
-            ),
-          ),
-        ],
-      )),
+          )),
     );
   }
 

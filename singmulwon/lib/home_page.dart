@@ -5,6 +5,7 @@ import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
 import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'dart:developer';
 
+import 'Community/screens/community_home_screen.dart';
 import 'Plant/manage_plant.dart';
 import 'Community/community.dart';
 import 'Account/account.dart';
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     MyFeedPage(userId: "lyhthy6"),
     ManagePlant(),
     FeedPage(),
-    Community(),
+    CommunityHomeScreen(),
     Account(),
   ];
 

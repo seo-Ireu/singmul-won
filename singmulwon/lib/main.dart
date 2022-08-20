@@ -9,6 +9,9 @@ import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Community/screens/community_detail_screen.dart';
+import 'Community/screens/community_home_screen.dart';
+import 'Community/screens/community_write_screen.dart';
 import 'Community/write_page.dart';
 import 'Feed/feed_create_test.dart';
 import 'Feed/feed_detail_test.dart';

@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new FileNotFoundException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -26,8 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    // compileSdkVersion flutter.compileSdkVersion
-    compileSdkVersion 31
+    compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -48,10 +47,10 @@ android {
         applicationId "com.example.flutter_singmulwon_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        // minSdkVersion flutter.minSdkVersion   22.08.09 권호 수정
         minSdkVersion 19
-        // targetSdkVersion flutter.targetSdkVersion 22.08.10 권호 수정
         targetSdkVersion 30
+        // minSdkVersion flutter.minSdkVersion   22.08.09 권호 수정
+        // targetSdkVersion flutter.targetSdkVersion 22.08.10 권호 수정
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
