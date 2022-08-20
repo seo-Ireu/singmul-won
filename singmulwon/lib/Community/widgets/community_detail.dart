@@ -198,7 +198,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
         future: _read(context, _cIdx),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData == false) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
