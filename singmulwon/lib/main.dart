@@ -2,14 +2,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_singmulwon_app/Feed/insta_create.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Feed/insta_home.dart';
-import 'Feed/insta_list.dart';
-import 'Feed/my_feed.dart';
-import 'Feed/my_feed_detail.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/manage_plant.dart';
 import 'Provider/feeds.dart';
@@ -40,12 +35,7 @@ class MyApp extends StatelessWidget {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
           PlantDetail.routeName: (ctx) => PlantDetail(),
-          CreatePage.routeName: (ctx) => CreatePage(),
-          InstaList.routeName: (ctx) => InstaList(),
-          InstaHome.routeName: (ctx) => InstaHome(),
           HomePage.routeName: (ctx) => HomePage('?'),
-          MyFeed.routeName: (ctx) => MyFeed(),
-          MyFeedDetail.routeName: (ctx) => MyFeedDetail(),
         });
   }
 }

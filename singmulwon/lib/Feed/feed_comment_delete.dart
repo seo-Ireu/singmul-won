@@ -4,15 +4,16 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'feed_comment_delete_last_test.dart';
+import 'feed_delete_last_test.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
 import 'feed_create_register_test.dart';
-import 'package:image_picker/image_picker.dart';
 
 final _textController = new TextEditingController();
 
 void main() => runApp(MaterialApp(
-  home: FeedCreate(),
+  home: CommentDelete(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -20,24 +21,28 @@ void main() => runApp(MaterialApp(
     '/myfeed': (context) => MyFeedPage(),
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
-    '/feed_create': (context) => FeedCreate(),
     '/feed_create_register': (context) => FeedCreateImage(),
   },
-  )
+)
 );
 
-class FeedCreate extends StatefulWidget {
+class CommentDelete extends StatefulWidget {
   final String userId;
-  const FeedCreate({Key key, @required this.userId}) : super(key: key);
+  final String feedCommentId;
+  final String feedId;
+
+  const CommentDelete({Key key, @required this.userId, @required this.feedCommentId, @required this.feedId}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId);
+  _FeedPageState createState() => _FeedPageState(userId, feedCommentId, feedId);
 }
 
-class _FeedPageState extends State<FeedCreate> {
+class _FeedPageState extends State<CommentDelete> {
   String userId;
+  String feedCommentId;
+  String feedId;
 
-  _FeedPageState(this. userId);
+  _FeedPageState(this. userId, this. feedCommentId, this. feedId);
 
 
   @override
@@ -47,12 +52,10 @@ class _FeedPageState extends State<FeedCreate> {
 
   @override
   Widget build(BuildContext context) {
-    String trans_text;
     return MaterialApp(
-      title: 'Flutter layout demo',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('게시글 등록'),
+          title: Text('피드 삭제'),
           actions: [
             IconButton(
               onPressed: () {
@@ -63,27 +66,16 @@ class _FeedPageState extends State<FeedCreate> {
           ],
         ),
         body: Row(
-            children: <Widget>[
-              SizedBox(height: 50.0,),
-              Expanded(
-                child:
-                TextField(
-                  controller: _textController,
-                ),
-              ),
-              TextButton(child: Text("이미지 업로드"), onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => FeedCreateImage(userId: userId, feedContent: _textController.text))),)
-            ],
-          ),
+          children: <Widget>[
+            SizedBox(height: 50.0,),
+            Expanded(
+              child:
+              Text("해당 댓글를 정말로 삭제하시겠습니까?"),
+            ),
+            TextButton(child: Text("삭제"), onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => CommentDeleteResgister(userId: userId, feedCommentId: feedCommentId, feedId: feedId))),)
+          ],
+        ),
       ),
     );
-  }
-
-  Widget buildColumn() {
-    List<Widget> lists = [
-    ];
-  }
-  void _handleSubmitted(String text) {
-    print(text);
-    _textController.clear(); //입력 후 텍스트창 비워준다.
   }
 }

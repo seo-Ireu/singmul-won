@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Feed/feed_create_test.dart';
-import 'package:flutter_singmulwon_app/Feed/my_feed.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';

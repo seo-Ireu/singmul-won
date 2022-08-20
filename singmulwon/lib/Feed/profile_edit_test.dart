@@ -3,26 +3,38 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'feed_create_register_test.dart';
+import 'feed_comment_create_test.dart';
+import 'feed_comment_test.dart';
+import 'feed_delete_test.dart';
+import 'my_feed_test.dart';
 import 'feed_test.dart';
+import 'feed_create_register_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
-import 'my_feed_test.dart';
+
+
+final _nameController = new TextEditingController();
+final _IntroController = new TextEditingController();
+final _IdController = new TextEditingController();
 
 Future fetchFeed(String userId) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_following.php?userId='+userId;
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/profile_edit.php?userId='+userId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
+    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
+    print('응답했다');
     var tmp = json.decode(utf8.decode(response.bodyBytes));
+    print(tmp);
     return tmp;
   } else {
+    //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('Failed to load post');
   }
 }
 
 void main() => runApp(MaterialApp(
-  home: MyFollowing(),
+  home: ProfileEdit(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -31,22 +43,24 @@ void main() => runApp(MaterialApp(
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
     '/feed_create': (context) => FeedCreate(),
+    '/feed_detail': (context) => FeedDetail(),
   },
 ));
 
-class MyFollowing extends StatefulWidget {
+class ProfileEdit extends StatefulWidget {
   final String userId;
-  const MyFollowing({Key key, @required this.userId}) : super(key: key);
+
+  const ProfileEdit({Key key, @required this.userId}) : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState(userId);
 }
 
-class _FeedPageState extends State<MyFollowing> {
+class _FeedPageState extends State<ProfileEdit> {
+  Future feeds;
   String userId;
 
   _FeedPageState(this. userId);
-  Future feeds;
 
   @override
   void initState() {
@@ -77,52 +91,57 @@ class _FeedPageState extends State<MyFollowing> {
   }
 
   Widget buildColumn(snapshot) {
-    int cnt = snapshot.data["count"];
+    _nameController.text = snapshot.data["name"];
+    _IntroController.text = snapshot.data["profile_intro"];
+    _IdController.text = snapshot.data["userId"];
 
     List<Widget> lists = [
-      Column(
+      Center(
+        child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text('팔로잉'),
-            ],
+          CircleAvatar(
+            radius: 50.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/'+snapshot.data["image_id"]),),
+          OutlinedButton(onPressed: () {}, child: Text("프로필 사진 변경")),
+          Expanded(
+            child:
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                icon: CircleAvatar(
+                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
+                labelText: '이름',
+              ),
+            ),
           ),
-          for(int i=0; i<cnt; i++)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 30.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/'+snapshot.data["follow"][i]["image"]),),
-                SizedBox(width: 10.0,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: '${snapshot.data["follow"][i]["toUser"]}')));
-                      },
-                      style: TextButton.styleFrom(
-                        primary: Colors.black, //글자색
-                      ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                          Text('${snapshot.data["follow"][i]["toUser"]}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                          Text('${snapshot.data["follow"][i]["nickname"]}', style: const TextStyle(fontSize: 17)),
-                        ]
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),// ID, Setting 아이콘
+          Expanded(
+            child:
+            TextFormField(
+              controller: _IdController,
+              decoration: const InputDecoration(
+                icon: CircleAvatar(
+                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
+                labelText: 'ID',
+              ),
+            ),
+          ),
+          Expanded(
+            child:
+            TextFormField(
+              controller: _IntroController,
+              decoration: const InputDecoration(
+                icon: CircleAvatar(
+                  radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
+                labelText: '소개글',
+              ),
+            ),
+          ),
           // 뒤에 GridView로 마이 피드 구성
         ],
       ),
+      ),
+
     ];
 
-
-    int _selectedIndex = 0;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -142,10 +161,6 @@ class _FeedPageState extends State<MyFollowing> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
-          setState(() {_selectedIndex = index;});
-        },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
@@ -173,4 +188,5 @@ class _FeedPageState extends State<MyFollowing> {
       ),
     );
   }
+
 }

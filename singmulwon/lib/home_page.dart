@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'dart:developer';
 
-import 'Feed/insta_home.dart';
-import 'Feed/my_feed.dart';
 import 'Plant/manage_plant.dart';
 import 'Community/community.dart';
 import 'Account/account.dart';
@@ -20,9 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 2;
   final List<Widget> widgetOptions = <Widget>[
-    MyFeed(),
     ManagePlant(),
-    InstaHome(),
     Community(),
     Account(),
   ];

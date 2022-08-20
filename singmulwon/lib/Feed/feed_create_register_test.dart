@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Feed/feed_create_test.dart';
-import 'package:flutter_singmulwon_app/Feed/my_feed.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -140,7 +139,7 @@ class _FeedPageState extends State<FeedCreateImage> {
       final response = await http.get(Uri.parse('http://54.177.126.159/ubuntu/flutter/feed/list.php'));
       if(response.statusCode == 200){
         final data = jsonDecode(response.body);
-        print(data);
+        //print(data);
         setState(() {
           _images = data;
         });
@@ -204,7 +203,7 @@ class _FeedPageState extends State<FeedCreateImage> {
               onPressed: () {
                 Navigator.pop(context);
                 pickImages();
-                // sendImage(ImageSource.gallery);
+                sendImages();
               },
               child: Row(
                 children: [
@@ -217,7 +216,7 @@ class _FeedPageState extends State<FeedCreateImage> {
               //if user click this button. user can upload image from camera
               onPressed: () {
                 Navigator.pop(context);
-                sendImage(ImageSource.camera);
+                sendImages();
               },
               child: Row(
                 children: [

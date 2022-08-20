@@ -7,8 +7,6 @@ import 'feed_create_register_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
-
-import 'insta_create.dart';
 import 'my_feed_test.dart';
 
 Future fetchFeed(String userId) async {
@@ -17,6 +15,7 @@ Future fetchFeed(String userId) async {
 
   if (response.statusCode == 200) {
     var tmp = json.decode(utf8.decode(response.bodyBytes));
+    print(tmp);
     return tmp;
   } else {
     throw Exception('Failed to load post');
@@ -91,26 +90,31 @@ class _FeedPageState extends State<MyFollower> {
           ),
           for(int i=0; i<cnt; i++)
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 CircleAvatar(
-                  radius: 40.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
+                  radius: 30.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/'+snapshot.data["follow"][i]["image"]),),
+                SizedBox(width: 10.0,),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextButton(
-                      onPressed: () {},
-                      child:
-                      Column(children: <Widget>[
-                        Text('${snapshot.data["follow"][i]["fromUser"]}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                        Text('${snapshot.data["follow"][i]["nickname"]}', style: const TextStyle(fontSize: 17)),
-                      ]
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: '${snapshot.data["follow"][i]["fromUser"]}')));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('${snapshot.data["follow"][i]["fromUser"]}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                          Text('${snapshot.data["follow"][i]["nickname"]}', style: const TextStyle(fontSize: 17)),
+                        ],
                       ),
                       style: TextButton.styleFrom(
                         primary: Colors.black, //글자색
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),// ID, Setting 아이콘
           // 뒤에 GridView로 마이 피드 구성
@@ -156,7 +160,7 @@ class _FeedPageState extends State<MyFollower> {
           BottomNavigationBarItem(
             icon: IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('/myfeed');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
               },
               icon: Icon(Icons.chat),
             ),

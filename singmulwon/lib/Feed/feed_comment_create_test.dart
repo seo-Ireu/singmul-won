@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_singmulwon_app/Feed/feed_delete_test.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'feed_create_register_test.dart';
-import 'feed_test.dart';
+import 'feed_comment_test.dart';
 import 'feed_detail_test.dart';
-import 'feed_create_test.dart';
 import 'my_feed_test.dart';
+import 'feed_test.dart';
+import 'feed_create_test.dart';
 
-Future fetchFeed(String userId) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_following.php?userId='+userId;
+final _textController = new TextEditingController();
+
+Future fetchFeed(String feedId, String userId, String commentContent) async {
+  String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); // 임시 시간 변수
+  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_comment_create.php?feedId='+feedId+'&commentContent='+commentContent+'&userId='+userId+'&createAt='+formattedDate+'&updateAt='+formattedDate;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
     var tmp = json.decode(utf8.decode(response.bodyBytes));
+    print(tmp);
     return tmp;
   } else {
     throw Exception('Failed to load post');
@@ -22,7 +27,7 @@ Future fetchFeed(String userId) async {
 }
 
 void main() => runApp(MaterialApp(
-  home: MyFollowing(),
+  home: CommentCreate(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -31,27 +36,33 @@ void main() => runApp(MaterialApp(
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
     '/feed_create': (context) => FeedCreate(),
+    '/feed_detail': (context) => FeedDetail(),
   },
 ));
 
-class MyFollowing extends StatefulWidget {
+
+class CommentCreate extends StatefulWidget {
+  final String feedId;
   final String userId;
-  const MyFollowing({Key key, @required this.userId}) : super(key: key);
+  final String commentContent;
+  const CommentCreate({Key key, @required this.feedId, @required this.userId, @required this.commentContent}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId);
+  _FeedPageState createState() => _FeedPageState(feedId, userId, commentContent);
 }
 
-class _FeedPageState extends State<MyFollowing> {
-  String userId;
-
-  _FeedPageState(this. userId);
+class _FeedPageState extends State<CommentCreate> {
   Future feeds;
+  String feedId;
+  String userId;
+  String commentContent;
+
+  _FeedPageState(this. feedId, this. userId, this. commentContent);
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed(userId);
+    feeds = fetchFeed(feedId, userId, commentContent);
   }
 
   @override
@@ -76,53 +87,20 @@ class _FeedPageState extends State<MyFollowing> {
     );
   }
 
+  //bool isPressed = false; // 좋아요 변수
+  List<bool> isPressed = [];
+
   Widget buildColumn(snapshot) {
-    int cnt = snapshot.data["count"];
 
     List<Widget> lists = [
       Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text('팔로잉'),
-            ],
-          ),
-          for(int i=0; i<cnt; i++)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 30.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/'+snapshot.data["follow"][i]["image"]),),
-                SizedBox(width: 10.0,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: '${snapshot.data["follow"][i]["toUser"]}')));
-                      },
-                      style: TextButton.styleFrom(
-                        primary: Colors.black, //글자색
-                      ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                          Text('${snapshot.data["follow"][i]["toUser"]}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                          Text('${snapshot.data["follow"][i]["nickname"]}', style: const TextStyle(fontSize: 17)),
-                        ]
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),// ID, Setting 아이콘
-          // 뒤에 GridView로 마이 피드 구성
+          Text("게시가 완료되었습니다!"),
+          TextButton(child: Text("돌아가기"), onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => FeedComment(feedId: feedId, userId: userId,))),)
         ],
       ),
     ];
 
-
-    int _selectedIndex = 0;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -142,17 +120,11 @@ class _FeedPageState extends State<MyFollowing> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
-          setState(() {_selectedIndex = index;});
-        },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/feed');
-              },
-              icon: Icon(Icons.home),
+                onPressed: () {},
+                icon: Icon(Icons.home)
             ),
             label: 'Home',
           ),

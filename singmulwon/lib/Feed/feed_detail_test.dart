@@ -4,9 +4,13 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'feed_comment_create_test.dart';
+import 'feed_comment_test.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
 import 'feed_create_test.dart';
+
+final _textController = new TextEditingController();
 
 Future fetchFeed(String feedId, String userId) async {
   var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_detail.php?userId='+userId+'&feedId='+feedId;
@@ -25,7 +29,7 @@ Future fetchFeed(String feedId, String userId) async {
 }
 
 void main() => runApp(MaterialApp(
-  home: FeedPage(),
+  home: FeedDetail(),
   initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
@@ -34,7 +38,6 @@ void main() => runApp(MaterialApp(
     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
     '/feed': (context) => FeedPage(),
     '/feed_create': (context) => FeedCreate(),
-    '/feed_detail': (context) => FeedDetail(),
   },
 ));
 
@@ -121,8 +124,9 @@ class _FeedPageState extends State<FeedDetail> {
                           children: <Widget>[
                             IconButton(
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDelete(userId: userId, feedId: feedId)));
-                                },
+                                  if(userId == snapshot.data["feed"][i]["userId"]) Navigator.push(context, MaterialPageRoute(builder: (context) => FeedDelete(userId: userId, feedId: feedId)));
+                                  else null;
+                                  },
                                 icon: Icon(Icons.more_horiz)),
                           ],
                         ),
@@ -145,7 +149,9 @@ class _FeedPageState extends State<FeedDetail> {
                           },
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => FeedComment(userId: userId, feedId: feedId)));
+                          },
                           icon: Icon(Icons.chat_bubble_outline),
                         ),
                       ],
@@ -175,13 +181,25 @@ class _FeedPageState extends State<FeedDetail> {
                         Expanded(
                           child:
                           TextFormField(
+                            controller: _textController,
                             decoration: const InputDecoration(
                               icon: CircleAvatar(
                                 radius: 20.0, backgroundImage: AssetImage("assets/human_1.jpg"),),
-                              suffixIcon: Icon(Icons.arrow_forward),
                               labelText: '댓글 달기...',
                             ),
                           ),
+                        ),
+                        TextButton(
+                            child: Text("게시"),
+                            onPressed: () {
+                              String texts = _textController.text;
+                              _textController.clear();
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) =>
+                                      CommentCreate(userId: userId,
+                                          commentContent: texts,
+                                          feedId: '${snapshot.data["feed"][i]["feedId"]}')));
+                            }
                         ),
                       ],
                     ),
@@ -219,7 +237,7 @@ class _FeedPageState extends State<FeedDetail> {
           BottomNavigationBarItem(
             icon: IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed('/myfeed');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId)));
               },
               icon: Icon(Icons.chat),
             ),
