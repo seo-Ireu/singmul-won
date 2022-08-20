@@ -6,14 +6,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_test.dart';
-import 'image_upload.dart';
 import 'my_feed_test.dart';
 
-<<<<<<< HEAD
-Future fetchFeed(String userId, List images, String feedContent) async {
-  print("userId: ${userId}, feedContent: ${feedContent}");
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_create.php?userId='+userId+'&feedContent='+feedContent;
-=======
 Future fetchFeed(String userId, String feedContent, String feedUrl) async {
   var url =
       'http://54.177.126.159/ubuntu/flutter/feed/feed_create.php?userId=' +
@@ -22,73 +16,20 @@ Future fetchFeed(String userId, String feedContent, String feedUrl) async {
           feedContent +
           '&feedUrl=' +
           feedUrl;
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
-    if(response.body.isNotEmpty) {
-      var message = json.decode(response.body);
-
-      String id = message["feedId"].toString();
-      print("!!!!${id}");
-      sendImages(id, images);
-    }
+    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
+    print('응답했다');
+    var tmp = json.decode(utf8.decode(response.bodyBytes));
+    print(tmp);
+    return tmp;
   } else {
     //만약 응답이 ok가 아니면 에러를 던집니다.
     throw Exception('Failed to load post');
   }
 }
-Future sendImages(String feedId, List images)async{
-  var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
-  var request = http.MultipartRequest('POST', Uri.parse(uri));
 
-<<<<<<< HEAD
-  try{
-    if (images.isNotEmpty){
-      for (int i = 0; i < images.length; i++) {
-        var pic = await http.MultipartFile.fromPath(
-            "image[]", images[i].path);
-        print("pick${i}: ${images[i].path}");
-        request.files.add(pic);
-      }
-      request.fields["feedId"] = feedId;
-
-      await request.send().then((result) {
-        http.Response.fromStream(result).then((response) {
-
-          if(response.body.isNotEmpty) {
-            var message = json.decode(response.body);
-            print("!!!${message['message']}");
-          }
-        });
-
-      }).catchError((e) {
-        print(e);
-      });
-    }else{
-      print("image is not selected!");
-    }
-
-  }catch(e){
-    print(e);
-  }
-  print("image list length:${images.length.toString()}");
-
-}
-void main() => runApp(MaterialApp(
-  home: FeedCreateRegister(),
-  initialRoute: '/',
-  routes: {
-    // When we navigate to the "/" route, build the FirstScreen Widget
-    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
-    '/feed': (context) => FeedPage(),
-    '/feed_create': (context) => FeedCreate(),
-    '/feed_create_register': (context) => FeedCreateRegister(),
-    '/myfeed': (context) => MyFeedPage(),
-  },
-));
-=======
 // void main() => runApp(MaterialApp(
 //   home: FeedCreateRegister(),
 //   initialRoute: '/',
@@ -102,16 +43,10 @@ void main() => runApp(MaterialApp(
 //     '/myfeed': (context) => MyFeedPage(),
 //   },
 // ));
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
 
 class FeedCreateRegister extends StatefulWidget {
   final String userId;
-  final List images;
   final String feedContent;
-<<<<<<< HEAD
-
-  FeedCreateRegister({Key key, @required this.userId, @required this.feedContent, @required this.images}) : super(key: key);
-=======
   final String feedUrl;
   FeedCreateRegister(
       {Key key,
@@ -119,25 +54,19 @@ class FeedCreateRegister extends StatefulWidget {
       @required this.feedContent,
       @required this.feedUrl})
       : super(key: key);
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId, feedContent, images);
+  _FeedPageState createState() => _FeedPageState(userId, feedContent, feedUrl);
 }
 
 class _FeedPageState extends State<FeedCreateRegister> {
   Future feeds;
   String userId;
   String feedContent;
-  List images;
+  String feedUrl;
   static const routeName = '/inst_home';
 
-<<<<<<< HEAD
-  _FeedPageState(this. userId, this. feedContent, this. images);
-
-=======
   _FeedPageState(this.userId, this.feedContent, this.feedUrl);
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
 
   XFile image;
   //불러온 image list
@@ -146,10 +75,6 @@ class _FeedPageState extends State<FeedCreateRegister> {
   List<XFile> _selectedFiles = [];
   final ImagePicker picker = ImagePicker();
 
-<<<<<<< HEAD
-
-  Future sendImages()async{
-=======
   //we can upload image from camera or from gallery based on parameter
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
@@ -181,7 +106,6 @@ class _FeedPageState extends State<FeedCreateRegister> {
   }
 
   Future sendImages() async {
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
     var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
@@ -253,7 +177,8 @@ class _FeedPageState extends State<FeedCreateRegister> {
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed(userId, images, feedContent);
+    getImageServer();
+    feeds = fetchFeed(userId, feedContent, feedUrl);
   }
 
   @override

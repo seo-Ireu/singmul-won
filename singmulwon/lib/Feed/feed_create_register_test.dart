@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_create_last_test.dart';
 import 'feed_test.dart';
-import 'image_upload.dart';
 import 'my_feed_test.dart';
 
 // void main() => runApp(MaterialApp(
@@ -218,26 +217,6 @@ class _FeedPageState extends State<FeedCreateImage> {
                 Text('From Camera'),
               ],
             ),
-<<<<<<< HEAD
-            OutlinedButton(
-              onPressed: () {
-                  if(_images.length != 0) {
-
-                  }
-                  else{
-                    myAlert();
-                  }
-                },
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(horizontal: 150)),
-              ),
-              child: Text('게시하기'),
-            )
-          ],
-        )
-      ),
-=======
           ),
           OutlinedButton(
             onPressed: () {
@@ -264,7 +243,6 @@ class _FeedPageState extends State<FeedCreateImage> {
           )
         ],
       )),
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
     ];
     //Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage()));
     return Scaffold(

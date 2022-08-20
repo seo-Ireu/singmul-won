@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'feed_comment_create_test.dart';
 import 'feed_comment_test.dart';
 import 'feed_delete_test.dart';
-import 'image_upload.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
 import 'feed_create_register_test.dart';
@@ -262,7 +261,10 @@ class _FeedPageState extends State<FeedPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(FeedCreate.routeName);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FeedCreates(userId: 'lyhthy6')));
             },
             icon: const Icon(Icons.add),
           ),

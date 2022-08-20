@@ -11,22 +11,6 @@ import 'package:image_picker/image_picker.dart';
 
 final _textController = new TextEditingController();
 
-<<<<<<< HEAD
-void main() => runApp(MaterialApp(
-  home: FeedCreates(),
-  initialRoute: '/',
-  routes: {
-    // When we navigate to the "/" route, build the FirstScreen Widget
-    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-    '/myfeed': (context) => MyFeedPage(),
-    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
-    '/feed': (context) => FeedPage(),
-    '/feed_create': (context) => FeedCreates(),
-    '/feed_create_register': (context) => FeedCreateImage(),
-  },
-  )
-);
-=======
 // void main() => runApp(MaterialApp(
 //   home: FeedCreate(),
 //   initialRoute: '/',
@@ -41,7 +25,6 @@ void main() => runApp(MaterialApp(
 //   },
 //   )
 // );
->>>>>>> 5a9245d45166bd7a1eabc689e3c6412b756aaf80
 
 class FeedCreates extends StatefulWidget {
   static const routeName = '/feed_create_test.dart';

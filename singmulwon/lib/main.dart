@@ -44,12 +44,11 @@ class MyApp extends StatelessWidget {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
           InsertPlant.routeName: (ctx) => InsertPlant(),
-          FeedCreate.routeName: (ctx) => FeedCreate(),
+          FeedCreates.routeName: (ctx) => FeedCreates(),
           FeedPage.routeName: (ctx) => FeedPage(),
           HomePage.routeName: (ctx) => HomePage('?'),
           MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "lyhthy6"),
           FeedDetail.routeName: (ctx) => FeedDetail(),
-
           CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
           CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),
           CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen()
