@@ -11,7 +11,11 @@ import 'feed_create_register_test.dart';
 final _textController = new TextEditingController();
 
 Future fetchFeed(String userId, String feedId) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_delete.php?userId='+userId+'&feedId='+feedId;
+  var url =
+      'http://54.177.126.159/ubuntu/flutter/feed/feed_delete.php?userId=' +
+          userId +
+          '&feedId=' +
+          feedId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -26,24 +30,26 @@ Future fetchFeed(String userId, String feedId) async {
   }
 }
 
-void main() => runApp(MaterialApp(
-  home: FeedDeleteResgister(),
-  initialRoute: '/',
-  routes: {
-    // When we navigate to the "/" route, build the FirstScreen Widget
-    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-    '/myfeed': (context) => MyFeedPage(),
-    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
-    '/feed': (context) => FeedPage(),
-  },
-)
-);
+// void main() => runApp(MaterialApp(
+//   home: FeedDeleteResgister(),
+//   initialRoute: '/',
+//   routes: {
+//     // When we navigate to the "/" route, build the FirstScreen Widget
+//     // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
+//     '/myfeed': (context) => MyFeedPage(),
+//     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
+//     '/feed': (context) => FeedPage(),
+//   },
+// )
+// );
 
 class FeedDeleteResgister extends StatefulWidget {
   final String userId;
   final String feedId;
 
-  const FeedDeleteResgister({Key key, @required this.userId, @required this.feedId}) : super(key: key);
+  const FeedDeleteResgister(
+      {Key key, @required this.userId, @required this.feedId})
+      : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState(userId, feedId);
@@ -53,8 +59,7 @@ class _FeedPageState extends State<FeedDeleteResgister> {
   String userId;
   String feedId;
 
-  _FeedPageState(this. userId, this. feedId);
-
+  _FeedPageState(this.userId, this.feedId);
 
   @override
   void initState() {
@@ -64,29 +69,32 @@ class _FeedPageState extends State<FeedDeleteResgister> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('피드 삭제'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.arrow_back),
-            ),
-          ],
-        ),
-        body: Row(
-          children: <Widget>[
-            SizedBox(height: 50.0,),
-            Expanded(
-              child:
-              Text("피드 삭제 완료!"),
-            ),
-            TextButton(child: Text("돌아가기"), onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage())),)
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('피드 삭제'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
+        ],
+      ),
+      body: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 50.0,
+          ),
+          Expanded(
+            child: Text("피드 삭제 완료!"),
+          ),
+          TextButton(
+            child: Text("돌아가기"),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MyFeedPage())),
+          )
+        ],
       ),
     );
   }
