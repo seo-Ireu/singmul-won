@@ -18,6 +18,7 @@ class EditPlantState extends State<EditPlant> {
   double currentWaterValue;
   double currentLightValue;
   var flag1 = 1;
+  var flag = 0;
 
   void changeWater(BuildContext context, snapshot) {
     currentWaterValue = double.parse(snapshot.data.humi);
@@ -38,11 +39,12 @@ class EditPlantState extends State<EditPlant> {
   var humidity;
   var luminance;
 
-  Future updatePlant(BuildContext context, name, myplantId, humi, lumi) async {
+  Future updatePlant(
+      BuildContext context, name, myplantId, humi, lumi, flag) async {
     var url = "http://54.177.126.159/ubuntu/flutter/plant/edit_plant.php";
 
     await http.get(Uri.parse(
-        '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi'));
+        '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi&flag=$flag'));
     // '$url?myplantId=9&name=Plant2&sort=3&lumi=70&humi=70&image=$image'));
     // await http.post(Uri.parse(url), body: {
     //   "myplantId": myplantId,
@@ -276,6 +278,7 @@ class EditPlantState extends State<EditPlant> {
                                       double.parse(snapshot.data.luminance);
                                   lightValue =
                                       double.parse(snapshot.data.luminance);
+                                  flag = 1;
                                 });
                                 //자동세팅
                               },
@@ -302,7 +305,8 @@ class EditPlantState extends State<EditPlant> {
                                     nickname,
                                     plantId,
                                     currentWaterValue.toInt().toString(),
-                                    currentLightValue.toInt().toString());
+                                    currentLightValue.toInt().toString(),
+                                    flag.toString());
                               },
                             ),
                           )

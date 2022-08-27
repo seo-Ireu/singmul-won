@@ -29,16 +29,18 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
   List<cCommentModel> _comments = [];
   List<NetworkImage> _images = <NetworkImage>[];
-  List _imagesForParam= [];
+  List _imagesForParam = [];
   final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
 
-  Future _deleteComment(int communityCommentId) async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete_comment.php";
+  Future _deleteComment(int communityCommentId) async {
+    var url =
+        "http://54.177.126.159/ubuntu/flutter/community/c_delete_comment.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "ccId": communityCommentId.toString(),
     });
   }
+
   Future _readComment(int communityId) async {
     var url =
         "http://54.177.126.159/ubuntu/flutter/community/c_read_comment.php";
@@ -64,6 +66,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
       _comments.add(cData);
     }
   }
+
   Future _read(BuildContext context, int communityIdx) async {
     var url =
         "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
@@ -72,7 +75,8 @@ class _CommunityDetailState extends State<CommunityDetail> {
       "communityId": communityIdx.toString(),
     });
     var myJson = await jsonDecode(utf8.decode(response.bodyBytes))['community'];
-    final temp = await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
+    final temp =
+        await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
 
     List<NetworkImage> images = <NetworkImage>[];
     if (temp.length != 0) {
@@ -84,7 +88,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
       }
     } else {
       images.add(NetworkImage(
-          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/image_picker4617457671962363705.jpg'));
+          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/image_picker2444963131384956519.jpg'));
     }
 
     setState(() {
@@ -103,6 +107,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
     return cm;
   }
+
   Future _delete(int delCId) async {
     var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete.php";
 
@@ -145,13 +150,15 @@ class _CommunityDetailState extends State<CommunityDetail> {
               ),
               TextButton(
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
                 ),
                 onPressed: () {
                   _deleteComment(message.ccId);
                 },
-                child: Text('삭제',
-                 style: TextStyle(
+                child: Text(
+                  '삭제',
+                  style: TextStyle(
                     fontSize: 14.0,
                   ),
                 ),
