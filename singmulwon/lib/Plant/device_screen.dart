@@ -2,22 +2,28 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class DeviceScreen extends StatefulWidget {
-  DeviceScreen({Key key, @required this.device}) : super(key: key);
+  DeviceScreen({Key key, @required this.device, @required this.snaps})
+      : super(key: key);
   // 장치 정보 전달 받기
   final BluetoothDevice device;
+  final snaps;
 
   @override
-  _DeviceScreenState createState() => _DeviceScreenState();
+  DeviceScreenState createState() => DeviceScreenState();
 }
 
-class _DeviceScreenState extends State<DeviceScreen> {
+class DeviceScreenState extends State<DeviceScreen> {
   // flutterBlue
   FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
+
+  final _wifiSsidController = TextEditingController();
+  final _wifiPwController = TextEditingController();
 
   // 연결 상태 표시 문자열
   String stateText = 'Connecting';
@@ -34,10 +40,13 @@ class _DeviceScreenState extends State<DeviceScreen> {
   // 연결된 장치의 서비스 정보를 저장하기 위한 변수
   List<BluetoothService> bluetoothService = [];
   //
+
   Map<String, List<int>> notifyDatas = {};
+
   @override
   initState() {
     super.initState();
+    print(widget.snaps);
     // 상태 연결 리스너 등록
     _stateListener = widget.device.state.listen((event) {
       debugPrint('event :  $event');
@@ -212,7 +221,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
           ),
           /* 연결된 BLE의 서비스 정보 출력 */
           Expanded(
-            child: ListView.separated(
+            child:
+                // listItem(bluetoothService[3])
+                ListView.separated(
               itemCount: bluetoothService.length,
               itemBuilder: (context, index) {
                 return listItem(bluetoothService[index]);
@@ -227,45 +238,104 @@ class _DeviceScreenState extends State<DeviceScreen> {
     );
   }
 
+  ButtonTheme _buildReadWriteNotifyButton(
+      BluetoothCharacteristic characteristic) {
+    return ButtonTheme(
+      minWidth: 10,
+      height: 20,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: RaisedButton(
+          child: Text('WRITE', style: TextStyle(color: Colors.white)),
+          onPressed: () async {
+            await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Write"),
+                    content: Column(
+                      children: <Widget>[
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Wifi Id',
+                          ),
+                          controller: _wifiSsidController,
+                        ),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Wifi Pw',
+                          ),
+                          controller: _wifiPwController,
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text("Send"),
+                        onPressed: () {
+                          // ignore: prefer_interpolation_to_compose_strings
+                          characteristic.write(utf8.encode('{"w_id":"' +
+                              _wifiSsidController.value.text +
+                              '","w_pw":"' +
+                              _wifiPwController.value.text +
+                              '","p_id":"' +
+                              widget.snaps));
+                          Future.delayed(Duration(milliseconds: 500));
+                          // characteristic.write(utf8.encode('`"p_iid":"' +
+                          //     widget.snaps +
+                          //     '","p_id":"' +
+                          //     widget.userid));
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text("Cancel"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                });
+          },
+        ),
+      ),
+    );
+  }
+
   /* 각 캐릭터리스틱 정보 표시 위젯 */
   Widget characteristicInfo(BluetoothService r) {
     String name = '';
     String properties = '';
-    String data = '';
+    ButtonTheme btn;
     // 캐릭터리스틱을 한개씩 꺼내서 표시
     for (BluetoothCharacteristic c in r.characteristics) {
       properties = '';
-      data = '';
+
       name += '\t\t${c.uuid}\n';
       if (c.properties.write) {
         properties += 'Write ';
+        name += '\t\t\tProperties: $properties\n';
+        btn = _buildReadWriteNotifyButton(c);
         // c.write(utf8.encode(_writeController.value.text));
       }
-      if (c.properties.read) {
-        properties += 'Read ';
-      }
-      if (c.properties.notify) {
-        properties += 'Notify ';
-        if (notifyDatas.containsKey(c.uuid.toString())) {
-          // notify 데이터가 존재한다면
-          if (notifyDatas[c.uuid.toString()].isNotEmpty) {
-            data = notifyDatas[c.uuid.toString()].toString();
-          }
-        }
-      }
-      if (c.properties.writeWithoutResponse) {
-        properties += 'WriteWR ';
-      }
-      if (c.properties.indicate) {
-        properties += 'Indicate ';
-      }
-      name += '\t\t\tProperties: $properties\n';
-      if (data.isNotEmpty) {
-        // 받은 데이터 화면에 출력!
-        name += '\t\t\t\t$data\n';
-      }
+      // if (c.properties.read) {
+      //   properties += 'Read ';
+      // }
+      // if (c.properties.notify) {
+      //   properties += 'Notify ';
+      //   if (notifyDatas.containsKey(c.uuid.toString())) {
+      //     // notify 데이터가 존재한다면
+      //   }
+      // }
+      // if (c.properties.writeWithoutResponse) {
+      //   properties += 'WriteWR ';
+      // }
+      // if (c.properties.indicate) {
+      //   properties += 'Indicate ';
+      // }
     }
-    return Text(name);
+    return btn;
   }
 
   /* Service UUID 위젯  */
