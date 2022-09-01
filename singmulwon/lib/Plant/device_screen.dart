@@ -272,9 +272,9 @@ class DeviceScreenState extends State<DeviceScreen> {
                     actions: <Widget>[
                       FlatButton(
                         child: Text("Send"),
-                        onPressed: () {
+                        onPressed: () async {
                           // ignore: prefer_interpolation_to_compose_strings
-                          characteristic.write(utf8.encode('{"w_id":"' +
+                          await characteristic.write(utf8.encode('{"w_id":"' +
                               _wifiSsidController.value.text +
                               '","w_pw":"' +
                               _wifiPwController.value.text +
