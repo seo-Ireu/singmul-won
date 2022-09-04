@@ -240,6 +240,7 @@ class DeviceScreenState extends State<DeviceScreen> {
 
   ButtonTheme _buildReadWriteNotifyButton(
       BluetoothCharacteristic characteristic) {
+    // BluetoothDescriptor descriptors){
     return ButtonTheme(
       minWidth: 10,
       height: 20,
@@ -274,6 +275,7 @@ class DeviceScreenState extends State<DeviceScreen> {
                         child: Text("Send"),
                         onPressed: () async {
                           // ignore: prefer_interpolation_to_compose_strings
+                          // await descriptors.write(utf8.encode('{"w_id":"' +
                           await characteristic.write(utf8.encode('{"w_id":"' +
                               _wifiSsidController.value.text +
                               '","w_pw":"' +

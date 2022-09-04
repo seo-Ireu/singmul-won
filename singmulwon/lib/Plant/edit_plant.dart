@@ -41,19 +41,11 @@ class EditPlantState extends State<EditPlant> {
 
   Future updatePlant(
       BuildContext context, name, myplantId, humi, lumi, flag) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/plant/edit_plant.php";
+    var url = "http://13.209.68.93/ubuntu/flutter/plant/edit_plant.php";
 
     await http.get(Uri.parse(
         '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi&flag=$flag'));
-    // '$url?myplantId=9&name=Plant2&sort=3&lumi=70&humi=70&image=$image'));
-    // await http.post(Uri.parse(url), body: {
-    //   "myplantId": myplantId,
-    //   "name": name,
-    //   "sort": _selectedSortIndex.toString(),
-    //   "lumi": lumi,
-    //   "humi": humi,
-    //   "image": image,
-    // });
+
     Navigator.of(context).pop();
   }
 
