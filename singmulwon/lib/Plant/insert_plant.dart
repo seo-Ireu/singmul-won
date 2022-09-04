@@ -33,7 +33,7 @@ class _InsertPlantState extends State<InsertPlant> {
 
   Future insertPlant(
       BuildContext context, userid, name, humi, lumi, flag) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/plant/insert_plant.php";
+    var url = "http://13.209.68.93/ubuntu/flutter/plant/insert_plant.php";
     var response = await http.post(Uri.parse(url), body: {
       "userid": userid,
       "sort": _selectedSortIndex.toString(),
