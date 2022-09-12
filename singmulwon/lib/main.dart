@@ -21,8 +21,11 @@ import 'Plant/manage_plant.dart';
 import 'Provider/feeds.dart';
 import 'Login/signin.dart';
 import 'home_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async{
+  await dotenv.load(fileName:"assets/.env");
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => Feeds()),
   ], child: MyApp()));

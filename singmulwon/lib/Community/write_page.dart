@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../home_page.dart';
 import 'community.dart';
 import 'community_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WritePage extends StatefulWidget {
   static const routeName = '/write_page.dart';
@@ -20,6 +21,8 @@ class WritePage extends StatefulWidget {
 }
 
 class _WritePageState extends State<WritePage> {
+  String baseUrl = dotenv.env['BASE_URL'];
+
   var _cData;
   List _cImageData=[];
   @override
@@ -65,7 +68,7 @@ class _WritePageState extends State<WritePage> {
     }
   }
   Future sendImages(String communityId)async{
-    var uri = "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+    var uri = baseUrl+"/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     try{
@@ -115,10 +118,8 @@ class _WritePageState extends State<WritePage> {
       });
     }
   }
-
   Future _create() async{
-
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_create.php";
+    var url = baseUrl+"/community/c_create.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "categoryId": _selectedCategoryIndex.toString(),
@@ -138,9 +139,8 @@ class _WritePageState extends State<WritePage> {
     Navigator.of(context).pop();
 
   }
-
   Future _update() async{
-  var url = "http://54.177.126.159/ubuntu/flutter/community/c_update.php";
+  var url = baseUrl+"/community/c_update.php";
 
   var response = await http.post(Uri.parse(url), body: {
     "communityId": _cData.communityId.toString(),
@@ -179,7 +179,7 @@ class _WritePageState extends State<WritePage> {
       itemCount: _cImageData.length,
       itemBuilder: (context, i) {
       return ListTile(
-      subtitle: Image.network('http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/'+_cImageData[i]['url']));
+      subtitle: Image.network(baseUrl+"/community/flutter_upload_image/images/"+_cImageData[i]['url']));
       })
   );
   }

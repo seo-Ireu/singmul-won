@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CommunityWriteForm extends StatefulWidget {
   @override
@@ -32,20 +33,20 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       }
     });
   }
-
+  String baseUrl = dotenv.env['BASE_URL'];
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
 
   final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
-  int _selectedCategoryIndex =1;
+  int _selectedCategoryIndex =0;
 
   final picker = ImagePicker();
   File _image;
   List<XFile> _selectedFiles=[];
 
   Future sendImages(String communityId)async{
-    var uri = "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+    var uri = baseUrl+"/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     try{
@@ -104,7 +105,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
   }
   Future _create() async{
 
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_create.php";
+    var url = baseUrl+"/community/c_create.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "categoryId": _selectedCategoryIndex.toString(),
@@ -125,7 +126,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
 
   }
   Future _update() async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_update.php";
+    var url = baseUrl+"/community/c_update.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": _cData.communityId.toString(),
@@ -202,7 +203,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                   CupertinoIcons.camera,
                   color: Colors.grey.withOpacity(0.5),
                 )
-                    : Image.network('http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/'+_cImageData[index]['url']),),
+                    : Image.network(baseUrl+"/community/flutter_upload_image/images/"+_cImageData[index]['url']),),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/community_model.dart';
 import '../screens/community_detail_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CategorySelector extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class CategorySelector extends StatefulWidget {
 }
 
 class _CategorySelectorState extends State<CategorySelector> {
+  String baseUrl = dotenv.env['BASE_URL'];
+
   int selectedIndex = 0;
   final List<String> categories = ['꿀팁', '질문', '나눔'];
 
@@ -139,14 +142,20 @@ class _CategorySelectorState extends State<CategorySelector> {
                               ),
                               SizedBox(width: 25.0),
                               Column(
+
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    snapshot.data[index].title,
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold,
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.7,
+                                    child: Text(
+                                      snapshot.data[index].title,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   SizedBox(height: 5.0),
@@ -194,7 +203,7 @@ class _CategorySelectorState extends State<CategorySelector> {
   }
 
   Future _read(int categoryIndex) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read.php?idx="+categoryIndex.toString();
+    var url = baseUrl+"/community/c_read.php?idx="+categoryIndex.toString();
 
     var response = await http.get(Uri.parse(url));
     String jsonData = response.body;

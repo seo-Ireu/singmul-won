@@ -6,10 +6,11 @@ import 'package:http/http.dart' as http;
 
 import 'c_comment_model.dart';
 import 'community_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class CommunityDetail extends StatefulWidget {
   static const routeName = '/community_detail.dart';
-
 
   @override
   State<CommunityDetail> createState() => _CommunityDetailState();
@@ -17,6 +18,7 @@ class CommunityDetail extends StatefulWidget {
 }
 
 class _CommunityDetailState extends State<CommunityDetail> {
+  String baseUrl = dotenv.env['BASE_URL'];
   TextEditingController _comment = TextEditingController();
 
   List<cCommentModel> _comments = [];
@@ -26,7 +28,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
   List _images=[];
 
   Future _read(BuildContext context, int communityIdx) async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
+    var url = baseUrl+"/community/c_read_detail.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityIdx.toString(),

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../models/c_comment_model.dart';
 import '../models/community_model.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CommunityDetail extends StatefulWidget {
   @override
@@ -31,9 +32,10 @@ class _CommunityDetailState extends State<CommunityDetail> {
   List<NetworkImage> _images = <NetworkImage>[];
   List _imagesForParam= [];
   final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
+  String baseUrl = dotenv.env['BASE_URL'];
 
   Future _deleteComment(int communityCommentId) async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete_comment.php";
+    var url = baseUrl+"/community/c_delete_comment.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "ccId": communityCommentId.toString(),
@@ -41,7 +43,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
   }
   Future _readComment(int communityId) async {
     var url =
-        "http://54.177.126.159/ubuntu/flutter/community/c_read_comment.php";
+        baseUrl+"/community/c_read_comment.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityId.toString(),
@@ -66,7 +68,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
   }
   Future _read(BuildContext context, int communityIdx) async {
     var url =
-        "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
+        baseUrl+"/community/c_read_detail.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityIdx.toString(),
@@ -79,12 +81,12 @@ class _CommunityDetailState extends State<CommunityDetail> {
       _imagesForParam = temp;
       for (var i = 0; i < temp.length; i++) {
         images.add(NetworkImage(
-            'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/' +
+            baseUrl+"/community/flutter_upload_image/images/"+
                 temp[i]['url']));
       }
     } else {
       images.add(NetworkImage(
-          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/image_picker4617457671962363705.jpg'));
+          baseUrl+"/community/flutter_upload_image/images/image_picker4617457671962363705.jpg"));
     }
 
     setState(() {
@@ -104,7 +106,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
     return cm;
   }
   Future _delete(int delCId) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete.php";
+    var url = baseUrl+"/community/c_delete.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": delCId.toString(),

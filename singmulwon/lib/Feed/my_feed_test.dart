@@ -153,7 +153,7 @@ class _FeedPageState extends State<MyFeedPage> {
                         'http://54.177.126.159/ubuntu/flutter/feed/image/' +
                             snapshot.data["feed"][i - 2]["feedImage"],
                         width: size.width * 0.293,
-                        height: size.height * 0.15,
+                        height: size.height * 0.13,
                         fit: BoxFit.fill),
                   ),
               ],

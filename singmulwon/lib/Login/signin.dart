@@ -8,13 +8,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import './signup.dart';
 import '../home_page.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class SignIn extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SignIn();
 }
 
 class _SignIn extends State<SignIn> {
+  String baseUrl = dotenv.env['BASE_URL'];
+
   TextEditingController userid = TextEditingController();
   TextEditingController pw = TextEditingController();
 
@@ -33,7 +35,7 @@ class _SignIn extends State<SignIn> {
           gravity: ToastGravity.CENTER,
           fontSize: 16);
     } else {
-      var url = "http://54.177.126.159/ubuntu/flutter/account/signin.php";
+      var url = baseUrl+"/account/signin.php";
       var response = await http.post(Uri.parse(url), body: {
         "userid": userid.text,
         "pw": pw.text,
