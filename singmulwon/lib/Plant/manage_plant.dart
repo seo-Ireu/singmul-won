@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names, unnecessary_string_interpolations, avoid_print, deprecated_member_use
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names, unnecessary_string_interpolations, avoid_print, deprecated_member_use, unnecessary_new, prefer_collection_literals, unused_field
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
@@ -21,6 +21,7 @@ class _ManagePlantState extends State<ManagePlant> {
   final _wifiPwController = TextEditingController();
   FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
   List<ScanResult> scanResultList = [];
+  List<BluetoothService> _services;
   bool _isScanning = false;
 
   @override
@@ -122,26 +123,32 @@ class _ManagePlantState extends State<ManagePlant> {
     print('${r.device.name}');
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DeviceScreen(device: r.device)),
+      MaterialPageRoute(
+          builder: (context) =>
+              DeviceScreen(device: r.device, snaps: snapshot)),
     );
-    /*
+/*
     connect(r.device);
+    for (BluetoothService service in _services) {}
+    // for (BluetoothCharacteristic characteristic in service.characteristics)
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Write"),
+            title: Text("Input Info"),
             content: Column(
               children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _wifiSsidController,
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Wifi Id',
                   ),
+                  controller: _wifiSsidController,
                 ),
-                Expanded(
-                  child: TextField(
-                    controller: _wifiPwController,
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Wifi Pw',
                   ),
+                  controller: _wifiPwController,
                 ),
               ],
             ),
@@ -164,6 +171,7 @@ class _ManagePlantState extends State<ManagePlant> {
           );
         });
         */
+
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(builder: (context) => DeviceScreen(device: r.device)),
@@ -464,7 +472,10 @@ class _ManagePlantState extends State<ManagePlant> {
                                               color: Colors.white),
                                           child: IconButton(
                                             onPressed: () {
-                                              showPopup(context, snapshot);
+                                              showPopup(
+                                                context,
+                                                snapshot.data[index].myPlantId,
+                                              );
                                             },
                                             icon: Icon(Icons.bluetooth),
                                           ),

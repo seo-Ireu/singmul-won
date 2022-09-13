@@ -14,16 +14,17 @@ class CommunityWriteForm extends StatefulWidget {
 
 class _CommunityWriteFormState extends State<CommunityWriteForm> {
   var _cData;
-  List _cImageData= [];
-  bool isPicked=false;
+  List _cImageData = [];
+  bool isPicked = false;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final arguments = (ModalRoute.of(context).settings.arguments ?? <String, dynamic>{}) as Map;
+      final arguments = (ModalRoute.of(context).settings.arguments ??
+          <String, dynamic>{}) as Map;
       _cData = arguments['data'];
 
-      if (_cData!=null){
+      if (_cData != null) {
         print(_cData);
         _titleController.text = _cData.title;
         _contentController.text = _cData.content;
@@ -39,18 +40,19 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
 
   final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
-  int _selectedCategoryIndex =0;
+  int _selectedCategoryIndex = 1;
+
 
   final picker = ImagePicker();
   File _image;
-  List<XFile> _selectedFiles=[];
+  List<XFile> _selectedFiles = [];
 
   Future sendImages(String communityId)async{
     var uri = baseUrl+"/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
-    try{
-      if (_selectedFiles.isNotEmpty){
+    try {
+      if (_selectedFiles.isNotEmpty) {
         for (int i = 0; i < _selectedFiles.length; i++) {
           var pic = await http.MultipartFile.fromPath(
               "image[]", _selectedFiles[i].path);
@@ -61,8 +63,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
 
         await request.send().then((result) {
           http.Response.fromStream(result).then((response) {
-
-            if(response.body.isNotEmpty) {
+            if (response.body.isNotEmpty) {
               var message = json.decode(response.body);
 
               // show snackbar if input data successfully
@@ -70,24 +71,22 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
           });
-
         }).catchError((e) {
           print(e);
         });
-      }else{
+      } else {
         print("image is not selected!");
       }
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
     print("image list length:${_selectedFiles.length.toString()}");
-
   }
+
   Future pickImages() async {
     final List<XFile> selectedImages = await picker.pickMultiImage();
 
-    if(_cImageData.isNotEmpty){
+    if (_cImageData.isNotEmpty) {
       setState(() {
         _cImageData.clear();
       });
@@ -103,10 +102,10 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       });
     }
   }
-  Future _create() async{
 
+
+  Future _create() async {
     var url = baseUrl+"/community/c_create.php";
-
     var response = await http.post(Uri.parse(url), body: {
       "categoryId": _selectedCategoryIndex.toString(),
       "userId": "admin",
@@ -114,7 +113,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       "content": _contentController.text
     });
 
-    if(response.body.isNotEmpty) {
+    if (response.body.isNotEmpty) {
       var message = json.decode(response.body);
 
       String id = message["communityId"].toString();
@@ -123,10 +122,10 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
     }
 
     Navigator.pop(context);
-
   }
   Future _update() async{
     var url = baseUrl+"/community/c_update.php";
+
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": _cData.communityId.toString(),
@@ -137,14 +136,14 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
     });
     sendImages(_cData.communityId.toString());
     Navigator.pop(context);
-
   }
+
   Widget showImages() {
     return Row(
       children: <Widget>[
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.width * 0.6,
+          width: MediaQuery.of(context).size.width * 0.82,
+          height: MediaQuery.of(context).size.width * 0.8,
           child: InkWell(
             onTap: () {
               pickImages();
@@ -175,18 +174,19 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       ],
     );
   }
-  Widget showImagesByNetwork(){
+
+  Widget showImagesByNetwork() {
     return Row(
       children: <Widget>[
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.width * 0.6,
+          height: MediaQuery.of(context).size.width * 0.8,
           child: InkWell(
             onTap: () {
               pickImages();
             },
             child: GridView.builder(
-              itemCount: _cImageData.isEmpty ? 1 : _cImageData.length+1,
+              itemCount: _cImageData.isEmpty ? 1 : _cImageData.length + 1,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
                 childAspectRatio: 1 / 1, //item 의 가로 1, 세로 2 의 비율
@@ -200,16 +200,17 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                 ),
                 child: _cImageData.isEmpty || index == _cImageData.length
                     ? Icon(
-                  CupertinoIcons.camera,
-                  color: Colors.grey.withOpacity(0.5),
-                )
-                    : Image.network(baseUrl+"/community/flutter_upload_image/images/"+_cImageData[index]['url']),),
+                        CupertinoIcons.camera,
+                        color: Colors.grey.withOpacity(0.5),
+                      )
+                    : Image.network(
+                        'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/' +
+                            _cImageData[index]['url']),),
               ),
             ),
           ),
       ],
     );
-
   }
 
   @override
@@ -217,10 +218,9 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
     return Column(
       children: <Widget>[
         Container(
-          height: MediaQuery.of(context).size.height*0.17,
+          height: MediaQuery.of(context).size.height * 0.17,
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(vertical: 50.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -230,20 +230,16 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
                     )),
-                const SizedBox(width: 65.0),
+                const SizedBox(width: 48.0),
                 IconButton(
                   onPressed: () {
-                    if(_cData != null){
+                    if (_cData != null) {
                       _update();
-                    }else{
+                    } else {
                       _create();
                     }
                   },
-                  icon: Icon(
-                    Icons.add,
-                    size: 30,
-                    color:Colors.white
-                  ),
+                  icon: Icon(Icons.add, size: 30, color: Colors.white),
                 ),
               ],
             ),
@@ -251,6 +247,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.9,
           decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -316,7 +313,9 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _cImageData.isEmpty? showImages():showImagesByNetwork(),
+                      _cImageData.isEmpty
+                          ? showImages()
+                          : showImagesByNetwork(),
                     ],
                   ),
                 ],

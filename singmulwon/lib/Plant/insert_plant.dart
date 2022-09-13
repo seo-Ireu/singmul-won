@@ -14,6 +14,7 @@ class InsertPlant extends StatefulWidget {
 
 double _currentWaterValue = 0;
 double _currentLightValue = 0;
+int flag = 0;
 
 class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
@@ -30,14 +31,16 @@ class _InsertPlantState extends State<InsertPlant> {
     init(); //notification.dart
   }
 
-  Future insertPlant(BuildContext context, userid, name, humi, lumi) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/plant/insert_plant.php";
+  Future insertPlant(
+      BuildContext context, userid, name, humi, lumi, flag) async {
+    var url = "http://13.209.68.93/ubuntu/flutter/plant/insert_plant.php";
     var response = await http.post(Uri.parse(url), body: {
       "userid": userid,
       "sort": _selectedSortIndex.toString(),
       "name": name,
       "humi": humi,
       "lumi": lumi,
+      "flag": flag,
     });
     showGroupedNotifications();
   }
@@ -245,6 +248,7 @@ class _InsertPlantState extends State<InsertPlant> {
                                       double.parse(snapshot.data.luminance);
                                   lightValue =
                                       double.parse(snapshot.data.luminance);
+                                  flag = 1;
                                 });
                               },
                             ),
@@ -271,7 +275,8 @@ class _InsertPlantState extends State<InsertPlant> {
                                     // _selectedSortIndex.toString(),
                                     plantidController.text,
                                     waterValue.toString(),
-                                    lightValue.toString());
+                                    lightValue.toString(),
+                                    flag.toString());
 
                                 Navigator.of(context).pop();
                               },

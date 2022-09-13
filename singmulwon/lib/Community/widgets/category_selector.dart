@@ -71,8 +71,8 @@ class _CategorySelectorState extends State<CategorySelector> {
             },
           ),
         ),
-        Expanded(child:
-        BodyContent(context, selectedIndex),
+        Expanded(
+          child: BodyContent(context, selectedIndex),
         ),
       ],
     );
@@ -117,9 +117,8 @@ class _CategorySelectorState extends State<CategorySelector> {
                   return GestureDetector(
                     onTap: () => Navigator.of(context).pushNamed(
                       CommunityDetailScreen.routeName,
-                        arguments: (snapshot.data[index].communityId),)
-                    ,
-
+                      arguments: (snapshot.data[index].communityId),
+                    ),
                     child: Container(
                       margin:
                           EdgeInsets.only(top: 5.0, bottom: 5.0, right: 20.0),
@@ -138,7 +137,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                           Row(
                             children: <Widget>[
                               Container(
-                                child: Text("${index+1}"),
+                                child: Text("${index + 1}"),
                               ),
                               SizedBox(width: 25.0),
                               Column(
@@ -148,11 +147,13 @@ class _CategorySelectorState extends State<CategorySelector> {
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         0.7,
+
                                     child: Text(
                                       snapshot.data[index].title,
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 20.0,
+
                                         fontWeight: FontWeight.bold,
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -204,6 +205,7 @@ class _CategorySelectorState extends State<CategorySelector> {
 
   Future _read(int categoryIndex) async {
     var url = baseUrl+"/community/c_read.php?idx="+categoryIndex.toString();
+
 
     var response = await http.get(Uri.parse(url));
     String jsonData = response.body;

@@ -26,16 +26,16 @@ final _textController = new TextEditingController();
 //   )
 // );
 
-class FeedCreate extends StatefulWidget {
+class FeedCreates extends StatefulWidget {
   static const routeName = '/feed_create_test.dart';
   final String userId;
-  const FeedCreate({Key key, @required this.userId}) : super(key: key);
+  const FeedCreates({Key key, @required this.userId}) : super(key: key);
 
   @override
   _FeedPageState createState() => _FeedPageState(userId);
 }
 
-class _FeedPageState extends State<FeedCreate> {
+class _FeedPageState extends State<FeedCreates> {
   String userId;
 
   _FeedPageState(this.userId);

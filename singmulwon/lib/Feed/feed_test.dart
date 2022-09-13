@@ -261,7 +261,10 @@ class _FeedPageState extends State<FeedPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(FeedCreate.routeName);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FeedCreates(userId: 'lyhthy6')));
             },
             icon: const Icon(Icons.add),
           ),

@@ -30,7 +30,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
   List<cCommentModel> _comments = [];
   List<NetworkImage> _images = <NetworkImage>[];
-  List _imagesForParam= [];
+  List _imagesForParam = [];
   final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
   String baseUrl = dotenv.env['BASE_URL'];
 
@@ -41,6 +41,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
       "ccId": communityCommentId.toString(),
     });
   }
+
   Future _readComment(int communityId) async {
     var url =
         baseUrl+"/community/c_read_comment.php";
@@ -66,6 +67,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
       _comments.add(cData);
     }
   }
+
   Future _read(BuildContext context, int communityIdx) async {
     var url =
         baseUrl+"/community/c_read_detail.php";
@@ -74,7 +76,8 @@ class _CommunityDetailState extends State<CommunityDetail> {
       "communityId": communityIdx.toString(),
     });
     var myJson = await jsonDecode(utf8.decode(response.bodyBytes))['community'];
-    final temp = await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
+    final temp =
+        await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
 
     List<NetworkImage> images = <NetworkImage>[];
     if (temp.length != 0) {
@@ -105,6 +108,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
     return cm;
   }
+
   Future _delete(int delCId) async {
     var url = baseUrl+"/community/c_delete.php";
 
@@ -147,13 +151,15 @@ class _CommunityDetailState extends State<CommunityDetail> {
               ),
               TextButton(
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
                 ),
                 onPressed: () {
                   _deleteComment(message.ccId);
                 },
-                child: Text('삭제',
-                 style: TextStyle(
+                child: Text(
+                  '삭제',
+                  style: TextStyle(
                     fontSize: 14.0,
                   ),
                 ),
