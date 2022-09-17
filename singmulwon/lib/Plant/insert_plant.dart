@@ -21,8 +21,6 @@ class _InsertPlantState extends State<InsertPlant> {
   final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
   String _selectedValue = '수선화';
   int _selectedSortIndex = 1;
-  var humidity;
-  var luminance;
 
   @override
   void initState() {

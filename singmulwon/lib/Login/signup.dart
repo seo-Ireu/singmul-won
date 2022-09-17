@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:developer';
 
 import 'dart:async';
 import 'dart:convert';
@@ -53,7 +54,10 @@ class _SignUp extends State<SignUp> {
         "userid": userid,
       });
       var vld = await json.decode(json.encode(response.body));
-      if (vld == '"catch"\n') {
+      log('****');
+      log(vld);
+      log('****');
+      if (vld == '"catch"') {
         Fluttertoast.showToast(
             msg: "아이디가 중복되었습니다.",
             toastLength: Toast.LENGTH_SHORT,

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors, use_key_in_widget_constructors
 import 'dart:async';
+import 'dart:developer';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ class _SignIn extends State<SignIn> {
         "pw": pw.text,
       });
       var vld = await json.decode(json.encode(response.body));
+      log('*****');
+      log(vld);
+      log('*****');
       if (vld == '"Success"') {
         Navigator.of(context)
             .pushNamed(HomePage.routeName, arguments: {'userid': userid.text});
