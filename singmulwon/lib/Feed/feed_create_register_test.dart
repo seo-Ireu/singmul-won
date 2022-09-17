@@ -52,7 +52,7 @@ class _FeedPageState extends State<FeedCreateImage> {
   //we can upload image from camera or from gallery based on parameter
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
-    var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
+    var uri = "http://13.209.68.93/ubuntu/flutter/feed/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     if (img != null) {
@@ -79,7 +79,7 @@ class _FeedPageState extends State<FeedCreateImage> {
   }
 
   Future sendImages() async {
-    var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
+    var uri = "http://13.209.68.93/ubuntu/flutter/feed/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     try {
@@ -134,7 +134,7 @@ class _FeedPageState extends State<FeedCreateImage> {
   Future getImageServer() async {
     try {
       final response = await http
-          .get(Uri.parse('http://54.177.126.159/ubuntu/flutter/feed/list.php'));
+          .get(Uri.parse('http://13.209.68.93/ubuntu/flutter/feed/list.php'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         //print(data);
@@ -229,7 +229,7 @@ class _FeedPageState extends State<FeedCreateImage> {
                               userId: userId,
                               feedContent: feedContent,
                               feedUrl:
-                                  'http://54.177.126.159/ubuntu/flutter/feed/image/' +
+                                  'http://13.209.68.93/ubuntu/flutter/feed/image/' +
                                       _images[i]['url'])));
               } else {
                 myAlert();

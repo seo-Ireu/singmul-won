@@ -5,15 +5,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_create_register_test.dart';
+import 'feed_delete_follow_test.dart';
+import 'feed_do_follow_test.dart';
 import 'feed_follower_test.dart';
 import 'feed_following_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
 import 'feed_create_test.dart';
 
-Future fetchFeed(String userId) async {
+Future fetchFeed(String userId, String currentUserId) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/myfeed.php?userId=$userId';
+      'http://13.209.68.93/ubuntu/flutter/feed/myfeed.php?userId=$userId&currentId=$currentUserId';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -40,42 +42,45 @@ Future fetchFeed(String userId) async {
 class MyFeedPage extends StatefulWidget {
   static const routeName = '/my_feed_test.dart';
   final String userId;
+  final String currentUserId;
 
-  MyFeedPage({Key key, @required this.userId}) : super(key: key);
+  MyFeedPage({Key key, @required this.userId, @required this.currentUserId}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId);
+  _FeedPageState createState() => _FeedPageState(userId, currentUserId);
 }
 
 class _FeedPageState extends State<MyFeedPage> {
   Future feeds;
   String userId;
+  String currentUserId;
 
-  _FeedPageState(this.userId);
+  _FeedPageState(this.userId, this.currentUserId);
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed(userId);
+    feeds = fetchFeed(userId, currentUserId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: FutureBuilder(
-        //통신데이터 가져오기
-        future: feeds,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return buildColumn(snapshot);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}에러!!");
-          }
-          return const CircularProgressIndicator();
-        },
-      ),
-    ));
+          child: FutureBuilder(
+            //통신데이터 가져오기
+            future: feeds,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return buildColumn(snapshot);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}에러!!");
+              }
+              return const CircularProgressIndicator();
+            },
+          ),
+        )
+    );
   }
 
   Widget buildColumn(snapshot) {
@@ -83,6 +88,7 @@ class _FeedPageState extends State<MyFeedPage> {
     List<Widget> feedList = [];
     List<Widget> imgList = [];
     String userid = userId;
+    String currentUserid = currentUserId;
     int cnt = snapshot.data["count"];
     String feedCount =
         '${snapshot.data["count"]}'; //snapshot.data["count"] as String;
@@ -108,7 +114,7 @@ class _FeedPageState extends State<MyFeedPage> {
                                 userId: userId)));
                   },
                   child: Image.network(
-                      'http://54.177.126.159/ubuntu/flutter/feed/image/' +
+                      'http://13.209.68.93/ubuntu/flutter/feed/image/' +
                           snapshot.data["feed"][i]["feedImage"],
                       width: size.width * 0.293,
                       height: size.height * 0.13,
@@ -129,7 +135,7 @@ class _FeedPageState extends State<MyFeedPage> {
                                   userId: userId)));
                     },
                     child: Image.network(
-                        'http://54.177.126.159/ubuntu/flutter/feed/image/' +
+                        'http://13.209.68.93/ubuntu/flutter/feed/image/' +
                             snapshot.data["feed"][i - 1]["feedImage"],
                         width: size.width * 0.293,
                         height: size.height * 0.13,
@@ -150,7 +156,7 @@ class _FeedPageState extends State<MyFeedPage> {
                                   userId: userId)));
                     },
                     child: Image.network(
-                        'http://54.177.126.159/ubuntu/flutter/feed/image/' +
+                        'http://13.209.68.93/ubuntu/flutter/feed/image/' +
                             snapshot.data["feed"][i - 2]["feedImage"],
                         width: size.width * 0.293,
                         height: size.height * 0.15,
@@ -179,7 +185,7 @@ class _FeedPageState extends State<MyFeedPage> {
               CircleAvatar(
                 radius: 40.0,
                 backgroundImage: NetworkImage(
-                    'http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["image"]}'),
+                    'http://13.209.68.93/ubuntu/flutter/account/image/${snapshot.data["image"]}'),
               ),
               Column(children: <Widget>[
                 Text(feedCount,
@@ -262,16 +268,39 @@ class _FeedPageState extends State<MyFeedPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              //OutlinedButton(
-              //onPressed: () {
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEdit(userId: userId)));
-              //},
-              //style: ButtonStyle(
-              //    padding: MaterialStateProperty.all(
-              //        const EdgeInsets.symmetric(horizontal: 150)),
-              //),
-              //child: Text('프로필 편집'),
-              // )
+              if(currentUserid == userid)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEdit(userId: userId)));
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(horizontal: 150)),
+                  ),
+                  child: Text('프로필 편집'),
+                )
+              else if(snapshot.data["follow_check"] == 0)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DoingFollow(userId: userId, currentUserId: currentUserId)));
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(horizontal: 150)),
+                  ),
+                  child: Text("팔로잉"),
+                )
+              else if(snapshot.data["follow_check"] == 1)
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteFollow(userId: userId, currentUserId: currentUserId)));
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(horizontal: 150)),
+                    ),
+                    child: Text("팔로잉 취소"),
+                  )
             ],
           ), // 프로필 편집 or 팔로잉 or 팔로잉 취소
           SizedBox(

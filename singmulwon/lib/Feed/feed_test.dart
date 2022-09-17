@@ -14,8 +14,8 @@ import 'feed_create_test.dart';
 
 final _textController = new TextEditingController();
 
-Future fetchFeed() async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed.php?userId=lyhthy6';
+Future fetchFeed(String userId) async {
+  var url = 'http://13.209.68.93/ubuntu/flutter/feed/feed.php?userId='+userId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -46,20 +46,23 @@ Future fetchFeed() async {
 
 class FeedPage extends StatefulWidget {
   static const routeName = '/feed_test.dart';
-  const FeedPage({Key key}) : super(key: key);
+  final String userid;
+  const FeedPage({Key key, this.userid}) : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState();
+  _FeedPageState createState() => _FeedPageState(userid);
 }
 
 class _FeedPageState extends State<FeedPage> {
   Future feeds;
+  String userId;
+  _FeedPageState(this.userId);
   static const routeName = '/inst_home';
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed();
+    feeds = fetchFeed(userId);
   }
 
   @override
@@ -112,7 +115,7 @@ class _FeedPageState extends State<FeedPage> {
                         CircleAvatar(
                           radius: 20.0,
                           backgroundImage: NetworkImage(
-                              'http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["feed"][i]["image"]}'),
+                              'http://13.209.68.93/ubuntu/flutter/account/image/${snapshot.data["feed"][i]["image"]}'),
                         ),
                         TextButton(
                           child: Text('${snapshot.data["feed"][i]["userId"]}',
@@ -159,7 +162,7 @@ class _FeedPageState extends State<FeedPage> {
                   height: 5.0,
                 ),
                 Image.network(
-                    'http://54.177.126.159/ubuntu/flutter/feed/image/' +
+                    'http://13.209.68.93/ubuntu/flutter/feed/image/' +
                         snapshot.data["feed"][i]["feedImage"],
                     width: 400,
                     height: 400,
@@ -229,7 +232,7 @@ class _FeedPageState extends State<FeedPage> {
                           icon: CircleAvatar(
                             radius: 20.0,
                             backgroundImage: NetworkImage(
-                                'http://54.177.126.159/ubuntu/flutter/account/image/${snapshot.data["image_id"]}'),
+                                'http://13.209.68.93/ubuntu/flutter/account/image/${snapshot.data["image_id"]}'),
                           ),
                           labelText: '댓글 달기...',
                         ),
@@ -264,7 +267,7 @@ class _FeedPageState extends State<FeedPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => FeedCreates(userId: 'lyhthy6')));
+                      builder: (context) => FeedCreates(userId: userId)));
             },
             icon: const Icon(Icons.add),
           ),

@@ -12,7 +12,7 @@ import 'my_feed_test.dart';
 
 Future fetchFeed(String userId) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/feed_follower.php?userId=' +
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_follower.php?userId=' +
           userId;
   final response = await http.get(Uri.parse(url));
 
@@ -95,7 +95,7 @@ class _FeedPageState extends State<MyFollower> {
                 CircleAvatar(
                   radius: 30.0,
                   backgroundImage: NetworkImage(
-                      'http://54.177.126.159/ubuntu/flutter/account/image/' +
+                      'http://13.209.68.93/ubuntu/flutter/account/image/' +
                           snapshot.data["follow"][i]["image"]),
                 ),
                 SizedBox(
@@ -111,7 +111,9 @@ class _FeedPageState extends State<MyFollower> {
                             MaterialPageRoute(
                                 builder: (context) => MyFeedPage(
                                     userId:
-                                        '${snapshot.data["follow"][i]["fromUser"]}')));
+                                        '${snapshot.data["follow"][i]["fromUser"]}',
+                                    currentUserId:
+                                        userId)));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

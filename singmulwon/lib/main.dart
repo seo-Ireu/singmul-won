@@ -2,8 +2,8 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_singmulwon_app/Community/community.dart';
-import 'package:flutter_singmulwon_app/Community/community_detail.dart';
+
+import 'package:flutter_singmulwon_app/Community/screens/boast_home_screen.dart';
 import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
 import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Community/screens/community_detail_screen.dart';
 import 'Community/screens/community_home_screen.dart';
 import 'Community/screens/community_write_screen.dart';
-import 'Community/write_page.dart';
+
 import 'Feed/feed_create_test.dart';
 import 'Feed/feed_detail_test.dart';
 import 'Feed/image_upload.dart';
@@ -22,8 +22,11 @@ import 'Plant/manage_plant.dart';
 import 'Provider/feeds.dart';
 import 'Login/signin.dart';
 import 'home_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async{
+  await dotenv.load(fileName:"assets/.env");
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => Feeds()),
   ], child: MyApp()));
@@ -31,6 +34,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,12 +50,13 @@ class MyApp extends StatelessWidget {
           InsertPlant.routeName: (ctx) => InsertPlant(),
           FeedCreates.routeName: (ctx) => FeedCreates(),
           FeedPage.routeName: (ctx) => FeedPage(),
-          HomePage.routeName: (ctx) => HomePage('?'),
-          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "lyhthy6"),
+          HomePage.routeName: (ctx) => HomePage('test1'),
+          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "test1", currentUserId: "test1"),
           FeedDetail.routeName: (ctx) => FeedDetail(),
           CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
           CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),
-          CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen()
+          CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen(),
+          BoastHomeScreen.routeName: (ctx) => BoastHomeScreen()
         });
   }
 }

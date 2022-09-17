@@ -10,7 +10,7 @@ import 'my_feed_test.dart';
 
 Future fetchFeed(String userId, String feedContent, String feedUrl) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/feed_create.php?userId=' +
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_create.php?userId=' +
           userId +
           '&feedContent=' +
           feedContent +
@@ -79,7 +79,7 @@ class _FeedPageState extends State<FeedCreateRegister> {
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
     var uri =
-        "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+        "http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     if (img != null) {
@@ -106,7 +106,7 @@ class _FeedPageState extends State<FeedCreateRegister> {
   }
 
   Future sendImages() async {
-    var uri = "http://54.177.126.159/ubuntu/flutter/feed/create.php";
+    var uri = "http://13.209.68.93/ubuntu/flutter/feed/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     try {
@@ -161,7 +161,7 @@ class _FeedPageState extends State<FeedCreateRegister> {
   Future getImageServer() async {
     try {
       final response = await http
-          .get(Uri.parse('http://54.177.126.159/ubuntu/flutter/feed/list.php'));
+          .get(Uri.parse('http://13.209.68.93/ubuntu/flutter/feed/list.php'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print(data);

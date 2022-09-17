@@ -12,7 +12,7 @@ final _textController = new TextEditingController();
 
 Future fetchFeed(String userId, String feedId) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/feed_delete.php?userId=' +
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_delete.php?userId=' +
           userId +
           '&feedId=' +
           feedId;

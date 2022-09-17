@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/c_comment_model.dart';
 import '../models/community_model.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../widgets/community_detail.dart';
 
 class CommunityComment extends StatefulWidget {
@@ -16,7 +16,7 @@ class CommunityComment extends StatefulWidget {
 
 class _CommunityCommentState extends State<CommunityComment> {
   var _cIdx;
-
+  String baseUrl = dotenv.env['BASE_URL'];
   @override
   void initState(){
     super.initState();
@@ -28,7 +28,7 @@ class _CommunityCommentState extends State<CommunityComment> {
   TextEditingController _commentController = TextEditingController();
 
   Future _createComment(int communityIdx) async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_create_comment.php";
+    var url = baseUrl+"/community/c_create_comment.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityIdx.toString(),

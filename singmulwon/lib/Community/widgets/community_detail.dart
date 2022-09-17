@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import '../models/c_comment_model.dart';
 import '../models/community_model.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class CommunityDetail extends StatefulWidget {
   @override
   State<CommunityDetail> createState() => _CommunityDetailState();
@@ -15,7 +15,7 @@ class CommunityDetail extends StatefulWidget {
 
 class _CommunityDetailState extends State<CommunityDetail> {
   var _cIdx;
-
+  String baseUrl = dotenv.env['BASE_URL'];
   @override
   void initState() {
     super.initState();
@@ -29,21 +29,19 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
   List<cCommentModel> _comments = [];
   List<NetworkImage> _images = <NetworkImage>[];
-  List _imagesForParam = [];
+  List _imagesForParam= [];
   final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
 
-  Future _deleteComment(int communityCommentId) async {
-    var url =
-        "http://54.177.126.159/ubuntu/flutter/community/c_delete_comment.php";
+  Future _deleteComment(int communityCommentId) async{
+    var url = baseUrl+"/community/c_delete_comment.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "ccId": communityCommentId.toString(),
     });
   }
-
   Future _readComment(int communityId) async {
     var url =
-        "http://54.177.126.159/ubuntu/flutter/community/c_read_comment.php";
+        baseUrl+"/community/c_read_comment.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityId.toString(),
@@ -66,29 +64,27 @@ class _CommunityDetailState extends State<CommunityDetail> {
       _comments.add(cData);
     }
   }
-
   Future _read(BuildContext context, int communityIdx) async {
     var url =
-        "http://54.177.126.159/ubuntu/flutter/community/c_read_detail.php";
+        baseUrl+"/community/c_read_detail.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityIdx.toString(),
     });
     var myJson = await jsonDecode(utf8.decode(response.bodyBytes))['community'];
-    final temp =
-        await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
+    final temp = await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
 
     List<NetworkImage> images = <NetworkImage>[];
     if (temp.length != 0) {
       _imagesForParam = temp;
       for (var i = 0; i < temp.length; i++) {
         images.add(NetworkImage(
-            'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/' +
+            baseUrl+"/community/flutter_upload_image/images/" +
                 temp[i]['url']));
       }
     } else {
       images.add(NetworkImage(
-          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/image_picker2444963131384956519.jpg'));
+          baseUrl+"/community/flutter_upload_image/images/image_picker4617457671962363705.jpg"));
     }
 
     setState(() {
@@ -107,9 +103,8 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
     return cm;
   }
-
   Future _delete(int delCId) async {
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_delete.php";
+    var url = baseUrl+"/community/c_delete.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": delCId.toString(),
@@ -150,15 +145,13 @@ class _CommunityDetailState extends State<CommunityDetail> {
               ),
               TextButton(
                 style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
                 ),
                 onPressed: () {
                   _deleteComment(message.ccId);
                 },
-                child: Text(
-                  '삭제',
-                  style: TextStyle(
+                child: Text('삭제',
+                 style: TextStyle(
                     fontSize: 14.0,
                   ),
                 ),
