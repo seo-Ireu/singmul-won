@@ -33,7 +33,7 @@ class _SignIn extends State<SignIn> {
           gravity: ToastGravity.CENTER,
           fontSize: 16);
     } else {
-      var url = "http://54.177.126.159/ubuntu/flutter/account/signin.php";
+      var url = "http://13.209.68.93/ubuntu/flutter/account/signin.php";
       var response = await http.post(Uri.parse(url), body: {
         "userid": userid.text,
         "pw": pw.text,

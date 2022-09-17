@@ -47,7 +47,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
       "communityId": communityId.toString(),
     });
     String jsonData = response.body;
-    var myJson = await jsonDecode(jsonData)['cComment'];
+    var myJson = await jsonDecode(utf8.decode(response.bodyBytes))['cComment'];
 
     for (var c in myJson) {
       DateTime now = DateTime.now();
@@ -71,9 +71,8 @@ class _CommunityDetailState extends State<CommunityDetail> {
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityIdx.toString(),
     });
-    String jsonData = response.body;
-    var myJson = await jsonDecode(jsonData)['community'];
-    final temp = await jsonDecode(jsonData)['communityImage'];
+    var myJson = await jsonDecode(utf8.decode(response.bodyBytes))['community'];
+    final temp = await jsonDecode(utf8.decode(response.bodyBytes))['communityImage'];
 
     List<NetworkImage> images = <NetworkImage>[];
     if (temp.length != 0) {

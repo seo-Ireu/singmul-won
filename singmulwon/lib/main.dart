@@ -31,6 +31,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,14 +45,14 @@ class MyApp extends StatelessWidget {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
           InsertPlant.routeName: (ctx) => InsertPlant(),
-          FeedCreate.routeName: (ctx) => FeedCreate(),
+          FeedCreates.routeName: (ctx) => FeedCreates(),
           FeedPage.routeName: (ctx) => FeedPage(),
-          HomePage.routeName: (ctx) => HomePage('?'),
-          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "lyhthy6"),
+          HomePage.routeName: (ctx) => HomePage('test1'),
+          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "test1", currentUserId: "test1"),
           FeedDetail.routeName: (ctx) => FeedDetail(),
-          Community.routeName: (ctx) => Community(),
-          CommunityDetail.routeName: (ctx) => CommunityDetail(),
-          WritePage.routeName: (ctx) => WritePage()
+          CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
+          CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),
+          CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen()
         });
   }
 }

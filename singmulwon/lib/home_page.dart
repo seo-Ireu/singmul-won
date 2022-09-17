@@ -11,20 +11,25 @@ import 'Community/community.dart';
 import 'Account/account.dart';
 
 class HomePage extends StatefulWidget {
-  String userid = '';
+  final String userid;
   HomePage(this.userid);
 
   static const routeName = '/homepage';
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState(userid);
 }
+
+String tests_id = "";
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 2;
+  _HomePageState(tests_id);
+
   final List<Widget> widgetOptions = <Widget>[
-    MyFeedPage(userId: "lyhthy6"),
+    // MyFeedPage(userId: tests_id),
+    MyFeedPage(userId: tests_id, currentUserId: tests_id),
     ManagePlant(),
-    FeedPage(),
+    FeedPage(userid: tests_id),
     CommunityHomeScreen(),
     Account(),
   ];
@@ -40,6 +45,10 @@ class _HomePageState extends State<HomePage> {
     final arguments = (ModalRoute.of(context).settings.arguments ??
         <String, String>{}) as Map;
     log(arguments['userid']);
+    setState(() {
+      tests_id = arguments['userid'];
+    });
+
     return Scaffold(
       body: SafeArea(
         child: widgetOptions.elementAt(selectedIndex),

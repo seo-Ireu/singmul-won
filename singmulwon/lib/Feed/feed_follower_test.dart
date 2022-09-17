@@ -11,7 +11,9 @@ import 'image_upload.dart';
 import 'my_feed_test.dart';
 
 Future fetchFeed(String userId) async {
-  var url = 'http://54.177.126.159/ubuntu/flutter/feed/feed_follower.php?userId='+userId;
+  var url =
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_follower.php?userId=' +
+          userId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -23,18 +25,18 @@ Future fetchFeed(String userId) async {
   }
 }
 
-void main() => runApp(MaterialApp(
-  home: MyFollower(),
-  initialRoute: '/',
-  routes: {
-    // When we navigate to the "/" route, build the FirstScreen Widget
-    // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-    '/myfeed': (context) => MyFeedPage(),
-    // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
-    '/feed': (context) => FeedPage(),
-    '/feed_create': (context) => FeedCreate(),
-  },
-));
+// void main() => runApp(MaterialApp(
+//   home: MyFollower(),
+//   initialRoute: '/',
+//   routes: {
+//     // When we navigate to the "/" route, build the FirstScreen Widget
+//     // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
+//     '/myfeed': (context) => MyFeedPage(),
+//     // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
+//     '/feed': (context) => FeedPage(),
+//     '/feed_create': (context) => FeedCreate(),
+//   },
+// ));
 
 class MyFollower extends StatefulWidget {
   final String userId;
@@ -47,7 +49,7 @@ class MyFollower extends StatefulWidget {
 class _FeedPageState extends State<MyFollower> {
   String userId;
 
-  _FeedPageState(this. userId);
+  _FeedPageState(this.userId);
   Future feeds;
 
   @override
@@ -58,24 +60,21 @@ class _FeedPageState extends State<MyFollower> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            body: Center(
-              child: FutureBuilder(
-                //통신데이터 가져오기
-                future: feeds,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return buildColumn(snapshot);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}에러!!");
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            )
-        )
-    );
+    return Scaffold(
+        body: Center(
+      child: FutureBuilder(
+        //통신데이터 가져오기
+        future: feeds,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return buildColumn(snapshot);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}에러!!");
+          }
+          return const CircularProgressIndicator();
+        },
+      ),
+    ));
   }
 
   Widget buildColumn(snapshot) {
@@ -89,25 +88,41 @@ class _FeedPageState extends State<MyFollower> {
               Text('팔로워'),
             ],
           ),
-          for(int i=0; i<cnt; i++)
+          for (int i = 0; i < cnt; i++)
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 CircleAvatar(
-                  radius: 30.0, backgroundImage: NetworkImage('http://54.177.126.159/ubuntu/flutter/account/image/'+snapshot.data["follow"][i]["image"]),),
-                SizedBox(width: 10.0,),
+                  radius: 30.0,
+                  backgroundImage: NetworkImage(
+                      'http://13.209.68.93/ubuntu/flutter/account/image/' +
+                          snapshot.data["follow"][i]["image"]),
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: '${snapshot.data["follow"][i]["fromUser"]}')));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyFeedPage(
+                                    userId:
+                                        '${snapshot.data["follow"][i]["fromUser"]}',
+                                    currentUserId:
+                                        userId)));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('${snapshot.data["follow"][i]["fromUser"]}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                          Text('${snapshot.data["follow"][i]["nickname"]}', style: const TextStyle(fontSize: 17)),
+                          Text('${snapshot.data["follow"][i]["fromUser"]}',
+                              style: const TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                          Text('${snapshot.data["follow"][i]["nickname"]}',
+                              style: const TextStyle(fontSize: 17)),
                         ],
                       ),
                       style: TextButton.styleFrom(
@@ -117,12 +132,11 @@ class _FeedPageState extends State<MyFollower> {
                   ],
                 ),
               ],
-            ),// ID, Setting 아이콘
+            ), // ID, Setting 아이콘
           // 뒤에 GridView로 마이 피드 구성
         ],
       ),
     ];
-
 
     int _selectedIndex = 0;
     return Scaffold(
