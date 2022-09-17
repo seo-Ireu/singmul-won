@@ -17,8 +17,10 @@ final _textController = new TextEditingController();
 
 Future fetchFeed(String feedId, String userId) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/feed_comment.php?feedId=' +
-          feedId;
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_comment.php?feedId=' +
+          feedId
+          +'&userId='
+          +userId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -91,6 +93,7 @@ class _FeedPageState extends State<FeedComment> {
 
   Widget buildColumn(snapshot) {
     int cnt = snapshot.data["count"];
+    String userphoto = 'http://13.209.68.93/ubuntu/flutter/account/image/' + snapshot.data["photo"];
 
     List<Widget> lists = [
       Column(
@@ -100,7 +103,9 @@ class _FeedPageState extends State<FeedComment> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 20.0,
-                  backgroundImage: AssetImage("assets/human_1.jpg"),
+                  backgroundImage: NetworkImage(
+                      'http://13.209.68.93/ubuntu/flutter/account/image/' +
+                          snapshot.data["comment"][i]["photo"]),
                 ),
                 SizedBox(
                   width: 10.0,
@@ -177,10 +182,10 @@ class _FeedPageState extends State<FeedComment> {
               Expanded(
                 child: TextFormField(
                   controller: _textController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     icon: CircleAvatar(
                       radius: 20.0,
-                      backgroundImage: AssetImage("assets/human_1.jpg"),
+                      backgroundImage: NetworkImage(userphoto),
                     ),
                     labelText: '댓글 달기...',
                   ),

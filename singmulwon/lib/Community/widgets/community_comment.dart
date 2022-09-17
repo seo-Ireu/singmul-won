@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/c_comment_model.dart';
 import '../models/community_model.dart';
-import '../widgets/community_detail.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../widgets/community_detail.dart';
 
 class CommunityComment extends StatefulWidget {
   @override

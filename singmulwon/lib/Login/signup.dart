@@ -48,7 +48,7 @@ class _SignUp extends State<SignUp> {
       var phone_number = _phoneTextController.text;
       var profile_intro = _profileintroTextController.text;
       var url_bf =
-          "http://13.209.68.93/ubuntu/flutter/account/signup_validate.php";
+          "http://54.177.126.159/ubuntu/flutter/account/signup_validate.php";
       var response = await http.post(Uri.parse(url_bf), body: {
         "userid": userid,
       });
@@ -60,7 +60,7 @@ class _SignUp extends State<SignUp> {
             gravity: ToastGravity.CENTER,
             fontSize: 16);
       } else {
-        var url = "http://13.209.68.93/ubuntu/flutter/account/insert.php";
+        var url = "http://54.177.126.159/ubuntu/flutter/account/insert.php";
         await http.get(Uri.parse(
             '$url?userid=$userid&pw=$pw&nickname=$nickname&phone_number=$phone_number&profile_intro=$profile_intro'));
         Navigator.of(context)

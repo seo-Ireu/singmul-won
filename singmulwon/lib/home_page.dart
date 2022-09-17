@@ -10,23 +10,25 @@ import 'Plant/manage_plant.dart';
 import 'Account/account.dart';
 
 class HomePage extends StatefulWidget {
-  String userid = '';
+  final String userid;
   HomePage(this.userid);
 
   static const routeName = '/homepage';
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState(userid);
 }
 
 String tests_id = "";
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 2;
+  _HomePageState(tests_id);
+
   final List<Widget> widgetOptions = <Widget>[
     // MyFeedPage(userId: tests_id),
-    MyFeedPage(userId: 'lyhthy6'),
+    MyFeedPage(userId: tests_id, currentUserId: tests_id),
     ManagePlant(),
-    FeedPage(),
+    FeedPage(userid: tests_id),
     CommunityHomeScreen(),
     Account(),
   ];

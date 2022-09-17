@@ -24,7 +24,7 @@ import 'Login/signin.dart';
 import 'home_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future main() async{
+void main() async{
   await dotenv.load(fileName:"assets/.env");
 
   runApp(MultiProvider(providers: [
@@ -34,6 +34,7 @@ Future main() async{
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,8 +50,8 @@ class MyApp extends StatelessWidget {
           InsertPlant.routeName: (ctx) => InsertPlant(),
           FeedCreates.routeName: (ctx) => FeedCreates(),
           FeedPage.routeName: (ctx) => FeedPage(),
-          HomePage.routeName: (ctx) => HomePage('?'),
-          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "lyhthy6"),
+          HomePage.routeName: (ctx) => HomePage('test1'),
+          MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "test1", currentUserId: "test1"),
           FeedDetail.routeName: (ctx) => FeedDetail(),
           CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
           CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),

@@ -3,6 +3,7 @@ class UserPlant {
   final String myPlantNickname;
   final String plantName;
   final String plantImage;
+  final String image;
   final String humi;
   final String lumi;
 
@@ -12,7 +13,8 @@ class UserPlant {
       this.plantName,
       this.plantImage,
       this.humi,
-      this.lumi});
+      this.lumi,
+      this.image});
 
   static UserPlant fromJson(json) => UserPlant(
         myPlantId: json['myPlantId'],
@@ -21,6 +23,7 @@ class UserPlant {
         plantImage: json['plantImage'],
         humi: json['humi'],
         lumi: json['lumi'],
+        image: json['image'],
       );
 }
 
