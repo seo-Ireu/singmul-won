@@ -38,7 +38,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
 
-  final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
+  final List<String> _categoryValueList = ['','꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
   int _selectedCategoryIndex = 1;
 
@@ -66,9 +66,6 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
             if (response.body.isNotEmpty) {
               var message = json.decode(response.body);
 
-              // show snackbar if input data successfully
-              final snackBar = SnackBar(content: Text(message['message']));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
           });
         }).catchError((e) {
@@ -105,17 +102,22 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
 
 
   Future _create() async {
+    print("_create start");
     var url = baseUrl+"/community/c_create.php";
+
     var response = await http.post(Uri.parse(url), body: {
       "categoryId": _selectedCategoryIndex.toString(),
       "userId": "admin",
       "title": _titleController.text,
       "content": _contentController.text
     });
-
+  print(_selectedCategoryIndex.toString());
+  print(_titleController.text);
+  print(_contentController.text);
     if (response.body.isNotEmpty) {
-      var message = json.decode(response.body);
-
+      // var message = json.decode(response.body);
+      var message = await json.decode(response.body);
+      print(message);
       String id = message["communityId"].toString();
       print("!!!!${id}");
       sendImages(id);

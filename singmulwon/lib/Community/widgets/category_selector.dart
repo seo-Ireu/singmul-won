@@ -14,7 +14,7 @@ class _CategorySelectorState extends State<CategorySelector> {
   String baseUrl = dotenv.env['BASE_URL'];
 
   int selectedIndex = 0;
-  final List<String> categories = ['꿀팁', '질문', '나눔'];
+  final List<String> categories = ['','꿀팁', '질문', '나눔'];
 
   Widget category_board;
 

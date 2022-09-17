@@ -7,7 +7,6 @@ import 'dart:developer';
 
 import 'Community/screens/community_home_screen.dart';
 import 'Plant/manage_plant.dart';
-import 'Community/community.dart';
 import 'Account/account.dart';
 
 class HomePage extends StatefulWidget {
