@@ -18,7 +18,7 @@ Future fetchFeed(String feedId, String userId, String commentContent) async {
   String formattedDate =
       DateFormat('yyyy-MM-dd').format(DateTime.now()); // 임시 시간 변수
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/feed_comment_create.php?feedId=' +
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_comment_create.php?feedId=' +
           feedId +
           '&commentContent=' +
           commentContent +

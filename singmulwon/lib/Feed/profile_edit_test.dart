@@ -19,7 +19,7 @@ final _IdController = new TextEditingController();
 
 Future fetchFeed(String userId) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/profile_edit.php?userId=' +
+      'http://13.209.68.93/ubuntu/flutter/feed/profile_edit.php?userId=' +
           userId;
   final response = await http.get(Uri.parse(url));
 
@@ -101,7 +101,7 @@ class _FeedPageState extends State<ProfileEdit> {
             CircleAvatar(
               radius: 50.0,
               backgroundImage: NetworkImage(
-                  'http://54.177.126.159/ubuntu/flutter/account/image/' +
+                  'http://13.209.68.93/ubuntu/flutter/account/image/' +
                       snapshot.data["image_id"]),
             ),
             OutlinedButton(onPressed: () {}, child: Text("프로필 사진 변경")),

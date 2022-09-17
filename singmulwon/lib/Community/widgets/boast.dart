@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:http/http.dart' as http;
 import '../models/boast_plant_model.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 class Boast extends StatefulWidget {
 
   @override
@@ -13,7 +13,7 @@ class Boast extends StatefulWidget {
 }
 
 class _BoastState extends State<Boast> {
-
+  String baseUrl = dotenv.env['BASE_URL'];
   int _selectedMyPlantId = -1;
   List<BoastPlantModel> _boastPlants = [];
 
@@ -26,7 +26,7 @@ class _BoastState extends State<Boast> {
   }
 
   Future _loadRandomPlants() async {
-    var url = "http://13.209.68.93/ubuntu/flutter/community/get_random_plants.php";
+    var url = baseUrl+"/community/get_random_plants.php";
 
     var response = await http.get(Uri.parse(url));
     String jsonData = response.body;
@@ -34,14 +34,18 @@ class _BoastState extends State<Boast> {
     if (response.statusCode == 200) {
       var results = json.decode(utf8.decode(response.bodyBytes));
 
+      List<BoastPlantModel> bps = [];
       for (var i in results['random_plants']) {
         BoastPlantModel bpm = BoastPlantModel(
             myPlantId: int.parse(i['myPlantId']),
             plantName: i['plantName'],
             image: i['image'],
             likes: int.parse(i['likes']));
-        _boastPlants.add(bpm);
+        bps.add(bpm);
       }
+      setState(() {
+        _boastPlants = bps;
+      });
       print(_boastPlants.length);
     } else {
       throw Exception('Failed to load post');
@@ -50,7 +54,7 @@ class _BoastState extends State<Boast> {
   }
 
   Future _addLikes(int myPlantId) async{
-    var url = "http://13.209.68.93/ubuntu/flutter/community/add_likes.php";
+    var url = baseUrl+"/community/add_likes.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "myPlantId": myPlantId.toString(),

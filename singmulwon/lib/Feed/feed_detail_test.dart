@@ -15,7 +15,7 @@ final _textController = new TextEditingController();
 
 Future fetchFeed(String feedId, String userId) async {
   var url =
-      'http://54.177.126.159/ubuntu/flutter/feed/feed_detail.php?userId=' +
+      'http://13.209.68.93/ubuntu/flutter/feed/feed_detail.php?userId=' +
           userId +
           '&feedId=' +
           feedId;
@@ -116,7 +116,9 @@ class _FeedPageState extends State<FeedDetail> {
                       children: <Widget>[
                         CircleAvatar(
                           radius: 20.0,
-                          backgroundImage: AssetImage("assets/human_1.jpg"),
+                          backgroundImage: NetworkImage(
+                              'http://13.209.68.93/ubuntu/flutter/account/image/' +
+                                  snapshot.data["feed"][i]["photos"]),
                         ),
                         SizedBox(
                           width: 10.0,
@@ -150,7 +152,7 @@ class _FeedPageState extends State<FeedDetail> {
                   height: 5.0,
                 ),
                 Image.network(
-                    'http://54.177.126.159/ubuntu/flutter/feed/image/' +
+                    'http://13.209.68.93/ubuntu/flutter/feed/image/' +
                         snapshot.data["feed"][i]["feedImage"],
                     width: 400,
                     height: 400,

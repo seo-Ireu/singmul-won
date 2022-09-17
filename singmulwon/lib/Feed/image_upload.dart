@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   Future sendImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
     var uri =
-        "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+        "http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     if (img != null) {
@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
 
   Future sendImages() async {
     var uri =
-        "http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/create.php";
+        "http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/create.php";
     var request = http.MultipartRequest('POST', Uri.parse(uri));
 
     try {
@@ -109,7 +109,7 @@ class _HomeState extends State<Home> {
   Future getImageServer() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/list.php'));
+          'http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/list.php'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print(data);
@@ -199,7 +199,7 @@ class _HomeState extends State<Home> {
                     padding: EdgeInsets.all(10),
                     child: Image(
                       image: NetworkImage(
-                          'http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/' +
+                          'http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/images/' +
                               _images[index]['url']),
                       fit: BoxFit.cover,
                     ),
