@@ -23,15 +23,6 @@ class _SignUp extends State<SignUp> {
   final _phoneTextController = TextEditingController();
   final _profileintroTextController = TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   _useridTextController.dispose();
-  //   _passwordTextController.dispose();
-  //   _nicknameTextController.dispose();
-  //   _phoneTextController.dispose();
-  //   _profileintroTextController.dispose();
-  //   super.dispose();
-  // }
   Future create() async {
     if (_useridTextController.text == "" ||
         _passwordTextController.text == "" ||
@@ -72,11 +63,6 @@ class _SignUp extends State<SignUp> {
       }
     }
   }
-
-  // _setIsLogin() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setBool('isLogin', true);
-  // }
 
   @override
   void initState() {

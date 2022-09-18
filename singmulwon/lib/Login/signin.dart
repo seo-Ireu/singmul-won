@@ -19,13 +19,6 @@ class _SignIn extends State<SignIn> {
   TextEditingController userid = TextEditingController();
   TextEditingController pw = TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   userid.dispose();
-  //   pw.dispose();
-  //   super.dispose();
-  // }
-
   Future login(BuildContext cont) async {
     if (userid.text == "" || pw.text == "") {
       Fluttertoast.showToast(
