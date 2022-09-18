@@ -7,7 +7,7 @@ import 'dart:convert';
 import './user_plant.dart';
 
 Future myPlant(String plantId) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/plant_view.php";
+  var url = "http://13.209.68.93/ubuntu/flutter/plant/plant_view.php";
   var response = await http.post(Uri.parse(url), body: {
     "myPlantId": plantId,
   });
@@ -29,7 +29,7 @@ Future myPlant(String plantId) async {
 }
 
 Future myPlantList(String user) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/manage_plant.php";
+  var url = "http://13.209.68.93/ubuntu/flutter/plant/manage_plant.php";
   var response = await http.post(Uri.parse(url), body: {
     "userid": user,
   });
@@ -52,7 +52,7 @@ Future myPlantList(String user) async {
 }
 
 Future deletePlant(BuildContext context, plantId) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/delete_plant.php";
+  var url = "http://13.209.68.93/ubuntu/flutter/plant/delete_plant.php";
 
   var response = await http.post(Uri.parse(url), body: {
     "myPlantId": plantId,
@@ -64,7 +64,7 @@ Future deletePlant(BuildContext context, plantId) async {
 }
 
 Future properValue(String plantInfoId) async {
-  var url = "http://54.177.126.159/ubuntu/flutter/plant/auto_setting.php";
+  var url = "http://13.209.68.93/ubuntu/flutter/plant/auto_setting.php";
   var response = await http.post(Uri.parse(url), body: {
     "plantInfoId": plantInfoId,
   });
