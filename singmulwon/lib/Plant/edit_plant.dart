@@ -187,7 +187,7 @@ class EditPlantState extends State<EditPlant> {
                           Container(
                             width: 10,
                           ),
-                          FavoriteValue(20),
+                          FavoriteValue(int.parse(snapshot.data.likes)),
                         ],
                       ),
                       SizedBox(

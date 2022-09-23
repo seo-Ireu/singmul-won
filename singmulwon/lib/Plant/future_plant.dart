@@ -23,7 +23,8 @@ Future myPlant(String plantId) async {
         humi: item['humi'],
         lumi: item['lumi'],
         humidity: item['humidity'],
-        luminance: item['luminance']);
+        luminance: item['luminance'],
+        likes: item['likes']);
   }
   return sig_plants;
 }
