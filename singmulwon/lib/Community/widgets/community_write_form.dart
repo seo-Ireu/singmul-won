@@ -136,7 +136,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
     }
   }
   Future _update() async{
-    var url = "http://54.177.126.159/ubuntu/flutter/community/c_update.php";
+    var url = baseUrl+"/community/c_update.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": _cData.communityId.toString(),
@@ -213,7 +213,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                   CupertinoIcons.camera,
                   color: Colors.grey.withOpacity(0.5),
                 )
-                    : Image.network('http://54.177.126.159/ubuntu/flutter/community/flutter_upload_image/images/'+_cImageData[index]['url']),),
+                    : Image.network(baseUrl+'/community/flutter_upload_image/images/'+_cImageData[index]['url']),),
               ),
             ),
           ),
@@ -230,7 +230,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
           height: MediaQuery.of(context).size.height*0.17,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+                const EdgeInsets.symmetric(vertical: 50.0, horizontal: 0.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -240,7 +240,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
                     )),
-                const SizedBox(width: 65.0),
+                const SizedBox(width: 55.0),
                 IconButton(
                   onPressed: () {
                     if(_cData != null){
@@ -261,6 +261,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height*0.9,
           decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -272,6 +273,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
               left: 30,
             ),
             child: SingleChildScrollView(
+
               child: Column(
                 children: [
                   const SizedBox(
@@ -322,12 +324,19 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                       prefixIcon: Icon(Icons.content_paste),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _cImageData.isEmpty? showImages():showImagesByNetwork(),
-                    ],
+
+                  Container(
+                    height:MediaQuery.of(context).size.height*0.5,
+                    width: MediaQuery.of(context).size.width,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _cImageData.isEmpty? showImages():showImagesByNetwork(),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

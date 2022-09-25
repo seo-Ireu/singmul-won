@@ -80,12 +80,30 @@ class _BoastState extends State<Boast> {
     return Center(
       child: Column(
         children: <Widget>[
+          SizedBox(height:50),
           Container(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height*0.5,
             child: new Swiper(
               itemBuilder: (BuildContext context,int index){
-                return Image.asset(_boastPlants[index].image);
+                return Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset(_boastPlants[index].image,
+                          height:MediaQuery.of(context).size.height*0.4,
+                          width:MediaQuery.of(context).size.height*0.4,
+                          ),
+                          Text(
+                            _boastPlants[index].plantName,
+                            style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ));
                 // return new Image.network('http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/images/'+_boastPlants[index].image, fit: BoxFit.fill);
               },
               loop:false,
@@ -162,9 +180,12 @@ class _BoastState extends State<Boast> {
                       BoastResultScreen.routeName,
                       arguments: (_likesIds),);
                   },
-                  child: Row(children: [
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                     Text(
                       '결과보기',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.green[700],

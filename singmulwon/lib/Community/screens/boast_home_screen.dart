@@ -13,6 +13,7 @@ class _BoastHomeScreenState extends State<BoastHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
