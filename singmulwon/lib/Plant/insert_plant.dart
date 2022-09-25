@@ -182,6 +182,7 @@ class _InsertPlantState extends State<InsertPlant> {
                                       .toString(),
                               onChanged: (double value) {
                                 setState(() {
+                                  flag1 = 2;
                                   _currentWaterValue = value;
                                   waterValue = _currentWaterValue;
                                 });
@@ -208,6 +209,7 @@ class _InsertPlantState extends State<InsertPlant> {
                               label: _currentLightValue.round().toString(),
                               onChanged: (double value) {
                                 setState(() {
+                                  flag1 = 2;
                                   _currentLightValue = value;
                                   lightValue = _currentLightValue;
                                 });
