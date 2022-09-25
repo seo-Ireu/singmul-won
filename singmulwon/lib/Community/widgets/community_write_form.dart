@@ -41,9 +41,9 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
 
-  final List<String> _categoryValueList = ['','꿀팁', '질문', '나눔'];
+  final List<String> _categoryValueList = ['꿀팁', '질문', '나눔'];
   String _selectedValue = '꿀팁';
-  int _selectedCategoryIndex =1;
+  int _selectedCategoryIndex =0;
 
   final picker = ImagePicker();
   File _image;

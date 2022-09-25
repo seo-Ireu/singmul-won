@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_singmulwon_app/Community/screens/boast_home_screen.dart';
+import 'package:flutter_singmulwon_app/Community/screens/boast_result_screen.dart';
 import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
 import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +57,8 @@ class MyApp extends StatelessWidget {
           CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
           CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),
           CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen(),
-          BoastHomeScreen.routeName: (ctx) => BoastHomeScreen()
+          BoastHomeScreen.routeName: (ctx) => BoastHomeScreen(),
+          BoastResultScreen.routeName: (ctx) =>BoastResultScreen()
         });
   }
 }
