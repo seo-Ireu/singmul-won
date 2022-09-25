@@ -6,6 +6,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:http/http.dart' as http;
 import '../models/boast_plant_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../screens/boast_result_screen.dart';
 class Boast extends StatefulWidget {
 
   @override
@@ -14,8 +16,13 @@ class Boast extends StatefulWidget {
 
 class _BoastState extends State<Boast> {
   String baseUrl = dotenv.env['BASE_URL'];
-  int _selectedMyPlantId = -1;
   List<BoastPlantModel> _boastPlants = [];
+
+  int _selectedMyPlantId = -1;
+  int _selectedIndex = 0;
+
+  List<BoastPlantModel> _likesIds =[];
+
 
   @override
   void initState() {
@@ -37,14 +44,17 @@ class _BoastState extends State<Boast> {
       List<BoastPlantModel> bps = [];
       for (var i in results['random_plants']) {
         BoastPlantModel bpm = BoastPlantModel(
-            myPlantId: int.parse(i['myPlantId']),
-            plantName: i['plantName'],
-            image: i['image'],
-            likes: int.parse(i['likes']));
+            feedId: int.parse(i['feedId']),
+            userId: i['userId'],
+            urls: "http://13.209.68.93/ubuntu/flutter/feed/image/"+i['urls'],
+            myPlantId: int.parse(i['myPlantId'])
+        );
+        print("${bpm.feedId}, ${bpm.myPlantId}, ${bpm.urls}, ${bpm.userId}");
         bps.add(bpm);
       }
       setState(() {
         _boastPlants = bps;
+        _selectedMyPlantId = _boastPlants[0].myPlantId;
       });
       print(_boastPlants.length);
     } else {
@@ -71,12 +81,21 @@ class _BoastState extends State<Boast> {
     return Center(
       child: Column(
         children: <Widget>[
+          SizedBox(height:50),
           Container(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height*0.5,
             child: new Swiper(
               itemBuilder: (BuildContext context,int index){
-                return Image.asset(_boastPlants[index].image);
+                return Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Image.network(_boastPlants[index].urls,
+                              fit: BoxFit.fill
+                          ),
+                        ],
+                      ),
+                    ));
                 // return new Image.network('http://13.209.68.93/ubuntu/flutter/community/flutter_upload_image/images/'+_boastPlants[index].image, fit: BoxFit.fill);
               },
               loop:false,
@@ -88,42 +107,86 @@ class _BoastState extends State<Boast> {
               itemHeight: 300.0,
               itemWidth: 300.0,
               onIndexChanged: (int newIndex){
-                _selectedMyPlantId = _boastPlants[newIndex].myPlantId;
+                setState(() {
+                  _selectedMyPlantId = _boastPlants[newIndex].myPlantId;
+                  _selectedIndex = newIndex;
+                });
               },
 
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0.5,
-                20,
-                MediaQuery.of(context).size.width * 0.18,
-                0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.green),
-                top: BorderSide(color: Colors.green),
-                left: BorderSide(color: Colors.green),
-                right: BorderSide(color: Colors.green),
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TextButton(
-              onPressed: () {
-                print(_selectedMyPlantId);
-                _addLikes(_selectedMyPlantId);
-              },
-              child: Row(children: [
-                Icon(Icons.favorite, color: Colors.green[700]),
-                Text(
-                  ' 좋아요',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.green[700],
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.5,
+                    20,
+                    MediaQuery.of(context).size.width * 0.18,
+                    0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.green),
+                    top: BorderSide(color: Colors.green),
+                    left: BorderSide(color: Colors.green),
+                    right: BorderSide(color: Colors.green),
                   ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ]),
-            ),
+                child: TextButton(
+                  onPressed: () {
+                    print(_selectedMyPlantId);
+                    _addLikes(_selectedMyPlantId);
+                    _likesIds.add(_boastPlants[_selectedIndex]);
+                  },
+                  child: Row(children: [
+                    Icon(Icons.favorite, color: Colors.green[700]),
+                    Text(
+                      ' 좋아요',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.green[700],
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+              _selectedIndex+1 == _boastPlants.length ?
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.5,
+                    20,
+                    MediaQuery.of(context).size.width * 0.18,
+                    0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.green),
+                    top: BorderSide(color: Colors.green),
+                    left: BorderSide(color: Colors.green),
+                    right: BorderSide(color: Colors.green),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      BoastResultScreen.routeName,
+                      arguments: (_likesIds),);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    Text(
+                      '결과보기',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.green[700],
+                      ),
+                    ),
+                  ]),
+                ),
+              ):Container(),
+            ],
           ),
         ],
       ),

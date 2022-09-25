@@ -26,7 +26,7 @@ class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
         title: Text(
           'Daily daily',
           style: TextStyle(
-            fontSize: 28.0,
+            fontSize: 22.0,
             fontWeight: FontWeight.bold,
           ),
         ),

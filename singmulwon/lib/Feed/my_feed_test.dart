@@ -4,14 +4,12 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'feed_create_register_test.dart';
 import 'feed_delete_follow_test.dart';
 import 'feed_do_follow_test.dart';
 import 'feed_follower_test.dart';
 import 'feed_following_test.dart';
 import 'feed_test.dart';
 import 'feed_detail_test.dart';
-import 'feed_create_test.dart';
 
 Future fetchFeed(String userId, String currentUserId) async {
   var url =
@@ -111,7 +109,8 @@ class _FeedPageState extends State<MyFeedPage> {
                         MaterialPageRoute(
                             builder: (context) => FeedDetail(
                                 feedId: snapshot.data["feed"][i]["feedId"],
-                                userId: userId)));
+                                userId: userId,
+                                currentUserId: currentUserId)));
                   },
                   child: Image.network(
                       'http://13.209.68.93/ubuntu/flutter/feed/image/' +
@@ -132,7 +131,8 @@ class _FeedPageState extends State<MyFeedPage> {
                               builder: (context) => FeedDetail(
                                   feedId: snapshot.data["feed"][i - 1]
                                       ["feedId"],
-                                  userId: userId)));
+                                  userId: userId,
+                                  currentUserId: currentUserId)));
                     },
                     child: Image.network(
                         'http://13.209.68.93/ubuntu/flutter/feed/image/' +
@@ -275,7 +275,7 @@ class _FeedPageState extends State<MyFeedPage> {
                   },
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 150)),
+                        const EdgeInsets.symmetric(horizontal: 130)),
                   ),
                   child: Text('프로필 편집'),
                 )
@@ -286,7 +286,7 @@ class _FeedPageState extends State<MyFeedPage> {
                   },
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 150)),
+                        const EdgeInsets.symmetric(horizontal: 130)),
                   ),
                   child: Text("팔로잉"),
                 )
@@ -297,7 +297,7 @@ class _FeedPageState extends State<MyFeedPage> {
                     },
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(horizontal: 150)),
+                          const EdgeInsets.symmetric(horizontal: 130)),
                     ),
                     child: Text("팔로잉 취소"),
                   )
@@ -317,17 +317,7 @@ class _FeedPageState extends State<MyFeedPage> {
 
     int _selectedIndex = 0;
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => FeedPage()));
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
+      appBar: AppBar(),
       body: Container(
         margin: EdgeInsets.all(10),
         child: ListView(

@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_singmulwon_app/Community/screens/boast_home_screen.dart';
+import 'package:flutter_singmulwon_app/Community/screens/boast_result_screen.dart';
 import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
 import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ import 'Community/screens/community_write_screen.dart';
 
 import 'Feed/feed_create_test.dart';
 import 'Feed/feed_detail_test.dart';
+import 'Feed/image_test.dart';
 import 'Feed/image_upload.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/insert_plant.dart';
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
           InsertPlant.routeName: (ctx) => InsertPlant(),
-          FeedCreates.routeName: (ctx) => FeedCreates(),
+          FeedCreate.routeName: (ctx) => FeedCreate(),
           FeedPage.routeName: (ctx) => FeedPage(),
           HomePage.routeName: (ctx) => HomePage('test1'),
           MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "test1", currentUserId: "test1"),
@@ -56,7 +58,8 @@ class MyApp extends StatelessWidget {
           CommunityHomeScreen.routeName: (ctx) => CommunityHomeScreen(),
           CommunityDetailScreen.routeName: (ctx) => CommunityDetailScreen(),
           CommunityWriteScreen.routeName: (ctx) => CommunityWriteScreen(),
-          BoastHomeScreen.routeName: (ctx) => BoastHomeScreen()
+          BoastHomeScreen.routeName: (ctx) => BoastHomeScreen(),
+          BoastResultScreen.routeName: (ctx) =>BoastResultScreen()
         });
   }
 }

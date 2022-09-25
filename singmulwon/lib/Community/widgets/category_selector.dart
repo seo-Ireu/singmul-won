@@ -11,7 +11,7 @@ class CategorySelector extends StatefulWidget {
 
 class _CategorySelectorState extends State<CategorySelector> {
   int selectedIndex = 0;
-  final List<String> categories = ['','꿀팁', '질문', '나눔'];
+  final List<String> categories = ['꿀팁', '질문', '나눔'];
   String baseUrl = dotenv.env['BASE_URL'];
   Widget category_board;
 
@@ -49,7 +49,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 45.0,
+                    horizontal: 37.0,
                     vertical: 30.0,
                   ),
                   child: Text(
@@ -201,7 +201,6 @@ class _CategorySelectorState extends State<CategorySelector> {
 
     if (response.statusCode == 200) {
       var tmp = json.decode(utf8.decode(response.bodyBytes));
-      print(tmp['community']);
       List<CommunityModel> communities = [];
       for (var c in tmp['community']) {
         CommunityModel cm = CommunityModel(
@@ -211,7 +210,6 @@ class _CategorySelectorState extends State<CategorySelector> {
             title: c['title'],
             content: c['content']);
         communities.add(cm);
-        print("${cm}");
       }
       return communities;
     } else {

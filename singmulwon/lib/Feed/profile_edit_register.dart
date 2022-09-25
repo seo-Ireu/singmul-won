@@ -7,11 +7,11 @@ import 'package:intl/intl.dart';
 import 'feed_test.dart';
 import 'my_feed_test.dart';
 
-String img_url = "/home/ubuntu/flutter/feed/image/";
+// String img_url = "/home/ubuntu/flutter/account/image/";
 
-Future fetchFeed(String userId, String feedContent, String feedUrl) async {
+Future fetchFeed(String userBeforeId, String userAfterId, String ImageUrl, String userIntro, String userName) async {
   var url =
-      'http://13.209.68.93/ubuntu/flutter/feed/feed_create.php?userId=$userId&feedContent=$feedContent&feedUrl=$img_url$feedUrl';
+      'http://13.209.68.93/ubuntu/flutter/feed/profile_edit_register.php?userBeforeId=$userBeforeId&userAfterId=$userAfterId&ImageUrl=$ImageUrl&userIntro=$userIntro&userName=$userName';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -43,34 +43,42 @@ Future fetchFeed(String userId, String feedContent, String feedUrl) async {
 //   },
 // ));
 
-class FeedCreateRegister extends StatefulWidget {
-  final String userId;
-  final String feedContent;
-  final String feedUrl;
-  const FeedCreateRegister(
+class ProfileEditRegister extends StatefulWidget {
+  final String userBeforeId;
+  final String userAfterId;
+  final String ImageUrl;
+  final String userIntro;
+  final String userName;
+
+  const ProfileEditRegister(
       {Key key,
-      @required this.userId,
-      @required this.feedContent,
-      @required this.feedUrl})
+        @required this.userBeforeId,
+        @required this.userAfterId,
+        @required this.ImageUrl,
+        @required this.userIntro,
+        @required this.userName,})
       : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(userId, feedContent, feedUrl);
+  _FeedPageState createState() => _FeedPageState(userBeforeId, userAfterId, ImageUrl, userIntro, userName);
 }
 
-class _FeedPageState extends State<FeedCreateRegister> {
+class _FeedPageState extends State<ProfileEditRegister> {
   Future feeds;
-  String userId;
-  String feedContent;
-  String feedUrl;
+  String userBeforeId;
+  String userAfterId;
+  String ImageUrl;
+  String userIntro;
+  String userName;
+
   static const routeName = '/inst_home';
 
-  _FeedPageState(this.userId, this.feedContent, this.feedUrl);
+  _FeedPageState(this.userBeforeId, this.userAfterId, this.ImageUrl, this.userIntro, this.userName);
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed(userId, feedContent, feedUrl);
+    feeds = fetchFeed(userBeforeId, userAfterId, ImageUrl, userIntro, userName);
   }
 
   @override
@@ -89,30 +97,28 @@ class _FeedPageState extends State<FeedCreateRegister> {
               return const CircularProgressIndicator();
             },
           ),
-      )
-    );
+        ));
   }
 
   Widget buildColumn(snapshot) {
-
     List<Widget> lists = [
       Center(
           child: Column(
-        children: <Widget>[
-          Text("게시가 완료되었습니다!"),
-          OutlinedButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId, currentUserId: userId)));
-            },
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all(
-                  const EdgeInsets.symmetric(horizontal: 150)),
-            ),
-            child: Text('돌아가기'),
-          )
-        ],
-      )),
+            children: <Widget>[
+              Text("수정이 완료되었습니다!"),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyFeedPage(userId: userAfterId, currentUserId: userAfterId)));
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(
+                      const EdgeInsets.symmetric(horizontal: 150)),
+                ),
+                child: Text('돌아가기'),
+              )
+            ],
+          )),
     ];
     //Navigator.push(context, MaterialPageRoute(builder: (context) => MyFeedPage()));
     return Scaffold(
@@ -121,7 +127,7 @@ class _FeedPageState extends State<FeedCreateRegister> {
           IconButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId, currentUserId: userId)));
+                  MaterialPageRoute(builder: (context) => MyFeedPage(userId: userAfterId, currentUserId: userAfterId)));
             },
             icon: const Icon(Icons.arrow_back),
           ),
@@ -137,3 +143,12 @@ class _FeedPageState extends State<FeedCreateRegister> {
     );
   }
 }
+
+
+//ProfileEditRegister(
+//userBeforeId: userId,
+//userAfterId: _IdController.text,
+//ImageUrl: response.data,
+//userIntro: _IntroController.text,
+//userName: _nameController.text,
+//)

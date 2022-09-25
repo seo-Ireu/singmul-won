@@ -35,6 +35,7 @@ class SinglePlant {
   final String lumi;
   final String humidity;
   final String luminance;
+  final String likes;
 
   SinglePlant(
       {this.myPlantId,
@@ -43,7 +44,8 @@ class SinglePlant {
       this.humi,
       this.lumi,
       this.humidity,
-      this.luminance});
+      this.luminance,
+      this.likes});
 
   static SinglePlant fromJson(json) => SinglePlant(
       myPlantId: json['myPlantId'],
@@ -52,7 +54,8 @@ class SinglePlant {
       humi: json['humi'],
       lumi: json['lumi'],
       humidity: json['humidity'],
-      luminance: json['luminance']);
+      luminance: json['luminance'],
+      likes: json['likes']);
 }
 
 class SuitableData {

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, use_build_context_synchronously, sized_box_for_whitespace, unused_element
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:developer';
 
 import './edit_button.dart';
 import './notification.dart';
@@ -14,6 +15,7 @@ class InsertPlant extends StatefulWidget {
 
 double _currentWaterValue = 0;
 double _currentLightValue = 0;
+var flag1 = 2;
 
 class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
@@ -36,6 +38,7 @@ class _InsertPlantState extends State<InsertPlant> {
       "name": name,
       "humi": humi,
       "lumi": lumi,
+      "flag": flag1.toString(),
     });
     showGroupedNotifications();
   }
@@ -179,6 +182,7 @@ class _InsertPlantState extends State<InsertPlant> {
                                       .toString(),
                               onChanged: (double value) {
                                 setState(() {
+                                  flag1 = 2;
                                   _currentWaterValue = value;
                                   waterValue = _currentWaterValue;
                                 });
@@ -205,6 +209,7 @@ class _InsertPlantState extends State<InsertPlant> {
                               label: _currentLightValue.round().toString(),
                               onChanged: (double value) {
                                 setState(() {
+                                  flag1 = 2;
                                   _currentLightValue = value;
                                   lightValue = _currentLightValue;
                                 });
@@ -235,6 +240,7 @@ class _InsertPlantState extends State<InsertPlant> {
                               //수정
                               onPressed: () {
                                 setState(() {
+                                  flag1 = 1;
                                   _currentWaterValue =
                                       double.parse(snapshot.data.humidity);
                                   waterValue =
@@ -264,12 +270,12 @@ class _InsertPlantState extends State<InsertPlant> {
                               ),
                               onPressed: () {
                                 insertPlant(
-                                    context,
-                                    userId,
-                                    // _selectedSortIndex.toString(),
-                                    plantidController.text,
-                                    waterValue.toString(),
-                                    lightValue.toString());
+                                  context,
+                                  userId,
+                                  plantidController.text,
+                                  waterValue.toString(),
+                                  lightValue.toString(),
+                                );
 
                                 Navigator.of(context).pop();
                               },

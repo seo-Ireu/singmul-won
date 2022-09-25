@@ -273,28 +273,28 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                         ],
                                       ),
                                     ),
-                                    //좋아요 이미지
-                                    Container(
-                                      height: 30.0,
-                                      width: 30.0,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: green,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: green.withOpacity(0.2),
-                                            blurRadius: 15,
-                                            offset: const Offset(0, 5),
-                                          ),
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      child: Image.asset(
-                                        'assets/icons/heart.png',
-                                        color: white,
-                                      ),
-                                    ),
+                                    // //좋아요 이미지
+                                    // Container(
+                                    //   height: 30.0,
+                                    //   width: 30.0,
+                                    //   padding: const EdgeInsets.all(8.0),
+                                    //   decoration: BoxDecoration(
+                                    //     color: green,
+                                    //     boxShadow: [
+                                    //       BoxShadow(
+                                    //         color: green.withOpacity(0.2),
+                                    //         blurRadius: 15,
+                                    //         offset: const Offset(0, 5),
+                                    //       ),
+                                    //     ],
+                                    //     borderRadius:
+                                    //         BorderRadius.circular(8.0),
+                                    //   ),
+                                    //   child: Image.asset(
+                                    //     'assets/icons/heart.png',
+                                    //     color: white,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                                 const SizedBox(height: 10.0),

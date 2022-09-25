@@ -22,16 +22,8 @@ class _SignUp extends State<SignUp> {
   final _nicknameTextController = TextEditingController();
   final _phoneTextController = TextEditingController();
   final _profileintroTextController = TextEditingController();
+  ScrollController _scrollController;
 
-  // @override
-  // void dispose() {
-  //   _useridTextController.dispose();
-  //   _passwordTextController.dispose();
-  //   _nicknameTextController.dispose();
-  //   _phoneTextController.dispose();
-  //   _profileintroTextController.dispose();
-  //   super.dispose();
-  // }
   Future create() async {
     if (_useridTextController.text == "" ||
         _passwordTextController.text == "" ||
@@ -54,9 +46,6 @@ class _SignUp extends State<SignUp> {
         "userid": userid,
       });
       var vld = await json.decode(json.encode(response.body));
-      log('****');
-      log(vld);
-      log('****');
       if (vld == '"catch"') {
         Fluttertoast.showToast(
             msg: "아이디가 중복되었습니다.",
@@ -73,14 +62,16 @@ class _SignUp extends State<SignUp> {
     }
   }
 
-  // _setIsLogin() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setBool('isLogin', true);
-  // }
-
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,83 +99,116 @@ class _SignUp extends State<SignUp> {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.all(15.0),
-              padding: const EdgeInsets.all(13.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[400]),
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              ),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    width: 360,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          icon: Icon(
-                            Icons.perm_identity,
-                          ),
-                          labelText: 'Id',
-                          hintText: 'Type your Id'),
-                      //validation 추가 필요
-                      controller: _useridTextController,
+            SingleChildScrollView(
+              controller: _scrollController,
+              child: Container(
+                margin: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(13.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[400]),
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 360,
+                      child: TextField(
+                        onTap: () {
+                          //120만큼 500milSec 동안 뷰를 올려줌
+                          _scrollController.animateTo(120.0,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(
+                              Icons.perm_identity,
+                            ),
+                            labelText: 'Id',
+                            hintText: 'Type your Id'),
+                        //validation 추가 필요
+                        controller: _useridTextController,
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  SizedBox(
-                    width: 360,
-                    child: TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          icon: Icon(Icons.lock),
-                          labelText: 'Password',
-                          hintText: 'Type password'),
-                      //validation 추가 필요
-                      controller: _passwordTextController,
+                    Divider(),
+                    SizedBox(
+                      width: 360,
+                      child: TextField(
+                        onTap: () {
+                          //120만큼 500milSec 동안 뷰를 올려줌
+                          _scrollController.animateTo(120.0,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(Icons.lock),
+                            labelText: 'Password',
+                            hintText: 'Type password'),
+                        //validation 추가 필요
+                        controller: _passwordTextController,
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  SizedBox(
-                    width: 360,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          icon: Icon(Icons.badge),
-                          labelText: 'Nickname',
-                          hintText: 'Type Nickname'),
-                      //validation 추가 필요
-                      controller: _nicknameTextController,
+                    Divider(),
+                    SizedBox(
+                      width: 360,
+                      child: TextField(
+                        onTap: () {
+                          //120만큼 500milSec 동안 뷰를 올려줌
+                          _scrollController.animateTo(120.0,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(Icons.badge),
+                            labelText: 'Nickname',
+                            hintText: 'Type Nickname'),
+                        //validation 추가 필요
+                        controller: _nicknameTextController,
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  SizedBox(
-                    width: 360,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          icon: Icon(Icons.phone),
-                          labelText: 'Phone Number',
-                          hintText: 'Type PhoneNum'),
-                      //validation 추가 필요
-                      controller: _phoneTextController,
+                    Divider(),
+                    SizedBox(
+                      width: 360,
+                      child: TextField(
+                        onTap: () {
+                          //120만큼 500milSec 동안 뷰를 올려줌
+                          _scrollController.animateTo(120.0,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(Icons.phone),
+                            labelText: 'Phone Number',
+                            hintText: 'Type PhoneNum'),
+                        //validation 추가 필요
+                        controller: _phoneTextController,
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  SizedBox(
-                    width: 360,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          icon: Icon(Icons.contact_page),
-                          labelText: 'ProfileIntro',
-                          hintText: 'Type Profile'),
-                      //validation 추가 필요
-                      controller: _profileintroTextController,
+                    Divider(),
+                    SizedBox(
+                      width: 360,
+                      child: TextField(
+                        onTap: () {
+                          //120만큼 500milSec 동안 뷰를 올려줌
+                          _scrollController.animateTo(120.0,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(Icons.contact_page),
+                            labelText: 'ProfileIntro',
+                            hintText: 'Type Profile'),
+                        //validation 추가 필요
+                        controller: _profileintroTextController,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Row(

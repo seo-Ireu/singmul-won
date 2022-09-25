@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../widgets/boast.dart';
 
-class BoastHomeScreen extends StatefulWidget {
-  static const routeName = '/boast_home_screen.dart';
+import '../widgets/boast_result.dart';
+
+class BoastResultScreen extends StatefulWidget {
+  static const routeName = '/boast_result_screen.dart';
 
   @override
-  State<BoastHomeScreen> createState() => _BoastHomeScreenState();
+  State<BoastResultScreen> createState() => _BoastResultScreenState();
 }
 
-class _BoastHomeScreenState extends State<BoastHomeScreen> {
+class _BoastResultScreenState extends State<BoastResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -21,8 +21,9 @@ class _BoastHomeScreenState extends State<BoastHomeScreen> {
               bottomLeft: Radius.circular(25),
             )
         ),
+
       ),
-      body: Boast(),
+      body: BoastResult(),
     );
   }
 }
