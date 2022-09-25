@@ -201,7 +201,6 @@ class _CategorySelectorState extends State<CategorySelector> {
 
     if (response.statusCode == 200) {
       var tmp = json.decode(utf8.decode(response.bodyBytes));
-      print(tmp['community']);
       List<CommunityModel> communities = [];
       for (var c in tmp['community']) {
         CommunityModel cm = CommunityModel(
@@ -211,7 +210,6 @@ class _CategorySelectorState extends State<CategorySelector> {
             title: c['title'],
             content: c['content']);
         communities.add(cm);
-        print("${cm}");
       }
       return communities;
     } else {

@@ -44,11 +44,12 @@ class _BoastState extends State<Boast> {
       List<BoastPlantModel> bps = [];
       for (var i in results['random_plants']) {
         BoastPlantModel bpm = BoastPlantModel(
-            myPlantId: int.parse(i['myPlantId']),
+            feedId: int.parse(i['feedId']),
             userId: i['userId'],
-            plantName: i['plantName'],
-            image: i['image'],
-            likes: int.parse(i['likes']));
+            urls: "http://13.209.68.93/ubuntu/flutter/feed/image/"+i['urls'],
+            myPlantId: int.parse(i['myPlantId'])
+        );
+        print("${bpm.feedId}, ${bpm.myPlantId}, ${bpm.urls}, ${bpm.userId}");
         bps.add(bpm);
       }
       setState(() {
@@ -89,17 +90,8 @@ class _BoastState extends State<Boast> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          Image.asset(_boastPlants[index].image,
-                          height:MediaQuery.of(context).size.height*0.4,
-                          width:MediaQuery.of(context).size.height*0.4,
-                          ),
-                          Text(
-                            _boastPlants[index].plantName,
-                            style: TextStyle(
-                              color: Colors.blueGrey,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w900,
-                            ),
+                          Image.network(_boastPlants[index].urls,
+                              fit: BoxFit.fill
                           ),
                         ],
                       ),
