@@ -6,6 +6,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:http/http.dart' as http;
 import '../models/boast_plant_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../screens/boast_result_screen.dart';
 class Boast extends StatefulWidget {
 
   @override
@@ -14,8 +16,13 @@ class Boast extends StatefulWidget {
 
 class _BoastState extends State<Boast> {
   String baseUrl = dotenv.env['BASE_URL'];
-  int _selectedMyPlantId = -1;
   List<BoastPlantModel> _boastPlants = [];
+
+  int _selectedMyPlantId = -1;
+  int _selectedIndex = 0;
+
+  List<BoastPlantModel> _likesIds =[];
+
 
   @override
   void initState() {
@@ -38,6 +45,7 @@ class _BoastState extends State<Boast> {
       for (var i in results['random_plants']) {
         BoastPlantModel bpm = BoastPlantModel(
             myPlantId: int.parse(i['myPlantId']),
+            userId: i['userId'],
             plantName: i['plantName'],
             image: i['image'],
             likes: int.parse(i['likes']));
@@ -45,6 +53,7 @@ class _BoastState extends State<Boast> {
       }
       setState(() {
         _boastPlants = bps;
+        _selectedMyPlantId = _boastPlants[0].myPlantId;
       });
       print(_boastPlants.length);
     } else {
@@ -88,42 +97,83 @@ class _BoastState extends State<Boast> {
               itemHeight: 300.0,
               itemWidth: 300.0,
               onIndexChanged: (int newIndex){
-                _selectedMyPlantId = _boastPlants[newIndex].myPlantId;
+                setState(() {
+                  _selectedMyPlantId = _boastPlants[newIndex].myPlantId;
+                  _selectedIndex = newIndex;
+                });
               },
 
             ),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0.5,
-                20,
-                MediaQuery.of(context).size.width * 0.18,
-                0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.green),
-                top: BorderSide(color: Colors.green),
-                left: BorderSide(color: Colors.green),
-                right: BorderSide(color: Colors.green),
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TextButton(
-              onPressed: () {
-                print(_selectedMyPlantId);
-                _addLikes(_selectedMyPlantId);
-              },
-              child: Row(children: [
-                Icon(Icons.favorite, color: Colors.green[700]),
-                Text(
-                  ' 좋아요',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.green[700],
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.5,
+                    20,
+                    MediaQuery.of(context).size.width * 0.18,
+                    0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.green),
+                    top: BorderSide(color: Colors.green),
+                    left: BorderSide(color: Colors.green),
+                    right: BorderSide(color: Colors.green),
                   ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ]),
-            ),
+                child: TextButton(
+                  onPressed: () {
+                    print(_selectedMyPlantId);
+                    _addLikes(_selectedMyPlantId);
+                    _likesIds.add(_boastPlants[_selectedIndex]);
+                  },
+                  child: Row(children: [
+                    Icon(Icons.favorite, color: Colors.green[700]),
+                    Text(
+                      ' 좋아요',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.green[700],
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+              _selectedIndex+1 == _boastPlants.length ?
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.5,
+                    20,
+                    MediaQuery.of(context).size.width * 0.18,
+                    0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.green),
+                    top: BorderSide(color: Colors.green),
+                    left: BorderSide(color: Colors.green),
+                    right: BorderSide(color: Colors.green),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      BoastResultScreen.routeName,
+                      arguments: (_likesIds),);
+                  },
+                  child: Row(children: [
+                    Text(
+                      '결과보기',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.green[700],
+                      ),
+                    ),
+                  ]),
+                ),
+              ):Container(),
+            ],
           ),
         ],
       ),
