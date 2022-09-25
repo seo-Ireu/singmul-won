@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
-import 'feed_create_register_test.dart';
 
 final _textController = new TextEditingController();
 
@@ -92,7 +91,7 @@ class _FeedPageState extends State<FeedDeleteResgister> {
           TextButton(
             child: Text("돌아가기"),
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MyFeedPage())),
+                context, MaterialPageRoute(builder: (context) => MyFeedPage(userId: userId, currentUserId: userId))),
           )
         ],
       ),

@@ -16,6 +16,7 @@ import 'Community/screens/community_write_screen.dart';
 
 import 'Feed/feed_create_test.dart';
 import 'Feed/feed_detail_test.dart';
+import 'Feed/image_test.dart';
 import 'Feed/image_upload.dart';
 import 'Plant/edit_plant.dart';
 import 'Plant/insert_plant.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           ManagePlant.routeName: (ctx) => ManagePlant(),
           EditPlant.routeName: (ctx) => EditPlant(),
           InsertPlant.routeName: (ctx) => InsertPlant(),
-          FeedCreates.routeName: (ctx) => FeedCreates(),
+          FeedCreate.routeName: (ctx) => FeedCreate(),
           FeedPage.routeName: (ctx) => FeedPage(),
           HomePage.routeName: (ctx) => HomePage('test1'),
           MyFeedPage.routeName: (ctx) => MyFeedPage(userId: "test1", currentUserId: "test1"),

@@ -7,10 +7,8 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_comment_test.dart';
 import 'feed_detail_test.dart';
-import 'image_upload.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
-import 'feed_create_test.dart';
 
 final _textController = new TextEditingController();
 

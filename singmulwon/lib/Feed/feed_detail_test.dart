@@ -6,19 +6,19 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'feed_comment_create_test.dart';
 import 'feed_comment_test.dart';
-import 'image_upload.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
-import 'feed_create_test.dart';
 
 final _textController = new TextEditingController();
 
-Future fetchFeed(String feedId, String userId) async {
+Future fetchFeed(String feedId, String userId, String currentUserId) async {
   var url =
       'http://13.209.68.93/ubuntu/flutter/feed/feed_detail.php?userId=' +
           userId +
           '&feedId=' +
-          feedId;
+          feedId +
+          '&currentUserId=' +
+          currentUserId;
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -52,25 +52,27 @@ class FeedDetail extends StatefulWidget {
   static const routeName = '/feed_detail_test.dart';
   final String feedId;
   final String userId;
-  FeedDetail({Key key, @required this.feedId, @required this.userId})
+  final String currentUserId;
+  FeedDetail({Key key, @required this.feedId, @required this.userId, @required this.currentUserId})
       : super(key: key);
 
   @override
-  _FeedPageState createState() => _FeedPageState(feedId, userId);
+  _FeedPageState createState() => _FeedPageState(feedId, userId, currentUserId);
 }
 
 class _FeedPageState extends State<FeedDetail> {
   Future feeds;
   String feedId;
   String userId;
+  String currentUserId;
   static const routeName = '/inst_home';
 
-  _FeedPageState(this.feedId, this.userId);
+  _FeedPageState(this.feedId, this.userId, this.currentUserId);
 
   @override
   void initState() {
     super.initState();
-    feeds = fetchFeed(feedId, userId);
+    feeds = fetchFeed(feedId, userId, currentUserId);
   }
 
   @override
@@ -131,18 +133,16 @@ class _FeedPageState extends State<FeedDetail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
                       children: <Widget>[
+                        if (currentUserId == snapshot.data["feed"][i]["userId"])
                         IconButton(
                             onPressed: () {
-                              if (userId == snapshot.data["feed"][i]["userId"])
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => FeedDelete(
-                                            userId: userId, feedId: feedId)));
-                              else
-                                null;
+                                            userId: currentUserId, feedId: feedId)));
                             },
-                            icon: Icon(Icons.more_horiz)),
+                            icon: Icon(Icons.delete)),
                       ],
                     ),
                   ],
@@ -215,14 +215,20 @@ class _FeedPageState extends State<FeedDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                          'http://13.209.68.93/ubuntu/flutter/account/image/'
+                              + snapshot.data["currentUser_photos"]
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
                     Expanded(
                       child: TextFormField(
                         controller: _textController,
                         decoration: const InputDecoration(
-                          icon: CircleAvatar(
-                            radius: 20.0,
-                            backgroundImage: AssetImage("assets/human_1.jpg"),
-                          ),
                           labelText: '댓글 달기...',
                         ),
                       ),

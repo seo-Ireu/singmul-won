@@ -6,11 +6,10 @@ import 'package:intl/intl.dart';
 import 'feed_comment_create_test.dart';
 import 'feed_comment_test.dart';
 import 'feed_delete_test.dart';
+import 'image_test.dart';
 import 'my_feed_test.dart';
 import 'feed_test.dart';
-import 'feed_create_register_test.dart';
 import 'feed_detail_test.dart';
-import 'feed_create_test.dart';
 
 final _textController = new TextEditingController();
 
@@ -92,7 +91,7 @@ class _FeedPageState extends State<FeedPage> {
   // String userId = 'lyhthy6'; 수정
   var now = new DateTime.now(); // 임시 시간 변수
 
-  Widget buildColumn(snapshot, user_account) {
+  Widget buildColumn(snapshot, userId) {
     Size size = MediaQuery.of(context).size;
     List<Widget> lists = [];
     for (int i = 0; i < snapshot.data["count"]; i++) {
@@ -127,7 +126,10 @@ class _FeedPageState extends State<FeedPage> {
                                 MaterialPageRoute(
                                     builder: (context) => MyFeedPage(
                                         userId:
-                                            '${snapshot.data["feed"][i]["userId"]}')));
+                                            '${snapshot.data["feed"][i]["userId"]}',
+                                        currentUserId: userId,))).then((value) {
+                                          setState(() {});
+                                        });
                           },
                           style: TextButton.styleFrom(
                             primary: Colors.black,
@@ -138,10 +140,9 @@ class _FeedPageState extends State<FeedPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
                       children: <Widget>[
+                        if (userId == snapshot.data["feed"][i]["userId"])
                         IconButton(
                             onPressed: () {
-                              if (user_account ==
-                                  snapshot.data["feed"][i]["userId"])
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -150,8 +151,6 @@ class _FeedPageState extends State<FeedPage> {
                                                 ["userId"],
                                             feedId: snapshot.data["feed"][i]
                                                 ["feedId"])));
-                              else
-                                null;
                             },
                             icon: Icon(Icons.delete)),
                       ],
@@ -247,7 +246,7 @@ class _FeedPageState extends State<FeedPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CommentCreate(
-                                      userId: user_account,
+                                      userId: userId,
                                       commentContent: texts,
                                       feedId:
                                           '${snapshot.data["feed"][i]["feedId"]}')));
@@ -267,7 +266,7 @@ class _FeedPageState extends State<FeedPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => FeedCreates(userId: userId)));
+                      builder: (context) => FeedCreate(userId: userId)));
             },
             icon: const Icon(Icons.add),
           ),
