@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers, missing_required_param, deprecated_member_use, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_key_in_widget_constructors, use_build_context_synchronously, sized_box_for_whitespace, unused_element
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:developer';
 
 import './edit_button.dart';
 import './notification.dart';
@@ -19,8 +18,8 @@ var flag1 = 2;
 
 class _InsertPlantState extends State<InsertPlant> {
   final plantidController = TextEditingController();
-  final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
-  String _selectedValue = '수선화';
+  final List<String> _sortValueList = ['', '봉선화', '산세베리아', '무늬산호수'];
+  String _selectedValue = '봉선화';
   int _selectedSortIndex = 1;
 
   @override
@@ -232,7 +231,6 @@ class _InsertPlantState extends State<InsertPlant> {
                               color: Color.fromARGB(255, 75, 143, 77),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
-
                               child: Text(
                                 "자동설정",
                                 style: TextStyle(fontSize: 20),
