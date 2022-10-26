@@ -49,7 +49,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 37.0,
+                    horizontal: 43.0,
                     vertical: 30.0,
                   ),
                   child: Text(
