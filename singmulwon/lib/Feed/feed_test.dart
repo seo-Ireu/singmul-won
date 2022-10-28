@@ -172,17 +172,17 @@ class _FeedPageState extends State<FeedPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      icon: Icon(isPressed[i]
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                      color: isPressed[i] ? Colors.red : Colors.black,
-                      onPressed: () {
-                        setState(() {
-                          isPressed[i] = !isPressed[i];
-                        });
-                      },
-                    ),
+                    //IconButton(
+                    //  icon: Icon(isPressed[i]
+                    //      ? Icons.favorite
+                    //      : Icons.favorite_border),
+                    //  color: isPressed[i] ? Colors.red : Colors.black,
+                    //  onPressed: () {
+                    //    setState(() {
+                    //      isPressed[i] = !isPressed[i];
+                    //    });
+                    //  },
+                    //),
                     IconButton(
                       onPressed: () {
                         Navigator.push(
@@ -190,7 +190,7 @@ class _FeedPageState extends State<FeedPage> {
                             MaterialPageRoute(
                                 builder: (context) => FeedComment(
                                     userId:
-                                        '${snapshot.data["feed"][i]["userId"]}',
+                                        userId,//'${snapshot.data["feed"][i]["userId"]}',
                                     feedId:
                                         '${snapshot.data["feed"][i]["feedId"]}')));
                       },

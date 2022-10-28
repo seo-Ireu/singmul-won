@@ -198,7 +198,7 @@ class _FeedPageState extends State<MyFeedPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyFollower(userId: userid)));
+                          builder: (context) => MyFollowing(userId: userid)));
                 },
                 child: Column(children: <Widget>[
                   Text(follower,
@@ -215,7 +215,7 @@ class _FeedPageState extends State<MyFeedPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyFollowing(userId: userid)));
+                          builder: (context) => MyFollower(userId: userid)));
                 },
                 child: Column(children: <Widget>[
                   Text(following,
@@ -279,7 +279,18 @@ class _FeedPageState extends State<MyFeedPage> {
                   ),
                   child: Text('프로필 편집'),
                 )
-              else if(snapshot.data["follow_check"] == 0)
+              else if(snapshot.data["follow_check"] == 1)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteFollow(userId: userId, currentUserId: currentUserId)));
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(horizontal: 130)),
+                  ),
+                  child: Text("팔로잉 취소"),
+                )
+              else if(snapshot.data["follow_check"] == 2 || snapshot.data["follow_check"] == 0)
                 OutlinedButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => DoingFollow(userId: userId, currentUserId: currentUserId)));
@@ -290,17 +301,6 @@ class _FeedPageState extends State<MyFeedPage> {
                   ),
                   child: Text("팔로잉"),
                 )
-              else if(snapshot.data["follow_check"] == 1)
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteFollow(userId: userId, currentUserId: currentUserId)));
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(horizontal: 130)),
-                    ),
-                    child: Text("팔로잉 취소"),
-                  )
             ],
           ), // 프로필 편집 or 팔로잉 or 팔로잉 취소
           SizedBox(

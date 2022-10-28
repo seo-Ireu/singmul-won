@@ -44,11 +44,12 @@ class _BoastState extends State<Boast> {
       List<BoastPlantModel> bps = [];
       for (var i in results['random_plants']) {
         BoastPlantModel bpm = BoastPlantModel(
-            myPlantId: int.parse(i['myPlantId']),
+            feedId: int.parse(i['feedId']),
             userId: i['userId'],
-            plantName: i['plantName'],
-            image: i['image'],
-            likes: int.parse(i['likes']));
+            urls: "http://13.209.68.93/ubuntu/flutter/feed/image/"+i['urls'],
+            myPlantId: int.parse(i['myPlantId'])
+        );
+        print("${bpm.feedId}, ${bpm.myPlantId}, ${bpm.urls}, ${bpm.userId}");
         bps.add(bpm);
       }
       setState(() {
@@ -89,17 +90,8 @@ class _BoastState extends State<Boast> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          Image.asset(_boastPlants[index].image,
-                          height:MediaQuery.of(context).size.height*0.4,
-                          width:MediaQuery.of(context).size.height*0.4,
-                          ),
-                          Text(
-                            _boastPlants[index].plantName,
-                            style: TextStyle(
-                              color: Colors.blueGrey,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w900,
-                            ),
+                          Image.network(_boastPlants[index].urls,
+                              fit: BoxFit.fill
                           ),
                         ],
                       ),
@@ -131,29 +123,19 @@ class _BoastState extends State<Boast> {
                     20,
                     MediaQuery.of(context).size.width * 0.18,
                     0),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.green),
-                    top: BorderSide(color: Colors.green),
-                    left: BorderSide(color: Colors.green),
-                    right: BorderSide(color: Colors.green),
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
+
+
+                child: ElevatedButton(
                   onPressed: () {
-                    print(_selectedMyPlantId);
                     _addLikes(_selectedMyPlantId);
                     _likesIds.add(_boastPlants[_selectedIndex]);
                   },
-                  child: Row(children: [
-                    Icon(Icons.favorite, color: Colors.green[700]),
+                  child: Row(
+                      mainAxisAlignment:MainAxisAlignment.center,
+                      children: <Widget>[
+                    Icon(Icons.favorite),
                     Text(
                       ' 좋아요',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.green[700],
-                      ),
                     ),
                   ]),
                 ),
@@ -165,16 +147,7 @@ class _BoastState extends State<Boast> {
                     20,
                     MediaQuery.of(context).size.width * 0.18,
                     0),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.green),
-                    top: BorderSide(color: Colors.green),
-                    left: BorderSide(color: Colors.green),
-                    right: BorderSide(color: Colors.green),
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                       BoastResultScreen.routeName,
@@ -185,11 +158,6 @@ class _BoastState extends State<Boast> {
                       children: [
                     Text(
                       '결과보기',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.green[700],
-                      ),
                     ),
                   ]),
                 ),

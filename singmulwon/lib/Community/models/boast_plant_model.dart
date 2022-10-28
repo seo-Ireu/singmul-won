@@ -1,20 +1,19 @@
 class BoastPlantModel{
+  final int feedId;
   final int myPlantId;
   final String userId;
-  final String plantName;
-  final String image;
-  final int likes;
+  final String urls;
+
 
   BoastPlantModel(
-      {this.myPlantId, this.userId, this.plantName, this.image, this.likes}
+      {this.feedId,this.myPlantId, this.userId, this.urls}
       );
 
   static BoastPlantModel fromJson(json) => BoastPlantModel(
+    feedId: json['feedId'] as int,
     myPlantId: json['myPlantId'] as int,
     userId: json['userId'],
-    plantName: json['plantName'],
-    image: json['image'],
-    likes: json['likes'] as int,
+    urls: json['urls'],
   );
 
 

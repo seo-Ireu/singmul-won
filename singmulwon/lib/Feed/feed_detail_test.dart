@@ -180,7 +180,7 @@ class _FeedPageState extends State<FeedDetail> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => FeedComment(
-                                    userId: userId, feedId: feedId)));
+                                    userId: currentUserId, feedId: feedId)));
                       },
                       icon: Icon(Icons.chat_bubble_outline),
                     ),

@@ -55,6 +55,7 @@ dependencies:
   image_cropper: ^3.0.0
   file_picker: ^5.2.0
   get: ^4.6.5
+  flutter_speed_dial: ^6.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
