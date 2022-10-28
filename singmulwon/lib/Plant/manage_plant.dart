@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
+import 'dart:developer';
 
 import './edit_plant.dart';
 import './insert_plant.dart';
@@ -120,9 +121,12 @@ class _ManagePlantState extends State<ManagePlant> {
   void onTap(ScanResult r, snapshot) async {
     // 단순히 이름만 출력
     print('${r.device.name}');
+    log(snapshot);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DeviceScreen(device: r.device)),
+      MaterialPageRoute(
+          builder: (context) =>
+              DeviceScreen(device: r.device, snaps: snapshot)),
     );
     /*
     connect(r.device);
@@ -257,7 +261,8 @@ class _ManagePlantState extends State<ManagePlant> {
           IconButton(
             onPressed: () {
               Navigator.of(context)
-                  .pushNamed(InsertPlant.routeName, arguments: user);
+                  .pushNamed(InsertPlant.routeName, arguments: user)
+                  .then((value) => {setState(() {})});
             },
             icon: const Icon(Icons.add),
           ),
@@ -296,10 +301,13 @@ class _ManagePlantState extends State<ManagePlant> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  EditPlant.routeName,
-                                  arguments: (snapshot.data[index].myPlantId),
-                                );
+                                Navigator.of(context)
+                                    .pushNamed(
+                                      EditPlant.routeName,
+                                      arguments:
+                                          (snapshot.data[index].myPlantId),
+                                    )
+                                    .then((value) => {setState(() {})});
                               },
                               child: Container(
                                 width: 270,
@@ -464,7 +472,10 @@ class _ManagePlantState extends State<ManagePlant> {
                                               color: Colors.white),
                                           child: IconButton(
                                             onPressed: () {
-                                              showPopup(context, snapshot);
+                                              showPopup(
+                                                  context,
+                                                  snapshot
+                                                      .data[index].myPlantId);
                                             },
                                             icon: Icon(Icons.bluetooth),
                                           ),

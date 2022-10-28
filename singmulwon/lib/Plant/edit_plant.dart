@@ -31,10 +31,6 @@ class EditPlantState extends State<EditPlant> {
   final _form = GlobalKey<FormState>();
   final plantidController = TextEditingController();
 
-  final List<String> _sortValueList = ['', '수선화', '민들레', '선인장'];
-  String _selectedValue = '수선화';
-  int _selectedSortIndex = 1;
-
   var humidity;
   var luminance;
 
@@ -43,16 +39,7 @@ class EditPlantState extends State<EditPlant> {
     var url = "http://13.209.68.93/ubuntu/flutter/plant/edit_plant.php";
 
     await http.get(Uri.parse(
-        '$url?myplantId=$myplantId&name=$name&sort=$_selectedSortIndex&lumi=$lumi&humi=$humi&flag=$flag'));
-    // '$url?myplantId=9&name=Plant2&sort=3&lumi=70&humi=70&image=$image'));
-    // await http.post(Uri.parse(url), body: {
-    //   "myplantId": myplantId,
-    //   "name": name,
-    //   "sort": _selectedSortIndex.toString(),
-    //   "lumi": lumi,
-    //   "humi": humi,
-    //   "image": image,
-    // });
+        '$url?myplantId=$myplantId&name=$name&lumi=$lumi&humi=$humi&flag=$flag'));
     Navigator.of(context).pop();
   }
 
@@ -133,44 +120,7 @@ class EditPlantState extends State<EditPlant> {
                             ),
                           ),
                           SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Color.fromARGB(255, 165, 171, 166),
-                                    width: 1),
-                                borderRadius: BorderRadius.circular(5)),
-                            width: 240,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 5,
-                                ),
-                                SizedBox(
-                                    width: 130,
-                                    child: Text(
-                                      "식물 종류",
-                                      style: TextStyle(fontSize: 15),
-                                    )),
-                                DropdownButton(
-                                  value: _selectedValue,
-                                  items: _sortValueList.map((value) {
-                                    return DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      var index = _sortValueList.indexOf(value);
-                                      _selectedValue = value;
-                                      _selectedSortIndex = index;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
+                            height: 38,
                           ),
                         ],
                       ),
