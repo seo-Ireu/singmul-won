@@ -198,6 +198,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_speed_dial">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_speed_dial-6.2.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_swiper">
           <value>
             <list>
@@ -655,6 +662,7 @@
       <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_platform_interface-5.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_page_indicator-0.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.6/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_speed_dial-6.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_swiper-1.1.6/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.0.9/lib" />
       <root url="file://$PROJECT_DIR$/../../flutter/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/lib" />

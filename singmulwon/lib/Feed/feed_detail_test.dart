@@ -163,17 +163,17 @@ class _FeedPageState extends State<FeedDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      icon: Icon(isPressed[i]
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                      color: isPressed[i] ? Colors.red : Colors.black,
-                      onPressed: () {
-                        setState(() {
-                          isPressed[i] = !isPressed[i];
-                        });
-                      },
-                    ),
+                    //IconButton(
+                    //  icon: Icon(isPressed[i]
+                    //      ? Icons.favorite
+                    //      : Icons.favorite_border),
+                    //  color: isPressed[i] ? Colors.red : Colors.black,
+                    //  onPressed: () {
+                    //    setState(() {
+                    //      isPressed[i] = !isPressed[i];
+                    //    });
+                    //  },
+                    //),
                     IconButton(
                       onPressed: () {
                         Navigator.push(
