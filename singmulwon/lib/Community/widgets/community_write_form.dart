@@ -105,13 +105,13 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
     }
   }
 
-  Future _create() async {
+  Future _create(userId) async {
     print("_create start");
     var url = baseUrl + "/community/c_create.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "categoryId": _selectedCategoryIndex.toString(),
-      "userId": "admin",
+      "userId": userId,
       "title": _titleController.text,
       "content": _contentController.text
     });
@@ -135,13 +135,13 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       Navigator.pop(context);
     }
   }
-  Future _update() async{
+  Future _update(userId) async{
     var url = baseUrl+"/community/c_update.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": _cData.communityId.toString(),
       "categoryId": _selectedCategoryIndex.toString(),
-      "userId": "admin",
+      "userId": userId,
       "title": _titleController.text,
       "content": _contentController.text,
     });
@@ -154,7 +154,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       children: <Widget>[
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.width * 0.6,
+          height: MediaQuery.of(context).size.width * 0.9,
           child: InkWell(
             onTap: () {
               pickImages();
@@ -169,13 +169,11 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
               ),
               itemBuilder: (context, index) => Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
                   border: Border.all(color: Colors.grey.withOpacity(0.5)),
                 ),
                 child: _selectedFiles.isEmpty || index == _selectedFiles.length
                     ? Icon(
                         CupertinoIcons.camera,
-                        color: Colors.grey.withOpacity(0.5),
                       )
                     : Image.file(File(_selectedFiles[index].path)),
               ),
@@ -190,7 +188,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       children: <Widget>[
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.width * 0.6,
+          height: MediaQuery.of(context).size.width * 0.9,
           child: InkWell(
             onTap: () {
               pickImages();
@@ -205,7 +203,6 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
               ),
               itemBuilder: (context, index) => Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
                   border: Border.all(color: Colors.grey.withOpacity(0.5)),
                 ),
                 child: _cImageData.isEmpty || index == _cImageData.length
@@ -224,40 +221,12 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = ModalRoute.of(context).settings.arguments;
+
     return Column(
       children: <Widget>[
         Container(
-          height: MediaQuery.of(context).size.height*0.17,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 50.0, horizontal: 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("DAILY DAILY",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(width: 55.0),
-                IconButton(
-                  onPressed: () {
-                    if(_cData != null){
-                      _update();
-                    }else{
-                      _create();
-                    }
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    size: 30,
-                    color:Colors.white
-                  ),
-                ),
-              ],
-            ),
-          ),
+          height: MediaQuery.of(context).size.height*0.11,
         ),
         Container(
           width: MediaQuery.of(context).size.width,
@@ -294,8 +263,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                         _selectedCategoryIndex = index;
                       });
                     },
-                    icon: const Icon(Icons.arrow_drop_down_circle,
-                        color: Colors.lightGreen),
+                    icon: const Icon(Icons.arrow_drop_down_circle,),
                     decoration: InputDecoration(
                       labelText: "Category",
                     ),
@@ -326,8 +294,8 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                   ),
 
                   Container(
-                    height:MediaQuery.of(context).size.height*0.5,
-                    width: MediaQuery.of(context).size.width,
+                    height:MediaQuery.of(context).size.height*0.38,
+                    width: MediaQuery.of(context).size.width*1,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -338,11 +306,29 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                       ),
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if(_cData != null){
+                        _update(userId);
+                      }else{
+                        _create(userId);
+                      }
+
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '작성',
+                          ),
+                        ]),
+                  ),
                 ],
               ),
             ),
           ),
         ),
+
       ],
     );
   }

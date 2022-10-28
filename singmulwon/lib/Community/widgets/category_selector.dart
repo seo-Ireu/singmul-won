@@ -11,6 +11,7 @@ class CategorySelector extends StatefulWidget {
 
 class _CategorySelectorState extends State<CategorySelector> {
   int selectedIndex = 0;
+  var _userid;
   final List<String> categories = ['꿀팁', '질문', '나눔'];
   String baseUrl = dotenv.env['BASE_URL'];
   Widget category_board;
@@ -23,17 +24,13 @@ class _CategorySelectorState extends State<CategorySelector> {
 
   @override
   Widget build(BuildContext context) {
-    Widget show_board = category_board;
+    final arguments = (ModalRoute.of(context).settings.arguments ??
+        <String, String>{}) as Map;
+    _userid = arguments['userid'];
     return Column(
       children: <Widget>[
         Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0),
-            ),
-          ),
+
           height: 90.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -55,11 +52,10 @@ class _CategorySelectorState extends State<CategorySelector> {
                   child: Text(
                     categories[index],
                     style: TextStyle(
-                      color: index == selectedIndex
-                          ? Colors.white
-                          : Colors.white60,
                       fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: index == selectedIndex
+                      ?FontWeight.bold
+                      :FontWeight.normal,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -78,7 +74,6 @@ class _CategorySelectorState extends State<CategorySelector> {
   Widget BodyContent(BuildContext context, int index) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
@@ -108,22 +103,22 @@ class _CategorySelectorState extends State<CategorySelector> {
             }
             // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 것이다.
             else {
-              return ListView.builder(
+              return ListView.separated(
+                padding: const EdgeInsets.all(8),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () => Navigator.of(context).pushNamed(
                       CommunityDetailScreen.routeName,
-                        arguments: (snapshot.data[index].communityId),)
+                        arguments: [snapshot.data[index].communityId, _userid],
+                    )
                     ,
 
                     child: Container(
-                      margin:
-                          EdgeInsets.only(top: 5.0, bottom: 5.0, right: 20.0),
                       padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
+                          horizontal: 10.0, vertical: 10.0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0),
@@ -144,8 +139,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                                   Text(
                                     snapshot.data[index].title,
                                     style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 25.0,
+                                      fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -157,7 +151,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                                       snapshot.data[index].content,
                                       style: TextStyle(
                                         color: Colors.blueGrey,
-                                        fontSize: 15.0,
+                                        fontSize: 14.0,
                                         fontWeight: FontWeight.w600,
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -185,6 +179,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                     ),
                   );
                 },
+                separatorBuilder: (BuildContext context, int index)=> const Divider(),
               );
             }
           },

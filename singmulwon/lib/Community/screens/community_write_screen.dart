@@ -19,7 +19,7 @@ class _CommunityWriteScreenState extends State<CommunityWriteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.green[50],
       body: SingleChildScrollView(
         child:CommunityWriteForm(),
       )

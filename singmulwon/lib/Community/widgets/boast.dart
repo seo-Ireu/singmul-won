@@ -123,29 +123,19 @@ class _BoastState extends State<Boast> {
                     20,
                     MediaQuery.of(context).size.width * 0.18,
                     0),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.green),
-                    top: BorderSide(color: Colors.green),
-                    left: BorderSide(color: Colors.green),
-                    right: BorderSide(color: Colors.green),
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
+
+
+                child: ElevatedButton(
                   onPressed: () {
-                    print(_selectedMyPlantId);
                     _addLikes(_selectedMyPlantId);
                     _likesIds.add(_boastPlants[_selectedIndex]);
                   },
-                  child: Row(children: [
-                    Icon(Icons.favorite, color: Colors.green[700]),
+                  child: Row(
+                      mainAxisAlignment:MainAxisAlignment.center,
+                      children: <Widget>[
+                    Icon(Icons.favorite),
                     Text(
                       ' 좋아요',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.green[700],
-                      ),
                     ),
                   ]),
                 ),
@@ -157,16 +147,7 @@ class _BoastState extends State<Boast> {
                     20,
                     MediaQuery.of(context).size.width * 0.18,
                     0),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.green),
-                    top: BorderSide(color: Colors.green),
-                    left: BorderSide(color: Colors.green),
-                    right: BorderSide(color: Colors.green),
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                       BoastResultScreen.routeName,
@@ -177,11 +158,6 @@ class _BoastState extends State<Boast> {
                       children: [
                     Text(
                       '결과보기',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.green[700],
-                      ),
                     ),
                   ]),
                 ),
