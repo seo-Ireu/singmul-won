@@ -7,6 +7,7 @@ import 'package:flutter_singmulwon_app/Community/screens/boast_home_screen.dart'
 import 'package:flutter_singmulwon_app/Community/screens/boast_result_screen.dart';
 import 'package:flutter_singmulwon_app/Feed/feed_test.dart';
 import 'package:flutter_singmulwon_app/Feed/my_feed_test.dart';
+import 'package:flutter_singmulwon_app/core/color_schemes.g.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,7 +44,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'singmul-won',
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          useMaterial3: true,
+          colorScheme: lightColorScheme,
+          fontFamily: "NotoSans",
         ),
         home: Login(),
         routes: {

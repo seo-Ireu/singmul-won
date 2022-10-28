@@ -54,8 +54,6 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.green[50],
-        selectedItemColor: Colors.green[600],
         // ignore: prefer_const_literals_to_create_immutables
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.feed), label: 'feed'),
@@ -68,6 +66,8 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: selectedIndex,
         onTap: _onItemTapped,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }
