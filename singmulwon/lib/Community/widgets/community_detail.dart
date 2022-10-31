@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Community/screens/community_write_screen.dart';
-import '../core/color.dart';
 import 'package:http/http.dart' as http;
 import '../models/c_comment_model.dart';
 import '../models/community_model.dart';
@@ -16,16 +15,17 @@ class CommunityDetail extends StatefulWidget {
 class _CommunityDetailState extends State<CommunityDetail> {
   var _cIdx;
   String baseUrl = dotenv.env['BASE_URL'];
+  final TextEditingController _commentController = TextEditingController();
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      _cIdx = ModalRoute.of(context).settings.arguments as int;
+      List<dynamic> args = ModalRoute.of(context).settings.arguments;
+      _cIdx = args[0] as int;
       _readComment(_cIdx);
     });
   }
 
-  TextEditingController _commentController = TextEditingController();
 
   List<cCommentModel> _comments = [];
   List<NetworkImage> _images = <NetworkImage>[];
@@ -115,67 +115,60 @@ class _CommunityDetailState extends State<CommunityDetail> {
   _buildMessage(cCommentModel message) {
     var isMe = false;
     final Container msg = Container(
-      margin: EdgeInsets.only(
-        right: 10.0,
-        left: 20.0,
-        top: 8.0,
-        bottom: 8.0,
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-      width: MediaQuery.of(context).size.width * 0.9,
+      margin: EdgeInsets.symmetric(horizontal:5.0,vertical: 5.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+      width: MediaQuery.of(context).size.width * 0.95,
       decoration: BoxDecoration(
-        color: Colors.lightGreen[100],
-        borderRadius: BorderRadius.all(
-          Radius.circular(15.0),
-        ),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        color:Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 message.userId,
                 style: TextStyle(
-                  color: Colors.blueGrey,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              TextButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey[400]),
-                ),
-                onPressed: () {
-                  _deleteComment(message.ccId);
-                },
-                child: Text('삭제',
-                 style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
               Text(
                 message.comment,
                 style: TextStyle(
                   color: Colors.blueGrey,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 16.0,
                 ),
               ),
+            ],
+          ),
+          Column(
+            children: [
               Text(
                 message.createAt,
                 style: TextStyle(
                   color: Colors.blueGrey,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 12.0,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  _deleteComment(message.ccId);
+                },
+                child: Text('삭제',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                  ),
                 ),
               ),
             ],
@@ -188,6 +181,33 @@ class _CommunityDetailState extends State<CommunityDetail> {
       children: <Widget>[
         msg,
       ],
+    );
+  }
+
+  _buildMessageComposer() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      height: 70.0,
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          SizedBox(width:10),
+          Expanded(
+            child: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              onChanged: (value) {},
+              decoration: InputDecoration.collapsed(
+                hintText: 'Send a message...',
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.send),
+            iconSize: 25.0,
+            onPressed: () {},
+          ),
+        ],
+      ),
     );
   }
 
@@ -250,7 +270,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                             text:
                                                 "[${_categoryValueList[snapshot.data.categoryId]}] ",
                                             style: TextStyle(
-                                              color: black.withOpacity(0.8),
+                                              color:Colors.grey,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12.0,
                                             ),
@@ -258,7 +278,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                           TextSpan(
                                             text: snapshot.data.title,
                                             style: TextStyle(
-                                              color: black.withOpacity(0.8),
+                                              color: Colors.black,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 25.0,
                                             ),
@@ -266,35 +286,40 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                           TextSpan(
                                             text: '    ${snapshot.data.userId}',
                                             style: TextStyle(
-                                              color: black.withOpacity(0.5),
+                                              color:Colors.black,
                                               fontSize: 15.0,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    // //좋아요 이미지
-                                    // Container(
-                                    //   height: 30.0,
-                                    //   width: 30.0,
-                                    //   padding: const EdgeInsets.all(8.0),
-                                    //   decoration: BoxDecoration(
-                                    //     color: green,
-                                    //     boxShadow: [
-                                    //       BoxShadow(
-                                    //         color: green.withOpacity(0.2),
-                                    //         blurRadius: 15,
-                                    //         offset: const Offset(0, 5),
-                                    //       ),
-                                    //     ],
-                                    //     borderRadius:
-                                    //         BorderRadius.circular(8.0),
-                                    //   ),
-                                    //   child: Image.asset(
-                                    //     'assets/icons/heart.png',
-                                    //     color: white,
-                                    //   ),
-                                    // ),
+                                    PopupMenuButton(
+                                        itemBuilder: (context){
+                                          return [
+                                            PopupMenuItem<int>(
+                                              value: 0,
+                                              child: Text("수정"),
+                                            ),
+
+                                            PopupMenuItem<int>(
+                                              value: 1,
+                                              child: Text("삭제"),
+                                            ),
+                                          ];
+                                        },
+                                        onSelected:(value){
+                                          if(value == 0){
+                                            Navigator.of(context).pushNamed(
+                                                CommunityWriteScreen.routeName,
+                                                arguments: {
+                                                  "data": snapshot.data,
+                                                  "image": _imagesForParam
+                                                });
+                                          }else if(value == 1){
+                                            _delete(snapshot.data.communityId);
+                                          }
+                                        }
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 10.0),
@@ -302,7 +327,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                   text: TextSpan(
                                     text: snapshot.data.content,
                                     style: TextStyle(
-                                      color: black.withOpacity(0.5),
+                                      color:Colors.blueGrey,
                                       fontSize: 20.0,
                                       height: 1.4,
                                       letterSpacing: 0.5,
@@ -312,28 +337,6 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                        icon: Icon(Icons.update),
-                                        iconSize: 30.0,
-                                        onPressed: () {
-                                          Navigator.of(context).pushNamed(
-                                              CommunityWriteScreen.routeName,
-                                              arguments: {
-                                                "data": snapshot.data,
-                                                "image": _imagesForParam
-                                              });
-                                        }),
-                                    IconButton(
-                                      icon: Icon(Icons.delete),
-                                      iconSize: 30.0,
-                                      onPressed: () =>
-                                          _delete(snapshot.data.communityId),
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
@@ -341,18 +344,22 @@ class _CommunityDetailState extends State<CommunityDetail> {
                       ),
                       Column(
                         children: [
-                          Container(
-                            height: MediaQuery.of(context).size.width * 0.3,
-                            child: ListView.builder(
-                              reverse: true,
-                              padding: EdgeInsets.only(top: 15.0),
-                              itemCount: _comments.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final cCommentModel comment = _comments[index];
-                                return _buildMessage(comment);
-                              },
+                          Center(
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: MediaQuery.of(context).size.width * 0.55,
+                              child: ListView.builder(
+
+                                reverse: true,
+                                itemCount: _comments.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final cCommentModel comment = _comments[index];
+                                  return _buildMessage(comment);
+                                },
+                              ),
                             ),
                           ),
+                          _buildMessageComposer(),
                         ],
                       ),
                     ],

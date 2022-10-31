@@ -16,15 +16,20 @@ class CommunityComment extends StatefulWidget {
 
 class _CommunityCommentState extends State<CommunityComment> {
   var _cIdx;
+  var _userid;
   String baseUrl = dotenv.env['BASE_URL'];
   @override
   void initState(){
     super.initState();
     Future.delayed(Duration.zero, () {
-      _cIdx = ModalRoute.of(context).settings.arguments as int;
+      List<dynamic> args = ModalRoute.of(context).settings.arguments;
+      _cIdx = args[0] as int;
+      _userid = args[1] as String;
       print("_cIdx = ${_cIdx}");
     });
   }
+
+
   TextEditingController _commentController = TextEditingController();
 
   Future _createComment(int communityIdx) async{
@@ -32,7 +37,7 @@ class _CommunityCommentState extends State<CommunityComment> {
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": communityIdx.toString(),
-      "userId":"admin",
+      "userId":_userid,
       "comment":_commentController.text,
     });
     _commentController.text="";
@@ -40,17 +45,17 @@ class _CommunityCommentState extends State<CommunityComment> {
       var message = json.decode(response.body);
 
       String id = message["ccId"].toString();
-      print("!!!!${id}");
     }
 
   }
 
   @override
   Widget build(BuildContext context) {
+    final userId = ModalRoute.of(context).settings.arguments;
     return Transform.translate(
       offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
       child: Container(
-        height: 100.0,
+        height: 90.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30.0),
@@ -89,8 +94,9 @@ class _CommunityCommentState extends State<CommunityComment> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  color: Color(0xFF23B66F),
+                  color: Colors.blueGrey,
                   onPressed: () => {
+                    FocusScope.of(context).unfocus(),
                     _createComment(_cIdx),
                   },
                   child: Icon(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Community/screens/boast_home_screen.dart';
 import 'package:flutter_singmulwon_app/Community/screens/community_write_screen.dart';
 import '../widgets/category_selector.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class CommunityHomeScreen extends StatefulWidget {
   static const routeName = '/community_home_screen.dart';
@@ -10,6 +11,13 @@ class CommunityHomeScreen extends StatefulWidget {
 }
 
 class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
+
+  var _userid;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   bool value = false;
   void changeData(){
@@ -20,8 +28,35 @@ class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context).settings.arguments ??
+        <String, String>{}) as Map;
+    _userid = arguments['userid'];
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: Color(0x7C476649),
+        children: [
+          SpeedDialChild(
+            child:Icon(Icons.add),
+            label: '글작성',
+            onTap: (){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CommunityWriteScreen()))
+                  .then((value) {
+                setState(() {});
+              });
+            },
+          ),
+          SpeedDialChild(
+            child:Icon(Icons.local_activity_rounded),
+            label: '뽐내기',
+            onTap: (){
+          Navigator.of(context)
+              .pushNamed(BoastHomeScreen.routeName);
+            }
+          ),
+        ],
+      ),
       appBar: AppBar(
         title: Text(
           'Daily daily',
@@ -31,33 +66,6 @@ class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
           ),
         ),
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            iconSize: 30.0,
-            color: Colors.white,
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(CommunityWriteScreen.routeName);
-              },
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(BoastHomeScreen.routeName);
-            },
-            child: Row(children: [
-              Icon(Icons.favorite, color: Colors.green[700]),
-              Text(
-                '뽐내기',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.green[700],
-                ),
-              ),
-            ]),
-          ),
-        ],
       ),
       body: CategorySelector(),
     );

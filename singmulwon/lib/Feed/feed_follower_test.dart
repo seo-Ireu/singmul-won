@@ -82,7 +82,7 @@ class _FeedPageState extends State<MyFollower> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text('팔로워'),
+              Text('팔로잉'),
             ],
           ),
           for (int i = 0; i < cnt; i++)

@@ -154,19 +154,19 @@ class _HomePageState extends State<FeedCreate> {
                       child: const Icon(Icons.delete),
                     ),
                 ),
-                if (_croppedFile == null)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: FloatingActionButton(
-                      heroTag: 'Crop',
-                      onPressed: () {
-                        _cropImage();
-                      },
-                      backgroundColor: const Color(0xFFBC764A),
-                      tooltip: 'Crop',
-                      child: const Icon(Icons.crop),
-                    ),
-                  )
+                //if (_croppedFile == null)
+                  //Padding(
+                    //padding: const EdgeInsets.only(left: 12.0),
+                    //child: FloatingActionButton(
+                      //heroTag: 'Crop',
+                      //onPressed: () {
+                        //_cropImage();
+                      //},
+                      //backgroundColor: const Color(0xFFBC764A),
+                      //tooltip: 'Crop',
+                      //child: const Icon(Icons.crop),
+                    //),
+                  //)
           ],
         ),
     );
