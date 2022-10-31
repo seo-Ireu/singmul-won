@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../Login/signup.dart';
+
 class Account extends StatefulWidget {
   @override
   State<Account> createState() => _AccountState();
@@ -134,6 +136,19 @@ class _AccountState extends State<Account> {
                 ),
               ),
               Divider(),
+              // Container(
+              //   padding: const EdgeInsets.only(
+              //       top: 10, left: 16, right: 10, bottom: 4),
+              //   child: ListTile(
+              //   title: Text("계정추가", style: TextStyle(fontSize: 16, color: Colors.blue[400])),
+              //   onTap: () {
+              //     Navigator.push(
+              //             context,
+              //             MaterialPageRoute(builder: (context) => SignUp()),
+              //           );
+              //   },
+              //   ),
+              // ),
               Container(
                 padding: const EdgeInsets.only(
                     top: 10, left: 16, right: 10, bottom: 4),
@@ -146,6 +161,17 @@ class _AccountState extends State<Account> {
                 ),
               ),
               Divider(),
+              // Container(
+              //   padding: const EdgeInsets.only(
+              //       top: 10, left: 16, right: 10, bottom: 4),
+              //   child: ListTile(
+              //   title: Text("로그아웃", style: TextStyle(fontSize: 16, color: Colors.blue[400])),
+              //   onTap: () {
+              //     Navigator.of(context).pop();
+              //   },
+
+              //   ),
+              // ),
               Container(
                 padding: const EdgeInsets.only(
                     top: 10, left: 16, right: 10, bottom: 12),
