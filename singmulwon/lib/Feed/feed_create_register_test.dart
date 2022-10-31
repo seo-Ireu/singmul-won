@@ -151,6 +151,7 @@ class _FeedPageState extends State<FeedCreateImage> {
   void initState() {
     super.initState();
     getImageServer();
+    //_plantSelect = myPlantList(userId);
   }
 
   void myAlert() {
