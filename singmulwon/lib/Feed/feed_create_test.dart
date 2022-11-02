@@ -37,7 +37,6 @@ class FeedCreates extends StatefulWidget {
 
 class _FeedPageState extends State<FeedCreates> {
   String userId;
-
   _FeedPageState(this.userId);
 
   @override
@@ -70,6 +69,10 @@ class _FeedPageState extends State<FeedCreates> {
               controller: _textController,
             ),
           ),
+          SizedBox(
+            height: 5.0,
+          ),
+
           TextButton(
             child: Text("이미지 업로드"),
             onPressed: () => Navigator.push(
