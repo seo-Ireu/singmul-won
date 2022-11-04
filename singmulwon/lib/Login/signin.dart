@@ -6,7 +6,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
+import '../Community/provider/Users.dart';
 import './signup.dart';
 import '../home_page.dart';
 
@@ -38,6 +40,7 @@ class _SignIn extends State<SignIn> {
       log(vld);
       log('*****');
       if (vld == '"Success"') {
+        context.read<Users>().setUserId(userid.text);
         Navigator.of(context)
             .pushNamed(HomePage.routeName, arguments: {'userid': userid.text});
       } else {

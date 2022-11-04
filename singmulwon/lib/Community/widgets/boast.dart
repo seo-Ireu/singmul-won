@@ -121,7 +121,7 @@ class _BoastState extends State<Boast> {
                 margin: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.width * 0.5,
                     20,
-                    MediaQuery.of(context).size.width * 0.18,
+                    MediaQuery.of(context).size.width * 0.1,
                     0),
 
 
@@ -145,7 +145,7 @@ class _BoastState extends State<Boast> {
                 margin: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.width * 0.5,
                     20,
-                    MediaQuery.of(context).size.width * 0.18,
+                    MediaQuery.of(context).size.width * 0.10,
                     0),
                 child: ElevatedButton(
                   onPressed: () {

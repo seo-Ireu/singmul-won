@@ -26,12 +26,13 @@ import 'Provider/feeds.dart';
 import 'Login/signin.dart';
 import 'home_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'Community/provider/Users.dart';
 void main() async{
   await dotenv.load(fileName:"assets/.env");
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => Feeds()),
+    ChangeNotifierProvider(create: (context) => Feeds(),),
+    ChangeNotifierProvider(create: (context)=> Users(),),
   ], child: MyApp()));
   //수정: EditPlant에서 Provider 가져올 수 없다고 해서 수정함
 }

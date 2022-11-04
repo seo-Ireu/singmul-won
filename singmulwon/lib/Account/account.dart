@@ -14,7 +14,8 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('내 정보'),
+        title: const Text('내 정보',
+          style: TextStyle(fontWeight: FontWeight.bold,),),
       ),
       body: Column(
         children: [

@@ -40,11 +40,12 @@ class _CommunityHomeScreenState extends State<CommunityHomeScreen> {
             child:Icon(Icons.add),
             label: '글작성',
             onTap: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CommunityWriteScreen()))
-                  .then((value) {
-                setState(() {});
-              });
+              Navigator.of(context)
+                  .pushNamed(
+                CommunityWriteScreen.routeName,
+                arguments: (_userid),
+              )
+                  .then((value) => {setState(() {})});
             },
           ),
           SpeedDialChild(

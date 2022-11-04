@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../models/community_model.dart';
+import '../provider/Users.dart';
 import '../screens/community_detail_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 class CategorySelector extends StatefulWidget {
@@ -24,9 +26,8 @@ class _CategorySelectorState extends State<CategorySelector> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context).settings.arguments ??
-        <String, String>{}) as Map;
-    _userid = arguments['userid'];
+    _userid = context.watch<Users>().userId.toString();
+
     return Column(
       children: <Widget>[
         Container(
@@ -108,12 +109,10 @@ class _CategorySelectorState extends State<CategorySelector> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed(
-                      CommunityDetailScreen.routeName,
-                        arguments: [snapshot.data[index].communityId, _userid],
-                    )
-                    ,
-
+                      onTap: () => Navigator.of(context).pushNamed(
+                        CommunityDetailScreen.routeName,
+                        arguments: (snapshot.data[index].communityId),
+                      ),
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 10.0),

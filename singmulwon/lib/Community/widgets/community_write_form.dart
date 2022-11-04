@@ -6,6 +6,9 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/Users.dart';
 
 class CommunityWriteForm extends StatefulWidget {
   @override
@@ -14,6 +17,7 @@ class CommunityWriteForm extends StatefulWidget {
 
 class _CommunityWriteFormState extends State<CommunityWriteForm> {
   var _cData;
+  var _userid;
   List _cImageData= [];
   bool isPicked=false;
 
@@ -105,13 +109,13 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
     }
   }
 
-  Future _create(userId) async {
+  Future _create() async {
     print("_create start");
     var url = baseUrl + "/community/c_create.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "categoryId": _selectedCategoryIndex.toString(),
-      "userId": userId,
+      "userId": _userid,
       "title": _titleController.text,
       "content": _contentController.text
     });
@@ -135,13 +139,13 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
       Navigator.pop(context);
     }
   }
-  Future _update(userId) async{
+  Future _update() async{
     var url = baseUrl+"/community/c_update.php";
 
     var response = await http.post(Uri.parse(url), body: {
       "communityId": _cData.communityId.toString(),
       "categoryId": _selectedCategoryIndex.toString(),
-      "userId": userId,
+      "userId": _userid,
       "title": _titleController.text,
       "content": _contentController.text,
     });
@@ -221,7 +225,7 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = ModalRoute.of(context).settings.arguments;
+    _userid = context.watch<Users>().userId.toString();
 
     return Column(
       children: <Widget>[
@@ -309,9 +313,9 @@ class _CommunityWriteFormState extends State<CommunityWriteForm> {
                   ElevatedButton(
                     onPressed: () {
                       if(_cData != null){
-                        _update(userId);
+                        _update();
                       }else{
-                        _create(userId);
+                        _create();
                       }
 
                     },

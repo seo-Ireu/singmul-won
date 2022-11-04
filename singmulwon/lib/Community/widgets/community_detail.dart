@@ -3,10 +3,13 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_singmulwon_app/Community/screens/community_write_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../models/c_comment_model.dart';
 import '../models/community_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../provider/Users.dart';
 class CommunityDetail extends StatefulWidget {
   @override
   State<CommunityDetail> createState() => _CommunityDetailState();
@@ -14,14 +17,15 @@ class CommunityDetail extends StatefulWidget {
 
 class _CommunityDetailState extends State<CommunityDetail> {
   var _cIdx;
+  var _userid;
+
   String baseUrl = dotenv.env['BASE_URL'];
   final TextEditingController _commentController = TextEditingController();
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      List<dynamic> args = ModalRoute.of(context).settings.arguments;
-      _cIdx = args[0] as int;
+      _cIdx = ModalRoute.of(context).settings.arguments as int;
       _readComment(_cIdx);
     });
   }
@@ -50,8 +54,8 @@ class _CommunityDetailState extends State<CommunityDetail> {
     var myJson = await jsonDecode(utf8.decode(response.bodyBytes))['cComment'];
 
     for (var c in myJson) {
-      DateTime now = DateTime.now();
-      String formattedDate = DateFormat('yy-MM-dd').format(now);
+      DateTime date = DateTime.tryParse(c['createAt']);
+      String formattedDate = DateFormat('yy-MM-dd').format(date);
 
       cCommentModel cData = cCommentModel(
           ccId: int.parse(c['ccId']),
@@ -184,7 +188,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
     );
   }
 
-  _buildMessageComposer() {
+  _buildMessageComposer(int communityId) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       height: 70.0,
@@ -194,6 +198,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
           SizedBox(width:10),
           Expanded(
             child: TextField(
+              controller: _commentController,
               textCapitalization: TextCapitalization.sentences,
               onChanged: (value) {},
               decoration: InputDecoration.collapsed(
@@ -204,15 +209,36 @@ class _CommunityDetailState extends State<CommunityDetail> {
           IconButton(
             icon: Icon(Icons.send),
             iconSize: 25.0,
-            onPressed: () {},
+            onPressed: () {
+              _createComment(communityId);
+            },
           ),
         ],
       ),
     );
   }
 
+  Future _createComment(int communityIdx) async{
+
+    var url = baseUrl+"/community/c_create_comment.php";
+
+    var response = await http.post(Uri.parse(url), body: {
+      "communityId": communityIdx.toString(),
+      "userId":_userid,
+      "comment":_commentController.text,
+    });
+    _commentController.text="";
+    if(response.body.isNotEmpty) {
+      var message = json.decode(response.body);
+
+      String id = message["ccId"].toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _userid = context.watch<Users>().userId.toString();
+
     return FutureBuilder(
         future: _read(context, _cIdx),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -280,7 +306,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 25.0,
+                                              fontSize: 22.0,
                                             ),
                                           ),
                                           TextSpan(
@@ -314,7 +340,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                                                 arguments: {
                                                   "data": snapshot.data,
                                                   "image": _imagesForParam
-                                                });
+                                                }).then((value) => {setState(() {})});
                                           }else if(value == 1){
                                             _delete(snapshot.data.communityId);
                                           }
@@ -359,7 +385,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
                               ),
                             ),
                           ),
-                          _buildMessageComposer(),
+                          _buildMessageComposer(snapshot.data.communityId),
                         ],
                       ),
                     ],
