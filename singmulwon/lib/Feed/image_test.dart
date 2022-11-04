@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,29 @@ import 'feed_create_last_test.dart';
 
 String baseUri = "http://13.209.68.93/ubuntu/flutter/feed/feed_upload.php?userId=";
 final _textController = new TextEditingController();
+var s_first;
+String _selectedValue = '';
+List<String> _plantSelect = [];
+
+Future fetchFeed(String userId) async {
+  var url = 'http://13.209.68.93/ubuntu/flutter/feed/feed_plant_select.php?userId='+userId;
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    //만약 서버가 ok응답을 반환하면, json을 파싱합니다
+    print('응답했다');
+    var tmp = json.decode(utf8.decode(response.bodyBytes));
+    print(tmp["nickname"]);
+    _selectedValue = tmp["nickname"][0];
+    for(int i=0; i<tmp["count"]; i++){
+      _plantSelect.add(tmp["nickname"][i]);
+    }
+    return tmp;
+  } else {
+    //만약 응답이 ok가 아니면 에러를 던집니다.
+    throw Exception('Failed to load post');
+  }
+}
 
 class FeedCreate extends StatefulWidget {
   static const routeName = '/image_test';
@@ -34,40 +58,63 @@ class _HomePageState extends State<FeedCreate> {
   CroppedFile _croppedFile;
   String title;
   String userId;
+  Future feeds;
 
   _HomePageState(this.title, this.userId);
+
+  @override
+  void initState() {
+    super.initState();
+    feeds = fetchFeed(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : false,
       appBar: !kIsWeb ? AppBar(title: Text(title)) : null,
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (kIsWeb)
-            Padding(
-              padding: const EdgeInsets.all(kIsWeb ? 24.0 : 16.0),
-              child: Text(
-                widget.title,
-              ),
-            ),
-          Expanded(child: _body()),
-        ],
+      body: Center(
+        child: FutureBuilder(
+          //통신데이터 가져오기
+          future: feeds,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (kIsWeb)
+                    Padding(
+                      padding: const EdgeInsets.all(kIsWeb ? 24.0 : 16.0),
+                      child: Text(
+                        widget.title,
+                      ),
+                    ),
+                    Expanded(child: _body(snapshot)),
+                  ],
+              );
+              //buildColumn(snapshot, arguments['userid']);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}에러!!");
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }
 
-  Widget _body() {
+  Widget _body(snapshot) {
     if (_croppedFile != null || _pickedFile != null) {
-      return _imageCard();
+      return _imageCard(snapshot);
     } else {
-      return _uploaderCard();
+      return _uploaderCard(snapshot);
     }
   }
 
-  Widget _imageCard() {
+  Widget _imageCard(snapshot) {
+
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -92,6 +139,21 @@ class _HomePageState extends State<FeedCreate> {
               ),
               controller: _textController,
             ),
+          ),
+          DropdownButton(
+            items: _plantSelect.map((String items) {
+              //print(items);
+              return DropdownMenuItem(
+                value: items,
+                child: Text(items),
+              );
+            }).toList(),
+            onChanged: (String items) => setState(() {
+                //print("dd:"+_selectedValue);
+                //print(items);
+                _selectedValue = items ?? "";
+              }),
+            value: _selectedValue,
           ),
           _menu(),
         ],
@@ -154,25 +216,25 @@ class _HomePageState extends State<FeedCreate> {
                       child: const Icon(Icons.delete),
                     ),
                 ),
-                if (_croppedFile == null)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: FloatingActionButton(
-                      heroTag: 'Crop',
-                      onPressed: () {
-                        _cropImage();
-                      },
-                      backgroundColor: const Color(0xFFBC764A),
-                      tooltip: 'Crop',
-                      child: const Icon(Icons.crop),
-                    ),
-                  )
+                //if (_croppedFile == null)
+                  //Padding(
+                    //padding: const EdgeInsets.only(left: 12.0),
+                    //child: FloatingActionButton(
+                      //heroTag: 'Crop',
+                      //onPressed: () {
+                        //_cropImage();
+                      //},
+                      //backgroundColor: const Color(0xFFBC764A),
+                      //tooltip: 'Crop',
+                      //child: const Icon(Icons.crop),
+                    //),
+                  //)
           ],
         ),
     );
   }
 
-  Widget _uploaderCard() {
+  Widget _uploaderCard(snapshot) {
     return Center(
       child: Card(
         elevation: 4.0,

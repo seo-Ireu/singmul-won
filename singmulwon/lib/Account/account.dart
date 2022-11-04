@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 
+import '../Login/signup.dart';
+import './change_pw.dart';
+
 class Account extends StatefulWidget {
   @override
   State<Account> createState() => _AccountState();
@@ -36,40 +39,6 @@ class _AccountState extends State<Account> {
               onTap: () {},
             ),
           ),
-          // Card(
-          //   child: ListTile(
-          //     title: Text("알림"),
-          //     leading: SizedBox(
-          //       height: 50,
-          //       width: 30,
-          //       child: Icon(
-          //         Icons.notifications_none,
-          //       ),
-          //     ),
-          //     trailing: Text(
-          //       ">  ",
-          //       style: TextStyle(fontSize: 20, color: Colors.grey),
-          //     ),
-          //     onTap: () {},
-          //   ),
-          // ),
-          // Card(
-          //   child: ListTile(
-          //     title: Text("공개 범위 및 보안"),
-          //     leading: SizedBox(
-          //       height: 50,
-          //       width: 30,
-          //       child: Icon(
-          //         Icons.lock,
-          //       ),
-          //     ),
-          //     trailing: Text(
-          //       ">  ",
-          //       style: TextStyle(fontSize: 20, color: Colors.grey),
-          //     ),
-          //     onTap: () {},
-          //   ),
-          // ),
           Card(
             child: ListTile(
               title: Text("계정"),
@@ -84,43 +53,14 @@ class _AccountState extends State<Account> {
                 ">  ",
                 style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChangePw()),
+                );
+              },
             ),
           ),
-          // Card(
-          //   child: ListTile(
-          //     title: Text("도움말"),
-          //     leading: SizedBox(
-          //       height: 50,
-          //       width: 30,
-          //       child: Icon(
-          //         Icons.help_outline,
-          //       ),
-          //     ),
-          //     trailing: Text(
-          //       ">  ",
-          //       style: TextStyle(fontSize: 20, color: Colors.grey),
-          //     ),
-          //     onTap: () {},
-          //   ),
-          // ),
-          // Card(
-          //   child: ListTile(
-          //     title: Text("정보"),
-          //     leading: SizedBox(
-          //       height: 50,
-          //       width: 30,
-          //       child: Icon(
-          //         Icons.info,
-          //       ),
-          //     ),
-          //     trailing: Text(
-          //       ">  ",
-          //       style: TextStyle(fontSize: 20, color: Colors.grey),
-          //     ),
-          //     onTap: () {},
-          //   ),
-          // ),
           Card(
             child: Column(children: [
               Container(
@@ -137,36 +77,30 @@ class _AccountState extends State<Account> {
               Divider(),
               Container(
                 padding: const EdgeInsets.only(
-                    top: 10, left: 16, right: 10, bottom: 4),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '계정추가',
-                    style: TextStyle(fontSize: 16, color: Colors.blue[400]),
-                  ),
+                    top: 2, left: 6, right: 10, bottom: 2),
+                child: ListTile(
+                  title: Text("계정추가",
+                      style: TextStyle(fontSize: 16, color: Colors.blue[400])),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUp()),
+                    );
+                  },
                 ),
               ),
               Divider(),
               Container(
                 padding: const EdgeInsets.only(
-                    top: 10, left: 16, right: 10, bottom: 12),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '로그아웃',
-                    style: TextStyle(fontSize: 16, color: Colors.blue[400]),
-                  ),
+                    top: 2, left: 6, right: 10, bottom: 2),
+                child: ListTile(
+                  title: Text("로그아웃",
+                      style: TextStyle(fontSize: 16, color: Colors.blue[400])),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => InfoPage(),
-              //         ));
-              //   },
-              // ),
             ]),
           )
         ],
