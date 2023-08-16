@@ -1,6 +1,7 @@
 # singmul-won
-[관련 동영상](https://www.youtube.com/watch?v=5ITeZj48Kkc)
+### 2022 한이음 ICT 멘토링 공모전 한국정보산업연합회장상(동상) [관련 동영상](https://www.youtube.com/watch?v=5ITeZj48Kkc)
 ![합본](https://user-images.githubusercontent.com/49058833/225816234-c68984a5-1ba1-4ae2-bae9-0db8ff6ea754.png)
+
 
 ## 🛠️ 사용 기술 및 라이브러리
 
